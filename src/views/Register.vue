@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <br /><br />
-    <h2>SING IN TO PROBLEM</h2>
+    <h2>REGISTER</h2>
     <br />
     <label>
       <input type="text" name="uName" placeholder="请输入用户名/手机号/邮箱" />
@@ -9,17 +9,20 @@
     <br />
     <br />
     <label>
+      <input type="text" name="uNickname" placeholder="请输入昵称" />
+    </label>
+    <br />
+    <br />
+    <label>
       <input type="password" name="uPwd" placeholder="请输入密码" />
     </label>
-    <div style="height: 8px"></div>
-    <div class="login-register-forget">
-      <span><router-link to="/register">注册</router-link></span>
-      <span><router-link to="#">忘记密码</router-link></span>
-
-    </div>
-    <div style="height: 8px"></div>
+    <br /><br />
     <label>
-      <button type="button" name="uPwd" @click="clickToHome">验证</button>
+      <input type="password" name="uPwdAgain" placeholder="请重复密码" />
+    </label>
+    <br /><br />
+    <label>
+      <button type="button" name="uPwd">注册</button>
     </label>
     <div style="height: 4px"></div>
     <p style="color: red">ERROR</p>
@@ -27,17 +30,11 @@
 </template>
 
 <script>
+// @ is an alias to /src
 
 export default {
   name: "Home",
-  components: {
-
-  },
-  methods: {
-    clickToHome() {
-      this.$router.push("/home")
-    }
-  }
+  components: {}
 };
 </script>
 
@@ -74,17 +71,4 @@ button:hover {
   cursor: pointer;
 }
 
-.login-register-forget {
-  height: auto;
-  width: 250px;
-  text-align: right;
-  margin: 0 auto;
-}
-.login-register-forget span {
-  margin: 0 0 0 16px;
-  font-size: 0.75rem;
-}
-.login-register-forget span:hover {
-  cursor: pointer;
-}
 </style>
