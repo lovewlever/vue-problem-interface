@@ -25,12 +25,15 @@ import $ from 'jquery'
 
 export default {
   name: "Home",
+  components: { Navigation },
   data () {
     return {
       cssActiveLeftTitle: "project"
     }
   },
-  components: { Navigation },
+  beforeCreate () {
+    document.title = "HOME"
+  },
   methods: {
     clickChooseLeftTitle(choose) {
       this.cssActiveLeftTitle = choose;

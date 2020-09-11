@@ -34,7 +34,10 @@
 
 export default {
   name: "Home",
-  components: {}
+  components: {},
+  beforeCreate () {
+    document.title = "REGISTER"
+  }
 };
 </script>
 

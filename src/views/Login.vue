@@ -33,6 +33,12 @@ export default {
   components: {
 
   },
+  beforeCreate () {
+    document.title = "SING IN"
+  },
+  created () {
+
+  },
   methods: {
     clickToHome() {
       this.$router.push("/home")
