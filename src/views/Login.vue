@@ -15,7 +15,6 @@
     <div class="login-register-forget">
       <span><router-link to="/register">注册</router-link></span>
       <span><router-link to="#">忘记密码</router-link></span>
-
     </div>
     <div style="height: 8px"></div>
     <label>
@@ -27,21 +26,37 @@
 </template>
 
 <script>
+import $axios from "axios";
+import ConstWeb from "@/constants/ConstWeb";
 
 export default {
   name: "Home",
-  components: {
-
+  components: {},
+  beforeCreate() {
+    document.title = "SING IN";
   },
-  beforeCreate () {
-    document.title = "SING IN"
-  },
-  created () {
-
+  created() {
+    this.queryVerifyCode();
   },
   methods: {
     clickToHome() {
-      this.$router.push("/home")
+      this.$router.push("/home");
+    },
+    queryVerifyCode() {
+      // 请求验证码
+      $axios
+        .get(ConstWeb.WebApi.USER_LOGIN, {
+          params: {
+            account: "test",
+            pwd: 123456
+          }
+        })
+        .then(data => {
+          console.info(data);
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }
 };
