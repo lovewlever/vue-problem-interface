@@ -125,10 +125,12 @@ export default {
   methods: {
     clickChooseLeftTitle(choose) {
       this.cssActiveLeftTitle = choose;
-      if (choose === "mine") {
+      if (choose === "mine") { //跳转我的
         this.$router.push("/homeMineComponent");
-      } else if (choose === "project") {
+      } else if (choose === "project") { // 跳转项目列表
         this.$router.push("/homeProjectListComponent");
+      } else if (choose === "problem") { // 跳转项目问题列表
+        this.$router.push("/homeProblemComponent");
       }
     },
     openOrHiddenLeftList() {
@@ -138,6 +140,10 @@ export default {
       } else {
         $cll.animate({ width: "250px" }, 500);
       }
+    },
+    createProject() {
+      this.cssActiveLeftTitle = "project";
+      this.$router.push("/homeCreateProjectComponent");
     }
   }
 };

@@ -26,14 +26,25 @@ const routes = [
     component: Home,
     redirect: "/homeMineComponent",
     children: [
-      {
+      { // 我的页面
         path: "/homeMineComponent",
         name: "HomeMineComponent",
         component: () => import("../components/HomeMineComponent.vue")
-      },{
+      },
+      { // 项目列表页面
         path: "/homeProjectListComponent",
         name: "HomeProjectListComponent",
         component: () => import("../components/HomeProjectListComponent.vue")
+      },
+      { // 创建项目
+        path: "/homeCreateProjectComponent",
+        name: "HomeCreateProjectComponent",
+        component: () => import("../components/HomeCreateProjectComponent.vue")
+      },
+      { // 项目问题列表
+        path: "/homeProblemComponent",
+        name: "HomeProblemComponent",
+        component: () => import("../components/HomeProblemComponent.vue")
       }
     ]
   }
