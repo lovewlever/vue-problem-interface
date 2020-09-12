@@ -33,13 +33,45 @@
 <script>
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
+import ConstWeb from "../constants/ConstWeb";
+//import _axios from "axios";
+import $ from "jquery";
+
 export default {
   name: "Welcome",
     created() {
       const timer = setInterval(() => {
-          this.$router.push("/login")
+          this.firstVerifyToken()
           clearInterval(timer)
       },2000)
+    },
+    methods: {
+      firstVerifyToken() {
+          let _this = this
+          let info = window.localStorage.getItem(ConstWeb.STORAGE_KEY.KEY_USER_LOGIN_INFO)
+          console.info(info)
+          if (info === null) {
+              this.$router.push("/login")
+          } else {
+              let obj = JSON.parse(info)
+              console.info(obj)
+              $.ajax({
+                  url: ConstWeb.WebApi.UNIVERSAL_VERIFY_TOKEN,
+                  headers: {
+                      "token":obj.data[0].token
+                  },
+                  data:{},
+                  success:function (data) {
+                      console.info(data)
+                      if (data.code === 200) {
+                          _this.$router.push("/home")
+                      } else {
+                          _this.$router.push("/login")
+                      }
+                  }
+              })
+          }
+      }
     }
 };
 </script>
