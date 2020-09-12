@@ -12,7 +12,19 @@ const routes = [
   {
     path: "/home",
     name: "Home",
-    component: Home
+    component: Home,
+    redirect: "/homeMineComponent",
+    children: [
+      {
+        path: "/homeMineComponent",
+        name: "HomeMineComponent",
+        component: () => import("../components/HomeMineComponent.vue")
+      },{
+        path: "/homeProjectListComponent",
+        name: "HomeProjectListComponent",
+        component: () => import("../components/HomeProjectListComponent.vue")
+      }
+    ]
   },
   {
     path: "/register",
