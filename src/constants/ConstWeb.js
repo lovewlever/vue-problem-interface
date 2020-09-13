@@ -3,6 +3,8 @@ import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
 const BASIS_URL = "http://192.168.3.21:8099";
+const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+
 const WebApi = {
   USER_LOGIN: BASIS_URL + "/usr/login", //
   USER_GET_VERIFY_CODE_IMG: BASIS_URL + "/usr/getVerifyCode",
@@ -65,5 +67,6 @@ export default {
   WebApi,
   STORAGE_KEY,
   RESULT_CODE,
+    WS_URL,
   axiosRequest
 };

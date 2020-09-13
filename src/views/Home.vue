@@ -67,6 +67,7 @@
 <script>
 import Navigation from "@/views/Navigation";
 import $ from "jquery";
+import WebSocket from "../constants/WebSocketCommon";
 
 export default {
   name: "Home",
@@ -84,6 +85,8 @@ export default {
       this.openOrHiddenLeftList();
       clearInterval(timer);
     }, 1000);
+
+    WebSocket.openWebSocket();
   },
   methods: {
     clickChooseLeftTitle(choose) {
