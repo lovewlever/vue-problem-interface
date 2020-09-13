@@ -13,7 +13,8 @@
           <svg style="margin-right: 24px" t="1599835265293" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="819" width="18" height="18"><path d="M287.8 319.8h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32zM608.3 319.8h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32zM928.2 319.8h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32zM287.8 639.2h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32zM608.3 639.2h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32zM928.2 639.2h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32zM287.8 959.7h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32zM608.3 959.7h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32zM928.2 959.7h-192c-17.6 0-32-14.4-32-32v-192c0-17.6 14.4-32 32-32h192c17.6 0 32 14.4 32 32v192c0 17.6-14.4 32-32 32z" p-id="820" fill="#ffffff"></path></svg>
         </li>
         <li>
-          <img src="../assets/logo.png" height="26" width="26" alt="avatar" style="border-radius: 50%;background: white">
+          <img v-bind:src="userAvatar" height="26" width="26" alt="avatar" style="border-radius: 50%;background: black" v-show="userNickname !== '未登录'">
+            <p class="nav-user-nickname" >{{userNickname}}</p>
         </li>
       </ul>
 
@@ -21,8 +22,16 @@
 </template>
 
 <script>
+import FuncCommon from "../constants/FuncCommon";
+
 export default {
   name: "Navigation",
+    data() {
+      return {
+          userNickname: "未登录",
+          userAvatar: require ("../assets/logo.png")
+      }
+    },
     methods: {
       clickOpenOrHiddenHomeLeft() {
           this.$parent.openOrHiddenLeftList()
@@ -30,6 +39,18 @@ export default {
         clickCreateProject() {
           this.$parent.createProject()
         }
+    },
+    created() {
+      let storageLoginInfo = FuncCommon.getStorageLoginInfo();
+      if (storageLoginInfo === null) {
+          this.$router.push("/login")
+      } else {
+          this.userNickname = storageLoginInfo.unickname
+          if (storageLoginInfo.uavatar !== "") {
+              this.userAvatar = storageLoginInfo.uavatar
+          }
+
+      }
     }
 };
 </script>
@@ -79,4 +100,14 @@ img {
 img :hover{
   cursor: pointer;
 }
+    .nav-user-nickname {
+        margin: 0 0 0 8px;
+        text-align: center;
+        color: wheat;
+        padding: 4px 0 0 0;
+        max-width: 96px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>

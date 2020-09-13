@@ -34,6 +34,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import ItemProject from "@/components/hmc/ItemProject";
 import $ from "jquery";
+import FuncCommon from "../constants/FuncCommon";
 
 export default {
   name: "HomeMineComponent",
@@ -51,6 +52,7 @@ export default {
         $("#setHeight").height(document.body.clientHeight - 101);
       })();
     };
+    FuncCommon.getStorageLoginInfo()
   }
 };
 </script>

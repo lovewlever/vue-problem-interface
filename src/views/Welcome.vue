@@ -36,6 +36,7 @@ import "bootstrap/dist/js/bootstrap.min";
 import ConstWeb from "../constants/ConstWeb";
 //import _axios from "axios";
 import $ from "jquery";
+import FuncCommon from "../constants/FuncCommon";
 
 export default {
   name: "Welcome",
@@ -48,17 +49,16 @@ export default {
     methods: {
       firstVerifyToken() {
           let _this = this
-          let info = window.localStorage.getItem(ConstWeb.STORAGE_KEY.KEY_USER_LOGIN_INFO)
+          let info = FuncCommon.getStorageLoginInfo()
           console.info(info)
           if (info === null) {
               this.$router.push("/login")
           } else {
-              let obj = JSON.parse(info)
-              console.info(obj)
+              console.info(info)
               $.ajax({
                   url: ConstWeb.WebApi.UNIVERSAL_VERIFY_TOKEN,
                   headers: {
-                      "token":obj.data[0].token
+                      "token":info.token
                   },
                   data:{},
                   success:function (data) {

@@ -41,7 +41,13 @@
             required
           />
         </label>
-        <img :src="verifyCodeUrl" alt="code" width="80" height="35" />
+        <img
+          :src="verifyCodeUrl"
+          alt="code"
+          width="80"
+          height="35"
+          @click="loadVerifyCode"
+        />
       </div>
       <div style="height: 8px"></div>
       <div class="login-register-forget">
@@ -61,6 +67,7 @@
 <script>
 import ConstWeb from "../constants/ConstWeb";
 import _axios from "axios";
+import FuncCommon from "../constants/FuncCommon";
 
 export default {
   name: "Home",
@@ -91,11 +98,16 @@ export default {
         let urlParams = new URLSearchParams();
         urlParams.append("account", this.inputAccount);
         urlParams.append("pwd", this.inputPwd);
-        _axios({
-          url: ConstWeb.WebApi.USER_LOGIN,
-          data: urlParams,
-          method: "POST"
-        })
+        urlParams.append("verifyCode", this.inputCode);
+        urlParams.append("sessionKey", FuncCommon.getSessionKey());
+        _axios(
+          {
+            url: ConstWeb.WebApi.USER_LOGIN,
+            data: urlParams,
+            method: "POST"
+          },
+          { withCredentials: true }
+        )
           .then(data => {
             console.info(data);
             if (data.data.code === 200) {
@@ -108,51 +120,34 @@ export default {
             this.showOrHiddenErrorDes = true;
           })
           .catch(error => {
-            this.errorMsg = "注册失败：" + error;
+            this.errorMsg = "登录失败：" + error;
             this.showOrHiddenErrorDes = true;
           });
       }
     },
     loadVerifyCode() {
       //获取验证码
-      _axios(
-        {
-          url: ConstWeb.WebApi.USER_GET_VERIFY_CODE_IMG,
-          data: {},
-          responseType: "arraybuffer",
-          method: "POST"
-        },
-        {}
-      )
-        .then(data => {
+      FuncCommon.getVerify(
+        data => {
           console.info(data);
-          this.verifyCodeUrl = arrayBufferToBase64(data.data);
-        })
-        .catch(error => {
-          this.errorMsg = "验证码获取失败：" + error.message();
+          this.verifyCodeUrl = data;
+        },
+        error => {
+          this.errorMsg = "验证码获取失败：" + error;
           this.showOrHiddenErrorDes = true;
-        });
+        }
+      );
     },
     saveLoginInfo(info) {
       //保存登录信息
       window.localStorage.setItem(
         ConstWeb.STORAGE_KEY.KEY_USER_LOGIN_INFO,
-        JSON.stringify(info)
+        JSON.stringify(info.data[0])
       );
       this.$router.push("/home");
     }
   }
 };
-
-function arrayBufferToBase64(buffer) {
-  let binary = "";
-  const bytes = new Uint8Array(buffer);
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return "data:image/jpeg;base64," + window.btoa(binary);
-}
 </script>
 
 <style scoped>
