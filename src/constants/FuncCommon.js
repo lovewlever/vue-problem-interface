@@ -2,6 +2,14 @@ import _axios from "axios";
 import mainJs from "../main";
 import ConstWeb from "./ConstWeb";
 
+function showConsoleInfo(obj) {
+  console.info(obj)
+}
+
+function showConsoleError(obj) {
+  console.error(obj)
+}
+
 /**
  * 获取用来获取服务器存在Session的验证码
  * @returns {string}
@@ -90,5 +98,7 @@ function uuid() {
 export default {
   getVerify,
   getSessionKey,
-  getStorageLoginInfo
+  getStorageLoginInfo,
+  showConsoleInfo,
+  showConsoleError
 };

@@ -1,7 +1,7 @@
 <template>
     <div class="item-con">
         <!--坐-->
-        <div class="item-con" v-if="doubleDataList.length > 0">
+        <div class="item-con" v-if="doubleDataList.length > 0" @click="clickToProjectDetails(doubleDataList[0].id)">
             <div class="item-con-c-left">
                 <h5 style="color: #CDCDCD;margin: 14px 0 auto 24px">
                     {{doubleDataList[0].projectName}}&nbsp;&nbsp;BY {{doubleDataList[0].tuserEntity.unickname}}
@@ -40,7 +40,7 @@
 
 
         <!--右-->
-        <div class="item-con"  v-if="doubleDataList.length > 1">
+        <div class="item-con"  v-if="doubleDataList.length > 1" @click="clickToProjectDetails(doubleDataList[1].id)">
             <div class="item-con-c-right">
                 <h5 style="color: #CDCDCD;margin: 14px 0 auto 24px">
                     {{doubleDataList[1].projectName}}&nbsp;&nbsp;BY {{doubleDataList[1].tuserEntity.unickname}}
@@ -90,7 +90,13 @@
             }
         },
         props: {
-            doubleDataList: Array(0)
+            doubleDataList: Array()
+        },
+        methods: {
+            clickToProjectDetails(projectId) {
+                console.info(projectId)
+                this.$router.push({path:"/homeProjectDetailsComponent",query: {projectId: projectId}})
+            }
         }
     };
 </script>

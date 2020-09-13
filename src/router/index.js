@@ -36,6 +36,11 @@ const routes = [
         name: "HomeProjectListComponent",
         component: () => import("../components/HomeProjectListComponent.vue")
       },
+      { // 项目详情
+        path: "/homeProjectDetailsComponent",
+        name: "HomeProjectDetailsComponent",
+        component: () => import("../components/HomeProjectDetailsComponent.vue")
+      },
       { // 创建项目
         path: "/homeCreateProjectComponent",
         name: "HomeCreateProjectComponent",
