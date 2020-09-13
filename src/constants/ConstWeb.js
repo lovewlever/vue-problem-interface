@@ -1,4 +1,5 @@
 import _axios from "axios";
+import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
 const BASIS_URL = "http://192.168.3.21:8099";
@@ -7,7 +8,8 @@ const WebApi = {
   USER_GET_VERIFY_CODE_IMG: BASIS_URL + "/usr/getVerifyCode",
   USER_REGISTER: BASIS_URL + "/usr/register",
   UNIVERSAL_VERIFY_TOKEN: BASIS_URL + "/uni/verifyToken", //首次进入是验证token
-  CREATE_PROJECT: BASIS_URL + "/pc/addNewProject" //创建项目
+  CREATE_PROJECT: BASIS_URL + "/pc/addNewProject", //创建项目
+  QUERY_PROJECT_LIST: BASIS_URL + "/pc/queryPlist" //查询项目列表
 };
 const RESULT_CODE = {
   RESULT_CODE_SUCCESS: 200, //成功
@@ -27,20 +29,22 @@ const STORAGE_KEY = {
  * @param error
  */
 function axiosRequest(url, urlParams, success, error) {
+  const token = FuncCommon.getStorageLoginInfo().token;
+
   _axios(
     {
       url: url,
       data: urlParams,
       method: "POST",
-        headers: {
-            "token":FuncCommon.getStorageLoginInfo().token
-        }
+      headers: {
+        token: token
+      }
     },
     { withCredentials: true }
   )
     .then(data => {
       if (data.data.code === RESULT_CODE.RESULT_CODE_NOT_LOGIN) {
-        this.$router.push("/login");
+        mainJs.vue.$router.push("/login");
       } else {
         console.info(data);
         success(data);

@@ -2,12 +2,19 @@
   <div>
     <div>
       <ul class="hmc-top-label">
-        <li><input type="text" name="search" placeholder="请输入搜索内容" style="background: none;border: none;outline: none;color: white"></li>
+        <li>
+          <input
+            type="text"
+            name="search"
+            placeholder="请输入搜索内容"
+            style="background: none;border: none;outline: none;color: white"
+          />
+        </li>
       </ul>
     </div>
 
     <div class="hmc-item-content" id="setHeight">
-      <ItemProject />
+      <ItemProject v-for="(obj,index) in projectDataList" :key="index" :double-data-list="obj" />
 
       <div style="left: 50%;margin: 24px 0">
         <ul class="pagination">
@@ -23,11 +30,17 @@
 <script>
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
-import ItemProject from "@/components/hmc/ItemProject";
+import ItemProject from "../components/hmc/ItemProject";
 import $ from "jquery";
+import ConstWeb from "../constants/ConstWeb";
 
 export default {
   name: "HomeProjectListComponent",
+  data() {
+    return {
+      projectDataList: []
+    };
+  },
   components: { ItemProject },
   mounted() {
     window.onresize = () => {
@@ -38,6 +51,37 @@ export default {
         $("#setHeight").height(document.body.clientHeight - 101);
       })();
     };
+    this.queryProjectList();
+  },
+  methods: {
+    queryProjectList() {
+      const urlParams = new URLSearchParams();
+      urlParams.append("page", 1);
+      urlParams.append("pageCountSize", 10);
+      ConstWeb.axiosRequest(
+        ConstWeb.WebApi.QUERY_PROJECT_LIST,
+        urlParams,
+        data => {
+          console.info(data);
+          let arr = [];
+          const array = data.data.data;
+          for (let index in array) {
+            console.info(index);
+            if (index % 2 === 0) { //偶数
+              arr.push(array[index]);
+              this.projectDataList.push(arr);
+            } else { //奇数
+              arr.push(array[index]);
+              arr = [];
+            }
+          }
+          console.info(this.projectDataList[0]);
+        },
+        error => {
+          console.error(error);
+        }
+      );
+    }
   }
 };
 </script>

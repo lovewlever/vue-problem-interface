@@ -1,10 +1,10 @@
 <template>
     <div class="item-con">
-
-        <div class="item-con">
+        <!--坐-->
+        <div class="item-con" v-if="doubleDataList.length > 0">
             <div class="item-con-c-left">
                 <h5 style="color: #CDCDCD;margin: 14px 0 auto 24px">
-                    小项目&nbsp;&nbsp;BY USER
+                    {{doubleDataList[0].projectName}}&nbsp;&nbsp;BY {{doubleDataList[0].tuserEntity.unickname}}
                 </h5>
                 <div class="progress">
                     <div
@@ -39,11 +39,11 @@
         </div>
 
 
-
-        <div class="item-con">
+        <!--右-->
+        <div class="item-con"  v-if="doubleDataList.length > 1">
             <div class="item-con-c-right">
                 <h5 style="color: #CDCDCD;margin: 14px 0 auto 24px">
-                    小项目&nbsp;&nbsp;BY USER
+                    {{doubleDataList[1].projectName}}&nbsp;&nbsp;BY {{doubleDataList[1].tuserEntity.unickname}}
                 </h5>
                 <div class="progress">
                     <div
@@ -84,7 +84,14 @@
     import "bootstrap/dist/js/bootstrap.min";
 
     export default {
-        name: "ItemProject"
+        name: "ItemProject",
+        data() {
+            return {
+            }
+        },
+        props: {
+            doubleDataList: Array(0)
+        }
     };
 </script>
 

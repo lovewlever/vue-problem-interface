@@ -10,13 +10,7 @@
     </div>
 
     <div class="hmc-item-content" id="setHeight">
-      <ItemProject />
-      <ItemProject />
-      <ItemProject />
-      <ItemProject />
-      <ItemProject />
-      <ItemProject />
-      <ItemProject />
+      <ItemProject :double-data-list="datas" />
 
       <div style="left: 50%;margin: 24px 0">
         <ul class="pagination">
@@ -39,6 +33,11 @@ import FuncCommon from "../constants/FuncCommon";
 export default {
   name: "HomeMineComponent",
   components: { ItemProject },
+  data() {
+    return {
+      datas: []
+    }
+  },
   created() {
   },
   mounted() {

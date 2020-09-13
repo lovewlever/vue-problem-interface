@@ -8,7 +8,7 @@
     </div>
 
     <div class="hmc-item-content" id="setHeight">
-      <ItemProject />
+
 
       <div style="left: 50%;margin: 24px 0">
         <ul class="pagination">
@@ -24,12 +24,11 @@
 <script>
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
-import ItemProject from "@/components/hmc/ItemProject";
 import $ from "jquery";
 
 export default {
   name: "HomeProblemComponent",
-  components: { ItemProject },
+  components: {  },
   created() {
   },
   mounted() {

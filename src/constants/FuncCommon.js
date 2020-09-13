@@ -1,16 +1,31 @@
 import _axios from "axios";
+import mainJs from "../main";
 import ConstWeb from "./ConstWeb";
 
+/**
+ * 获取用来获取服务器存在Session的验证码
+ * @returns {string}
+ */
 function getSessionKey() {
   return window.localStorage.getItem(
     ConstWeb.STORAGE_KEY.KEY_GET_VERIFY_CODE_SESSION_KEY
   );
 }
 
+/**
+ * 获取本地存储的登录信息
+ * @returns {any}
+ */
 function getStorageLoginInfo() {
-  return JSON.parse(
+  const userLoginInfo = JSON.parse(
     window.localStorage.getItem(ConstWeb.STORAGE_KEY.KEY_USER_LOGIN_INFO)
   );
+  //如果本地存的登录信息为null 则让重新登录
+  console.info(userLoginInfo);
+  if (userLoginInfo === null) {
+    mainJs.vue.$router.push("/login");
+  }
+  return userLoginInfo;
 }
 
 /**
@@ -34,7 +49,6 @@ function getVerify(funcImageBufferArray, error) {
     xhrFields: { withCredentials: true }
   })
     .then(data => {
-      console.info(data);
       funcImageBufferArray(arrayBufferToBase64(data.data));
     })
     .catch(err => {

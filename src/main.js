@@ -5,7 +5,11 @@ import store from "./store";
 import _axios from "axios";
 _axios.defaults.withCredentials = true;
 
-createApp(App)
+const vue = createApp(App)
   .use(store)
   .use(router)
-  .mount("#app");
+  .mount("#app").$root;
+
+export default {
+    vue
+}
