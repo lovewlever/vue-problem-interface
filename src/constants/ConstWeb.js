@@ -14,9 +14,11 @@ const WebApi = {
   QUERY_PROJECT_LIST: BASIS_URL + "/pc/queryPlist", //查询项目列表
   QUERY_PROJECT_LIST_FOR_ME: BASIS_URL + "/pc/queryProjectsByUserId", //查询我发布的项目
   QUERY_PROJECT_DETAILS: BASIS_URL + "/pc/queryProjectById", //查询项目详情
-  QUERY_PROJECT_OPERATE_RECORDER: BASIS_URL + "/pc/queryProjectOperateRecorders", //查询项目的操作记录
+  QUERY_PROJECT_OPERATE_RECORDER:
+    BASIS_URL + "/pc/queryProjectOperateRecorders", //查询项目的操作记录
 
-  QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM: BASIS_URL + "/ppc/recommendProjectLabelsForProblem" //查询问题页面上面项目标签
+  QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM:
+    BASIS_URL + "/ppc/recommendProjectLabelsForProblem" //查询问题页面上面项目标签
 };
 const RESULT_CODE = {
   RESULT_CODE_SUCCESS: 200, //成功
@@ -53,12 +55,12 @@ function axiosRequest(url, urlParams, success, error) {
       if (data.data.code === RESULT_CODE.RESULT_CODE_NOT_LOGIN) {
         mainJs.vue.$router.push("/login");
       } else {
-        console.info(data);
+        FuncCommon.showConsoleInfo(data);
         success(data);
       }
     })
     .catch(err => {
-      console.info(err);
+      FuncCommon.showConsoleError(err);
       error(err);
     });
 }
@@ -67,6 +69,6 @@ export default {
   WebApi,
   STORAGE_KEY,
   RESULT_CODE,
-    WS_URL,
+  WS_URL,
   axiosRequest
 };
