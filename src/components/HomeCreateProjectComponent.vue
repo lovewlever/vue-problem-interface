@@ -75,6 +75,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import $ from "jquery";
 import ConstWeb from "../constants/ConstWeb";
+import FuncCommon from "../constants/FuncCommon";
 
 export default {
   name: "HomeCreateProjectComponent",
@@ -94,7 +95,7 @@ export default {
     $("#setHeight").height(document.body.clientHeight - 160);
     window.onresize = () => {
       return (() => {
-        console.info(
+        FuncCommon.showConsoleInfo(
           document.body.clientWidth + "==" + document.body.clientHeight
         );
         $("#setHeight").height(document.body.clientHeight - 160);
@@ -123,12 +124,12 @@ export default {
             this.showOrHiddenErrorMsg = true;
           }
         },error => {
-          console.error(error)
+          FuncCommon.showConsoleError(error)
           this.errorMsg = "添加错误：" + error;
           this.showOrHiddenErrorMsg = true;
         })
       }
-        console.info(this.projectName + "--" + this.projectLevel + "---" + this.projectDesc)
+      FuncCommon.showConsoleInfo(this.projectName + "--" + this.projectLevel + "---" + this.projectDesc)
         return false;
     }
   }

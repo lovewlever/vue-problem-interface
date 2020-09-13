@@ -103,11 +103,13 @@ export default {
       const $cll = $("#content-left-list");
       const $span = $("#content-left-list ul li span");
       if ($cll.width() === 250) {
-        $cll.animate({ width: "100px" }, 500);
-        $span.animate({ opacity: 0 }, 100);
+        $span.animate({ opacity: 0 }, 200);
+        $cll.animate({ width: "72px" }, 500);
+        $span.animate({ width: "0px" }, 400);
       } else {
         $cll.animate({ width: "250px" }, 500);
-        $span.animate({ opacity: 1 }, 100);
+        $span.animate({ width: "50px" }, 400);
+        $span.animate({ opacity: 1 }, 200);
       }
     },
     createProject() {
@@ -144,7 +146,7 @@ export default {
 }
 .app-content-left-list ul li {
   list-style: none;
-  height: 40px;
+  height: 45px;
   text-align: center;
   margin: 0;
   padding: 0;
@@ -156,7 +158,6 @@ export default {
 
 .app-content-left-list ul li:hover {
   list-style: none;
-  height: 40px;
   text-align: center;
   background: #383838;
   margin: 0;

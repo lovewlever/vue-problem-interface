@@ -45,6 +45,8 @@ export default {
           this.firstVerifyToken()
           clearInterval(timer)
       },2000)
+
+        window.Notification.requestPermission();
     },
     methods: {
       firstVerifyToken() {

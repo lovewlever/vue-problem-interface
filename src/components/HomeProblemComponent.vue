@@ -2,14 +2,12 @@
   <div>
     <div>
       <ul class="hmc-top-label">
-        <li>小项目</li>
-        <li>项目2</li>
+        <li>推荐的项目</li>
+        <li v-for="(obj,index) in projectLabelList" :key="index">{{obj?.projectName}}</li>
       </ul>
     </div>
 
     <div class="hmc-item-content" id="setHeight">
-
-
       <div style="left: 50%;margin: 24px 0">
         <ul class="pagination">
           <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -25,23 +23,49 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import $ from "jquery";
+import ConstWeb from "../constants/ConstWeb";
+import FuncCommon from "../constants/FuncCommon";
 
 export default {
   name: "HomeProblemComponent",
-  components: {  },
-  created() {
+  components: {},
+  data() {
+    return {
+      projectLabelList: [] // 顶部项目标签
+    };
   },
+  created() {},
   mounted() {
     //设置容器高度 防止内容移除
     $("#setHeight").height(document.body.clientHeight - 101);
     window.onresize = () => {
       return (() => {
-        console.info(
+        FuncCommon.showConsoleInfo(
           document.body.clientWidth + "==" + document.body.clientHeight
         );
         $("#setHeight").height(document.body.clientHeight - 101);
       })();
     };
+
+    this.queryProjectLabelList();
+  },
+  methods: {
+    queryProjectLabelList() {
+      // 查询顶部项目标签
+      const urlParams = new URLSearchParams();
+      urlParams.append("labelNum", 10);
+      ConstWeb.axiosRequest(
+        ConstWeb.WebApi.QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM,
+        urlParams,
+        data => {
+          FuncCommon.showConsoleInfo(data);
+          this.projectLabelList = data.data.data;
+        },
+        error => {
+          FuncCommon.showConsoleError(error);
+        }
+      );
+    }
   }
 };
 </script>

@@ -33,6 +33,7 @@ import "bootstrap/dist/js/bootstrap.min";
 import ItemProject from "../components/hmc/ItemProject";
 import $ from "jquery";
 import ConstWeb from "../constants/ConstWeb";
+import FuncCommon from "../constants/FuncCommon";
 
 export default {
   name: "HomeProjectListComponent",
@@ -62,11 +63,11 @@ export default {
         ConstWeb.WebApi.QUERY_PROJECT_LIST,
         urlParams,
         data => {
-          console.info(data);
+          FuncCommon.showConsoleInfo(data)
           let arr = [];
           const array = data.data.data;
           for (let index in array) {
-            console.info(index);
+            FuncCommon.showConsoleInfo(index)
             if (index % 2 === 0) { //偶数
               arr.push(array[index]);
               this.projectDataList.push(arr);
@@ -75,10 +76,10 @@ export default {
               arr = [];
             }
           }
-          console.info(this.projectDataList[0]);
+          FuncCommon.showConsoleInfo(this.projectDataList)
         },
         error => {
-          console.error(error);
+          FuncCommon.showConsoleError(error)
         }
       );
     }

@@ -10,8 +10,11 @@ const WebApi = {
   UNIVERSAL_VERIFY_TOKEN: BASIS_URL + "/uni/verifyToken", //首次进入是验证token
   CREATE_PROJECT: BASIS_URL + "/pc/addNewProject", //创建项目
   QUERY_PROJECT_LIST: BASIS_URL + "/pc/queryPlist", //查询项目列表
+  QUERY_PROJECT_LIST_FOR_ME: BASIS_URL + "/pc/queryProjectsByUserId", //查询我发布的项目
   QUERY_PROJECT_DETAILS: BASIS_URL + "/pc/queryProjectById", //查询项目详情
   QUERY_PROJECT_OPERATE_RECORDER: BASIS_URL + "/pc/queryProjectOperateRecorders", //查询项目的操作记录
+
+  QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM: BASIS_URL + "/ppc/recommendProjectLabelsForProblem" //查询问题页面上面项目标签
 };
 const RESULT_CODE = {
   RESULT_CODE_SUCCESS: 200, //成功

@@ -1,8 +1,17 @@
 <template>
     <div>
-        <div>
+        <div style="display: flex">
             <ul class="hmc-top-label">
                 <li>:{{projectObj?.projectName}}&nbsp;BY&nbsp;{{projectObj?.tuserEntity?.unickname}}</li>
+            </ul>
+
+            <ul class="hpdc-top-add">
+                <li>
+                    <router-link to="/" >添加问题</router-link>
+                </li>
+                <li>
+                    <router-link to="/" >添加接口</router-link>
+                </li>
             </ul>
         </div>
         <hr/>
@@ -53,13 +62,13 @@
         },
         mounted() {
             //设置容器高度 防止内容移除
-            $("#setHeight").height(document.body.clientHeight - 160);
+            $("#setHeight").height(document.body.clientHeight - 180);
             window.onresize = () => {
                 return (() => {
-                    console.info(
+                    FuncCommon.showConsoleInfo(
                         document.body.clientWidth + "==" + document.body.clientHeight
                     );
-                    $("#setHeight").height(document.body.clientHeight - 160);
+                    $("#setHeight").height(document.body.clientHeight - 180);
                 })();
             };
 
@@ -135,5 +144,30 @@
     label {
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
+    }
+
+    .hpdc-top-add {
+        flex: 1;
+        list-style-type: none;
+        text-align: right;
+        margin: 3px 0 13px 0px;
+        display: flex;
+    }
+
+    .hpdc-top-add li {
+        display: inline;
+        margin: auto 0 auto 24px;
+        padding: 3px 10px 0px 10px;
+        font-size: 0.8rem;
+        height: 26px;
+        color: #696969;
+        border: 1px solid;
+        border-radius: 6px;
+    }
+    .hpdc-top-add li:hover {
+        cursor: pointer;
+    }
+    .hpdc-top-add li a {
+        color: #696969;
     }
 </style>

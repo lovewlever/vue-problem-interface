@@ -10,7 +10,7 @@
     </div>
 
     <div class="hmc-item-content" id="setHeight">
-      <ItemProject :double-data-list="datas" />
+      <ItemProject v-for="(obj,index) in projectDataList" :key="index" :double-data-list="obj" />
 
       <div style="left: 50%;margin: 24px 0">
         <ul class="pagination">
@@ -28,6 +28,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import ItemProject from "@/components/hmc/ItemProject";
 import $ from "jquery";
+import ConstWeb from "../constants/ConstWeb";
 import FuncCommon from "../constants/FuncCommon";
 
 export default {
@@ -35,7 +36,7 @@ export default {
   components: { ItemProject },
   data() {
     return {
-      datas: []
+      projectDataList: []
     }
   },
   created() {
@@ -45,13 +46,43 @@ export default {
     $("#setHeight").height(document.body.clientHeight - 101);
     window.onresize = () => {
       return (() => {
-        console.info(
+        FuncCommon.showConsoleInfo(
           document.body.clientWidth + "==" + document.body.clientHeight
         );
         $("#setHeight").height(document.body.clientHeight - 101);
       })();
     };
-    FuncCommon.getStorageLoginInfo()
+    this.queryProjectList()
+  },
+  methods: {
+    queryProjectList() { //查询我的项目
+      const urlParams = new URLSearchParams();
+      urlParams.append("page", 1);
+      urlParams.append("pageCountSize", 10);
+      ConstWeb.axiosRequest(
+              ConstWeb.WebApi.QUERY_PROJECT_LIST_FOR_ME,
+              urlParams,
+              data => {
+                FuncCommon.showConsoleInfo(data)
+                let arr = [];
+                const array = data.data.data;
+                for (let index in array) {
+                  FuncCommon.showConsoleInfo(index)
+                  if (index % 2 === 0) { //偶数
+                    arr.push(array[index]);
+                    this.projectDataList.push(arr);
+                  } else { //奇数
+                    arr.push(array[index]);
+                    arr = [];
+                  }
+                }
+                FuncCommon.showConsoleInfo(this.projectDataList[0]);
+              },
+              error => {
+                FuncCommon.showConsoleError(error);
+              }
+      );
+    }
   }
 };
 </script>
