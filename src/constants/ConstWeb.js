@@ -2,8 +2,8 @@ import _axios from "axios";
 import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
-const BASIS_URL = "http://192.168.3.21:8099";
-const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+const BASIS_URL = "http://192.168.1.113:8099";
+const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
 
 const WebApi = {
   USER_LOGIN: BASIS_URL + "/usr/login", //

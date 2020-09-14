@@ -6,11 +6,11 @@
             </ul>
 
             <ul class="hpdc-top-add">
-                <li>
-                    <router-link to="/" >添加问题</router-link>
+                <li @click="clickToAddProblemToProject">
+                    <span>添加问题</span>
                 </li>
                 <li>
-                    <router-link to="/" >添加接口</router-link>
+                    <span>添加接口</span>
                 </li>
             </ul>
         </div>
@@ -53,11 +53,13 @@
         data() {
             return {
                 projectObj: null,
-                operateRecorders: []
+                operateRecorders: [],
+                projectId: String
             };
         },
         components: {},
         created() {
+            this.projectId = this.$route.query.projectId
             this.queryProjectDetails()
         },
         mounted() {
@@ -71,12 +73,12 @@
                     $("#setHeight").height(document.body.clientHeight - 180);
                 })();
             };
-
         },
         methods: {
             queryProjectDetails() { //查询项目详情
+                const _this = this
                 const urlParams = new URLSearchParams()
-                urlParams.append("projectId", this.$route.query.projectId);
+                urlParams.append("projectId", _this.projectId);
                 ConstWeb.axiosRequest(ConstWeb.WebApi.QUERY_PROJECT_DETAILS, urlParams, data => {
                     FuncCommon.showConsoleInfo(data)
                     this.projectObj = data.data.data[0]
@@ -87,9 +89,10 @@
                 })
             },
             queryProjectOperateRecorders() { // 查询项目的操作记录
+                const _this = this
                 FuncCommon.showConsoleInfo("查询项目的操作记录")
                 const urlParams = new URLSearchParams()
-                urlParams.append("projectId", this.$route.query.projectId);
+                urlParams.append("projectId", _this.projectId);
                 urlParams.append("page", 1);
                 urlParams.append("pageCountSize", 30);
                 ConstWeb.axiosRequest(ConstWeb.WebApi.QUERY_PROJECT_OPERATE_RECORDER, urlParams, data => {
@@ -97,6 +100,16 @@
                     this.operateRecorders = data.data.data
                 }, err => {
                     FuncCommon.showConsoleError(err)
+                })
+            },
+            clickToAddProblemToProject() {
+                const _this = this
+                this.$router.push({
+                    path: "/homeAddProblemToProjectComponent", query:
+                        {
+                            projectId: _this.projectId,
+                            projectName: _this.projectObj?.projectName
+                        }
                 })
             }
         }

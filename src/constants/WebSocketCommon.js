@@ -4,7 +4,7 @@ import FuncCommon from "./FuncCommon";
 
 
 function openWebSocket() {
-    const ws = new WebSocket(ConstWeb.WS_URL + "?userId=" +FuncCommon.getStorageLoginInfo().id)
+    const ws = new WebSocket(ConstWeb.WS_URL + "?userId=" +FuncCommon.getStorageLoginInfo()?.id)
     ws.onopen = function() {          //处理连接开启事件
         console.log('Opening');
         ws.send('start');
