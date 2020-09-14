@@ -18,7 +18,7 @@
           <div style="display: flex;width: 100%">
             <div style="flex: 1;margin: 25px;display: flex;">
               <div class="align-left ">
-                <p class="no-margin">出现问题的终端：</p>
+                <p class="no-margin item-title">出现问题的终端：</p>
                 <p class="no-margin item-title-desc">必选</p>
                 <label>
                   <select
@@ -32,7 +32,7 @@
               </div>
 
               <div class="align-left ">
-                <p class="no-margin">请添加出现问题的页面</p>
+                <p class="no-margin item-title">请添加出现问题的页面</p>
                 <p class="no-margin item-title-desc">如：我的页面</p>
                 <label>
                   <input
@@ -45,7 +45,7 @@
               </div>
 
               <div class="align-left" style="flex: 1">
-                <p class="no-margin">请添加问题描述</p>
+                <p class="no-margin item-title">请添加问题描述</p>
                 <p class="no-margin item-title-desc">如：</p>
                 <label style="width: 100%;display: flex">
                   <textarea
@@ -72,6 +72,8 @@
             <button type="submit" value="" @click="clickCommit">添加问题到&nbsp;=>&nbsp;{{projectName}}</button>
           </label>
           <p style="color: red" v-show="showOrHiddenErrorMsg">{{errorMsg}}</p>
+          <br/><br/>
+          <p style="color: gray">添加的问题未提交时将自动保存到本地，下次进入时自动读取</p>
         </div>
       </div>
     </div>
@@ -147,7 +149,7 @@ export default {
     },
     addInputProblem() { //添加一行输入框
       const proD4 = new ProblemData();
-      proD4.devicesList = this.problemList[0]?.problemList;
+      proD4.devicesList = this.problemList[0]?.devicesList;
       proD4.projectId = this.projectId;
       this.problemList.push(proD4);
     },
@@ -272,4 +274,7 @@ hr {
 .add-or-remove-click:hover {
   cursor: pointer;
 }
+  .item-title {
+    color: wheat;
+  }
 </style>
