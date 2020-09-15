@@ -458,4 +458,7 @@ hr {
 table {
   width: 100%;
 }
+  .modal-dialog {
+    max-width: 700px;
+  }
 </style>

@@ -2,11 +2,11 @@ import _axios from "axios";
 import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
-//const BASIS_URL = "http://192.168.3.21:8099";
-//const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+const BASIS_URL = "http://192.168.3.21:8099";
+const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
 
-const BASIS_URL = "http://192.168.1.113:8099";
-const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
+//const BASIS_URL = "http://192.168.1.113:8099";
+//const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
 
 const WebApi = {
   USER_LOGIN: BASIS_URL + "/usr/login", //
@@ -23,6 +23,8 @@ const WebApi = {
     BASIS_URL + "/ppc/recommendProjectLabelsForProblem", //查询问题页面上面项目标签
   QUERY_PROJECT_SYSTEM_DEVICES: BASIS_URL + "/ppc/queryProjectSystemDevices", //查询添加问题时选择的设备列表
   SAVE_PROJECT_SAVE_PROBLEM_LIST: BASIS_URL + "/ppc/saveProjectSaveProblemList", //查询添加问题时选择的设备列表
+  QUERY_PROBLEM_LIST_BY_PROJECT_ID: BASIS_URL + "/ppc/queryProblemListByProjectId", //根据项目id查询问题列表
+  QUERY_PROBLEM_LIST_NEW_TIME_COUNT: BASIS_URL + "/ppc/queryProblemListNewTimeCount" //查询最新添加的指定条问题
 };
 const RESULT_CODE = {
   RESULT_CODE_SUCCESS: 200, //成功

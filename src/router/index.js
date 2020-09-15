@@ -47,9 +47,9 @@ const routes = [
         component: () => import("../components/HomeCreateProjectComponent.vue")
       },
       { // 项目问题列表
-        path: "/homeProblemComponent",
-        name: "HomeProblemComponent",
-        component: () => import("../components/HomeProblemComponent.vue")
+        path: "/homeProblemListComponent",
+        name: "HomeProblemListComponent",
+        component: () => import("../components/HomeProblemListComponent.vue")
       },
       { // 添加问题到项目
         path: "/homeAddProblemToProjectComponent",

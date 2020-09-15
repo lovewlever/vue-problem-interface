@@ -100,7 +100,7 @@ export default {
         this.$router.push("/homeProjectListComponent");
       } else if (choose === "problem") {
         // 跳转项目问题列表
-        this.$router.push("/homeProblemComponent");
+        this.$router.push("/homeProblemListComponent");
       }
     },
     openOrHiddenLeftList() {
