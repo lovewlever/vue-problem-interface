@@ -2,8 +2,11 @@ import _axios from "axios";
 import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
-const BASIS_URL = "http://192.168.3.21:8099";
-const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+//const BASIS_URL = "http://192.168.3.21:8099";
+//const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+
+const BASIS_URL = "http://192.168.1.113:8099";
+const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
 
 const WebApi = {
   USER_LOGIN: BASIS_URL + "/usr/login", //
@@ -18,7 +21,8 @@ const WebApi = {
     BASIS_URL + "/pc/queryProjectOperateRecorders", //查询项目的操作记录
   QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM:
     BASIS_URL + "/ppc/recommendProjectLabelsForProblem", //查询问题页面上面项目标签
-  QUERY_PROJECT_SYSTEM_DEVICES: BASIS_URL + "/ppc/recommendProjectSystemDevices" //查询添加问题时选择的设备列表
+  QUERY_PROJECT_SYSTEM_DEVICES: BASIS_URL + "/ppc/queryProjectSystemDevices", //查询添加问题时选择的设备列表
+  SAVE_PROJECT_SAVE_PROBLEM_LIST: BASIS_URL + "/ppc/saveProjectSaveProblemList", //查询添加问题时选择的设备列表
 };
 const RESULT_CODE = {
   RESULT_CODE_SUCCESS: 200, //成功
@@ -28,7 +32,7 @@ const RESULT_CODE = {
 const STORAGE_KEY = {
   KEY_USER_LOGIN_INFO: "keyUserLoginInfo",
   KEY_GET_VERIFY_CODE_SESSION_KEY: "sessionKey",
-    KEY_SAVE_UNSUBMITTED_PROBLEM_LIST: "saveUnCommitProblemList" // 保存未提交的问题到本地 下次打开页面时读取
+    KEY_SAVE_UNSUBMITTED_PROBLEM_OBJ: "saveUnCommitProblemObj" // 保存未提交的问题到本地 下次打开页面时读取
 };
 
 /**
