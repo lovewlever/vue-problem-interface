@@ -100,5 +100,6 @@ export default {
   getSessionKey,
   getStorageLoginInfo,
   showConsoleInfo,
-  showConsoleError
+  showConsoleError,
+  mainJs
 };
