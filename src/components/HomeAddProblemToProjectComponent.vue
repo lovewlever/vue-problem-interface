@@ -289,6 +289,8 @@ export default {
               );
               //刷新
               window.location.reload();
+            } else {
+              alert("提交失败：" + data.data.msg);
             }
           }
         })
