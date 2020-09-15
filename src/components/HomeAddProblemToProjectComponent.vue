@@ -287,6 +287,8 @@ export default {
                 ConstWeb.STORAGE_KEY.KEY_SAVE_UNSUBMITTED_PROBLEM_OBJ,
                 JSON.stringify("")
               );
+              //刷新
+              window.location.reload();
             }
           }
         })
