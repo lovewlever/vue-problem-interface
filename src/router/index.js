@@ -55,7 +55,11 @@ const routes = [
         path: "/homeAddProblemToProjectComponent",
         name: "HomeAddProblemToProjectComponent",
         component: () => import("../components/HomeAddProblemToProjectComponent.vue")
-
+      },
+      { // 添加问题到项目
+        path: "/homeAddInterfaceToProjectComponent",
+        name: "HomeAddInterfaceToProjectComponent",
+        component: () => import("../components/HomeAddInterfaceToProjectComponent.vue")
       }
     ]
   }

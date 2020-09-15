@@ -9,7 +9,7 @@
                 <li @click="clickToAddProblemToProject">
                     <span>添加问题</span>
                 </li>
-                <li>
+                <li @click="clickToAddInterfaceToProject">
                     <span>添加接口</span>
                 </li>
             </ul>
@@ -111,6 +111,13 @@
                             projectName: _this.projectObj?.projectName
                         }
                 })
+            },
+            clickToAddInterfaceToProject() {
+                const _this = this
+                this.$router.push({path: "/homeAddInterfaceToProjectComponent", query: {
+                        projectId: _this.projectId,
+                        projectName: _this.projectObj?.projectName
+                    }})
             }
         }
     };
