@@ -253,6 +253,8 @@ export default {
         ConstWeb.STORAGE_KEY.KEY_SAVE_UNSUBMITTED_PROBLEM_OBJ
       )
     );
+    FuncCommon.showConsoleInfo("本地保存的问题列表:");
+    FuncCommon.showConsoleInfo(localList);
     if (localList === null || localList === "" || localList.length === 0) {
       this.querySystemDevicesList();
     } else {

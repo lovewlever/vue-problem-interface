@@ -48,7 +48,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
-            添加问题到&nbsp;=>&nbsp;{{ projectName }}
+            添加接口到&nbsp;=>&nbsp;{{ projectName }}
           </h5>
           <button
             type="button"
