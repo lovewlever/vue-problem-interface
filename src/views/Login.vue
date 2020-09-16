@@ -41,6 +41,12 @@
             required
           />
         </label>
+        <span
+          id="verifyLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
         <img
           :src="verifyCodeUrl"
           alt="code"
@@ -68,6 +74,7 @@
 import ConstWeb from "../constants/ConstWeb";
 import _axios from "axios";
 import FuncCommon from "../constants/FuncCommon";
+import $ from "jquery"
 
 export default {
   name: "Home",
@@ -131,6 +138,7 @@ export default {
         data => {
           console.info(data);
           this.verifyCodeUrl = data;
+          $("#verifyLoading").hide();
         },
         error => {
           this.errorMsg = "验证码获取失败：" + error;

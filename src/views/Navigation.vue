@@ -69,7 +69,7 @@
           ></path>
         </svg>
       </li>
-      <li>
+      <li @click.prevent="clickShowUserPopup">
         <img
           v-bind:src="userAvatar"
           height="26"
@@ -81,12 +81,31 @@
         <p class="nav-user-nickname">{{ userNickname }}</p>
       </li>
     </ul>
+
+    <div
+      @click.prevent="clickShowUserPopup"
+      style="position: absolute;width: 100%;height: 1000px;display: none"
+      data-upopup-show="false"
+      id="userPopup"
+    >
+      <div class="user-popup">
+        <a class="user-popup-item" href="#">{{ userNickname }}</a>
+        <div class="user-popup-item-divider"></div>
+        <a class="user-popup-item" href="#">Action</a>
+        <a class="user-popup-item" href="#">Another action</a>
+        <a class="user-popup-item" href="#">Something else here</a>
+        <div class="user-popup-item-divider"></div>
+        <a @click.prevent="clickLogOut" class="user-popup-item" href="#">退出账号</a>
+      </div>
+    </div>
   </nav>
 </template>
 
 <script>
 import FuncCommon from "../constants/FuncCommon";
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min";
+import $ from "jquery";
 export default {
   name: "Navigation",
   data() {
@@ -101,6 +120,23 @@ export default {
     },
     clickCreateProject() {
       this.$parent.createProject();
+    },
+    clickShowUserPopup: function() {
+      let $userPopup = $("#userPopup");
+      let attribute = $userPopup[0].getAttribute("data-upopup-show");
+      FuncCommon.showConsoleInfo("data-upopup-show:");
+      FuncCommon.showConsoleInfo(attribute);
+      if (attribute === "true") {
+        $userPopup.hide();
+        $userPopup[0].setAttribute("data-upopup-show", "false");
+      } else {
+        $userPopup.show();
+        $userPopup[0].setAttribute("data-upopup-show", "true");
+      }
+    },
+    clickLogOut() {
+      window.localStorage.clear();
+      this.$router.push("/");
     }
   },
   created() {
@@ -151,6 +187,10 @@ nav {
 .nav-user-info li {
   margin: auto;
   display: flex;
+}
+
+.nav-user-info li:hover {
+  cursor: pointer;
 }
 
 .nav-user-info li svg,
@@ -219,5 +259,32 @@ img :hover {
 }
 .top-search-border p span {
   margin: auto;
+}
+.user-popup {
+  position: absolute;
+  right: 24px;
+  top: 49px;
+  background: #202020;
+  border: 1px #383838 solid;
+  border-radius: 4px;
+  color: #f4f4f4;
+}
+.user-popup-item {
+  color: #f4f4f4;
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+.user-popup-item-divider {
+  height: 0;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #383838;
 }
 </style>

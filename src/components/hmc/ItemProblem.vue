@@ -2,7 +2,7 @@
   <div style="display: flex">
     <div class="item-problem-content">
       <div style="display: flex;margin-bottom: 4px">
-        <div style="width: 45px;height: 45px;margin: auto 12px auto 0">
+        <div style="width: 40px;height: 40px;margin: auto 12px auto 0">
           <LoadingComponents />
         </div>
         <div style="margin: auto 12px auto 0">
@@ -50,7 +50,7 @@
           </svg>
         </div>
 
-        <h6 class="item-title">项目名称&nbsp;=>&nbsp;<span>{{problemObj?.ppModulePage}}</span></h6>
+        <h6 class="item-title">{{problemObj?.refTProjectSystemDevicesEntity?.systemDevicesName}}&nbsp;=>&nbsp;{{problemObj?.refTProjectEntity?.projectName}}&nbsp;=>&nbsp;<span>{{problemObj?.ppModulePage}}</span></h6>
       </div>
       <span class="item-c-time"
         >2020-01-01&nbsp;00:00&nbsp;&nbsp;=>=>&nbsp;&nbsp;</span
@@ -60,7 +60,7 @@
       <div style="width: 100%;text-align: right">
         <ul class="item-bottom-info">
           <li>
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary" @click.prevent="clickChooseProblem(this,problemObj?.id)">
               <span
                 class="spinner-border spinner-border-sm"
                 role="status"
@@ -129,13 +129,20 @@
 
 <script>
 import LoadingComponents from "@/components/hmc/LoadingComponents";
+import FuncCommon from "@/constants/FuncCommon";
 
 export default {
   name: "ItemProblem",
   props: {
     problemObj: Object
   },
-  components: { LoadingComponents }
+  components: { LoadingComponents },
+  methods: {
+    clickChooseProblem(__this,pId) { //选择修改一个问题
+      FuncCommon.showConsoleInfo("选择修改一个问题ID:");
+      FuncCommon.showConsoleInfo(pId);
+    }
+  }
 };
 </script>
 
