@@ -15,7 +15,7 @@
       <ItemProblem
         v-for="(obj, index) in problemList"
         :key="index"
-        :problem-obj="obj"
+        :problem-o="obj"
       />
 
       <div style="left: 50%;margin: 24px 0">
@@ -35,7 +35,7 @@ import "bootstrap/dist/js/bootstrap.min";
 import $ from "jquery";
 import ConstWeb from "../constants/ConstWeb";
 import FuncCommon from "../constants/FuncCommon";
-import ItemProblem from "@/components/hmc/ItemProblem";
+import ItemProblem from "../components/hmc/ItemProblem";
 
 export default {
   name: "HomeProblemListComponent",

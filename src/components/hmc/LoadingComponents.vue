@@ -4,14 +4,17 @@
     <div
       style="margin-top: -70%;font-size: 0.5rem;text-align: center;color: #3E5BF2"
     >
-      0%
+      {{progress2}}%
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "LoadingComponents"
+  name: "LoadingComponents",
+  props: {
+    progress2: Number
+  }
 };
 </script>
 
