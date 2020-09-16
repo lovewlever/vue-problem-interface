@@ -154,46 +154,10 @@
       </div>
     </div>
   </div>
-
-  <!-- Modal -->
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
 import FuncCommon from "../../constants/FuncCommon";
-import $ from "jquery";
 import LoadingComponents from "./LoadingComponents";
 import ConstWeb from "../../constants/ConstWeb";
 
@@ -214,12 +178,10 @@ export default {
     this.problemObj = this.problemO;
   },
   mounted() {
-    $("#exampleModal").modal();
+
   },
   methods: {
     clickChooseProblem(pId) {
-      FuncCommon.showConsoleInfo("选择修改一个问题ID:");
-      FuncCommon.showConsoleInfo(pId);
       //选择修改一个问题
       const params = new URLSearchParams();
       params.append("problemId", pId);
@@ -232,7 +194,7 @@ export default {
             this.problemObj.chooseProblemTUserEntity = data.data.data.chooseProblemTUserEntity
             this.localLoginUserId = data.data.data.chooseProblemTUserEntity?.id
           } else {
-            alert(data.data.msg);
+            alert(data.data.msg)
           }
           FuncCommon.showConsoleInfo("选择修改一个问题结果:");
           FuncCommon.showConsoleInfo(data);
@@ -240,6 +202,7 @@ export default {
         err => {
           FuncCommon.showConsoleInfo("选择修改一个问题结果:");
           FuncCommon.showConsoleInfo(err);
+          alert(err)
         }
       );
     }
