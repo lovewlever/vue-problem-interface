@@ -316,8 +316,7 @@ export default {
           FuncCommon.showConsoleInfo("修改问题进度:");
           FuncCommon.showConsoleInfo(data);
           if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
-            _this.problemObj.chooseProblemTUserEntity =
-              data.data.data.chooseProblemTUserEntity;
+            _this.problemObj = data?.data?.data[0];
           } else {
             $("#dialogMsg").html(data.data.msg);
             $("#dialogMsg").css("color", "red");
@@ -348,11 +347,11 @@ export default {
           params,
           data => {
             if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
-              _this.problemObj.userIdForChoose = data.data.data.userIdForChoose;
+              _this.problemObj.userIdForChoose = data?.data?.data[0].userIdForChoose;
               _this.problemObj.chooseProblemTUserEntity =
-                data.data.data.chooseProblemTUserEntity;
+                      data?.data?.data[0].chooseProblemTUserEntity;
               _this.localLoginUserId =
-                data.data.data.chooseProblemTUserEntity?.id;
+                      data?.data?.data[0].chooseProblemTUserEntity?.id;
             } else {
               $("#dialogMsg").html(data.data.msg);
               $("#exampleModal").modal();
