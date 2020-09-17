@@ -29,7 +29,7 @@ function getStorageLoginInfo() {
     window.localStorage.getItem(ConstWeb.STORAGE_KEY.KEY_USER_LOGIN_INFO)
   );
   //如果本地存的登录信息为null 则让重新登录
-  console.info(userLoginInfo);
+  showConsoleInfo(userLoginInfo);
   if (userLoginInfo === null) {
     mainJs.vue.$router.push("/login");
   }

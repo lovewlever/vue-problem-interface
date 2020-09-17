@@ -91,7 +91,11 @@
             "
           >
             <li>
-              <button type="button" class="btn btn-success">
+              <button
+                type="button"
+                class="btn btn-success"
+                @click.prevent="clickCompleteProblem(problemObj?.id)"
+              >
                 <span
                   class="spinner-border spinner-border-sm"
                   role="status"
@@ -152,36 +156,54 @@
           </template>
         </ul>
       </div>
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <h5 class="modal-title" id="exampleModalLabel">提醒</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              {{dialogMsg}}
+              <span id="dialogMsg"></span>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                取消
+              </button>
+              <button id="dialogCommit" type="button" class="btn btn-primary">
+                确定
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
   </div>
-
 </template>
 
 <script>
 import FuncCommon from "../../constants/FuncCommon";
 import LoadingComponents from "./LoadingComponents";
-//import ConstWeb from "../../constants/ConstWeb";
+import ConstWeb from "../../constants/ConstWeb";
 import $ from "jquery";
 
 export default {
@@ -191,48 +213,90 @@ export default {
   },
   data() {
     return {
-      problemObj: Object,
-      localLoginUserId: String,
-      dialogMsg: "",
-      dialogErrorMsg: "确定要选择修改此问题？"
+      problemObj: this.problemO,
+      localLoginUserId: String
     };
   },
   components: { LoadingComponents },
   created() {
     this.localLoginUserId = FuncCommon.getStorageLoginInfo().id;
-    this.problemObj = this.problemO;
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
-    clickChooseProblem(pId) {
-      this.dialogMsg = this.dialogErrorMsg + pId;
+    clickModifyProgress(pId,schedule) { //修改问题进度
+      if (schedule === 100) {
+        this.clickCompleteProblem(pId);
+      } else {
+        this.modifyProblemProgress(pId,schedule);
+      }
+    },
+    clickCompleteProblem(pId) {// 完成该问题
+      const _this = this;
+      const $dialog = $("#dialogMsg");
+      $dialog.html("请确定问题已修改完成？");
+      $dialog.css("color", "red");
       $("#exampleModal").modal();
-
-     /* //选择修改一个问题
+      $("#dialogCommit").bind("click", function() {
+        $("#exampleModal").modal("hide");
+        $("#dialogCommit").unbind("click");
+        _this.modifyProblemProgress(pId, 100);
+      });
+    },
+    modifyProblemProgress(pId,schedule) { //修改问题进度
+      //选择修改一个问题
       const params = new URLSearchParams();
       params.append("problemId", pId);
+      params.append("schedule", schedule);
       ConstWeb.axiosRequest(
-        ConstWeb.WebApi.CHOOSE_PROBLEM,
-        params,
-        data => {
-          if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
-            this.problemObj.userIdForChoose = data.data.data.userIdForChoose;
-            this.problemObj.chooseProblemTUserEntity = data.data.data.chooseProblemTUserEntity
-            this.localLoginUserId = data.data.data.chooseProblemTUserEntity?.id
-          } else {
-            alert(data.data.msg)
+              ConstWeb.WebApi.UPDATE_MODIFY_PROBLEM_PROGRESS,
+              params,
+              data => {
+                FuncCommon.showConsoleInfo("选择修改一个问题结果:");
+                FuncCommon.showConsoleInfo(data);
+              },
+              err => {
+                FuncCommon.showConsoleInfo("选择修改一个问题结果:");
+                FuncCommon.showConsoleInfo(err);
+                $("#dialogMsg").html(err);
+                $("#exampleModal").modal();
+              }
+      );
+    },
+    clickChooseProblem(pId) {
+      const _this = this;
+      $("#dialogMsg").html("确定选择修改该问题？");
+      $("#exampleModal").modal();
+      $("#dialogCommit").bind("click", function() {
+        $("#exampleModal").modal("hide");
+        $("#dialogCommit").unbind("click");
+        //选择修改一个问题
+        const params = new URLSearchParams();
+        params.append("problemId", pId);
+        ConstWeb.axiosRequest(
+          ConstWeb.WebApi.CHOOSE_PROBLEM,
+          params,
+          data => {
+            if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
+              _this.problemObj.userIdForChoose = data.data.data.userIdForChoose;
+              _this.problemObj.chooseProblemTUserEntity =
+                data.data.data.chooseProblemTUserEntity;
+              _this.localLoginUserId =
+                data.data.data.chooseProblemTUserEntity?.id;
+            } else {
+              $("#dialogMsg").html(data.data.msg);
+              $("#exampleModal").modal();
+            }
+            FuncCommon.showConsoleInfo("选择修改一个问题结果:");
+            FuncCommon.showConsoleInfo(data);
+          },
+          err => {
+            FuncCommon.showConsoleInfo("选择修改一个问题结果:");
+            FuncCommon.showConsoleInfo(err);
+            $("#dialogMsg").html(err);
+            $("#exampleModal").modal();
           }
-          FuncCommon.showConsoleInfo("选择修改一个问题结果:");
-          FuncCommon.showConsoleInfo(data);
-        },
-        err => {
-          FuncCommon.showConsoleInfo("选择修改一个问题结果:");
-          FuncCommon.showConsoleInfo(err);
-          alert(err)
-        }
-      );*/
+        );
+      });
     }
   }
 };
