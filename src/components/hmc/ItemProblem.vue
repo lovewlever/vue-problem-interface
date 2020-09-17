@@ -6,6 +6,7 @@
           <LoadingComponents :progress2="problemObj?.ppCompleteSchedule" />
         </div>
         <div style="margin: auto 12px auto 0">
+          <!--进度为100时 显示完成图标-->
           <template v-if="problemObj?.ppCompleteSchedule === 100">
             <svg
               t="1600227691504"
@@ -83,11 +84,12 @@
             </li>
           </template>
 
-          <!--有人选择-->
+          <!--有人选择 并且进度小于100-->
           <template
             v-if="
               problemObj?.chooseProblemTUserEntity !== null &&
-                problemObj?.chooseProblemTUserEntity?.id === localLoginUserId
+                problemObj?.chooseProblemTUserEntity?.id === localLoginUserId &&
+                problemObj?.ppCompleteSchedule < 100
             "
           >
             <li>
@@ -114,20 +116,62 @@
                   style="color: white"
                 ></span>
                 <select
+                  id="selectModifyProblemProgress"
                   name="progress"
                   style="background: #FFC107;color: black"
+                  @change.prevent="clickModifyProgress($event, problemObj?.id)"
                 >
                   <option label="修改进度" value="0"></option>
-                  <option label="10%" value="10"></option>
-                  <option label="20%" value="20"></option>
-                  <option label="30%" value="30"></option>
-                  <option label="40%" value="40"></option>
-                  <option label="50%" value="50"></option>
-                  <option label="60%" value="60"></option>
-                  <option label="70%" value="70"></option>
-                  <option label="80%" value="80"></option>
-                  <option label="90%" value="90"></option>
-                  <option label="100%" value="100"></option>
+                  <option
+                    label="10%"
+                    value="10"
+                    :selected="problemObj?.ppCompleteSchedule === 10"
+                  ></option>
+                  <option
+                    label="20%"
+                    value="20"
+                    :selected="problemObj?.ppCompleteSchedule === 20"
+                  ></option>
+                  <option
+                    label="30%"
+                    value="30"
+                    :selected="problemObj?.ppCompleteSchedule === 30"
+                  ></option>
+                  <option
+                    label="40%"
+                    value="40"
+                    :selected="problemObj?.ppCompleteSchedule === 40"
+                  ></option>
+                  <option
+                    label="50%"
+                    value="50"
+                    :selected="problemObj?.ppCompleteSchedule === 50"
+                  ></option>
+                  <option
+                    label="60%"
+                    value="60"
+                    :selected="problemObj?.ppCompleteSchedule === 60"
+                  ></option>
+                  <option
+                    label="70%"
+                    value="70"
+                    :selected="problemObj?.ppCompleteSchedule === 70"
+                  ></option>
+                  <option
+                    label="80%"
+                    value="80"
+                    :selected="problemObj?.ppCompleteSchedule === 80"
+                  ></option>
+                  <option
+                    label="90%"
+                    value="90"
+                    :selected="problemObj?.ppCompleteSchedule === 90"
+                  ></option>
+                  <option
+                    label="100%"
+                    value="100"
+                    :selected="problemObj?.ppCompleteSchedule === 100"
+                  ></option>
                 </select>
               </label>
             </li>
@@ -147,10 +191,18 @@
               </label>
             </li>
           </template>
+          <!--有人选择 并且进度小于100-->
           <template v-if="problemObj?.chooseProblemTUserEntity !== null">
             <li>
               <div style="color: #AAAAAA;font-size: .75rem">
-                <span>正在修改：</span>&nbsp;002
+                <span>
+                  <template v-if="problemObj?.ppCompleteSchedule >= 100">
+                    修改完成&nbsp;BY
+                  </template>
+                  <template v-else>
+                    正在修改：
+                  </template> </span
+                >&nbsp;002
               </div>
             </li>
           </template>
@@ -186,6 +238,7 @@
                 type="button"
                 class="btn btn-secondary"
                 data-dismiss="modal"
+                @click.prevent="clickDialogCancel"
               >
                 取消
               </button>
@@ -223,14 +276,21 @@ export default {
   },
   mounted() {},
   methods: {
-    clickModifyProgress(pId,schedule) { //修改问题进度
-      if (schedule === 100) {
+    clickDialogCancel() {
+      $("#dialogCommit").unbind("click");
+    },
+    clickModifyProgress(event, pId) {
+      //修改问题进度
+      //const schedule = $("#selectModifyProblemProgress option:selected").val();
+      const schedule = event.target.value;
+      if (schedule === "100") {
         this.clickCompleteProblem(pId);
       } else {
-        this.modifyProblemProgress(pId,schedule);
+        this.modifyProblemProgress(pId, schedule);
       }
     },
-    clickCompleteProblem(pId) {// 完成该问题
+    clickCompleteProblem(pId) {
+      // 完成该问题
       const _this = this;
       const $dialog = $("#dialogMsg");
       $dialog.html("请确定问题已修改完成？");
@@ -242,27 +302,38 @@ export default {
         _this.modifyProblemProgress(pId, 100);
       });
     },
-    modifyProblemProgress(pId,schedule) { //修改问题进度
+    modifyProblemProgress(pId, schedule) {
+      //修改问题进度
+      const _this = this;
       //选择修改一个问题
       const params = new URLSearchParams();
       params.append("problemId", pId);
       params.append("schedule", schedule);
       ConstWeb.axiosRequest(
-              ConstWeb.WebApi.UPDATE_MODIFY_PROBLEM_PROGRESS,
-              params,
-              data => {
-                FuncCommon.showConsoleInfo("选择修改一个问题结果:");
-                FuncCommon.showConsoleInfo(data);
-              },
-              err => {
-                FuncCommon.showConsoleInfo("选择修改一个问题结果:");
-                FuncCommon.showConsoleInfo(err);
-                $("#dialogMsg").html(err);
-                $("#exampleModal").modal();
-              }
+        ConstWeb.WebApi.UPDATE_MODIFY_PROBLEM_PROGRESS,
+        params,
+        data => {
+          FuncCommon.showConsoleInfo("修改问题进度:");
+          FuncCommon.showConsoleInfo(data);
+          if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
+            _this.problemObj.chooseProblemTUserEntity =
+              data.data.data.chooseProblemTUserEntity;
+          } else {
+            $("#dialogMsg").html(data.data.msg);
+            $("#dialogMsg").css("color", "red");
+            $("#exampleModal").modal();
+          }
+        },
+        err => {
+          FuncCommon.showConsoleInfo("修改问题进度:");
+          FuncCommon.showConsoleInfo(err);
+          $("#dialogMsg").html(err);
+          $("#exampleModal").modal();
+        }
       );
     },
     clickChooseProblem(pId) {
+      //确认选择修改选中的问题
       const _this = this;
       $("#dialogMsg").html("确定选择修改该问题？");
       $("#exampleModal").modal();

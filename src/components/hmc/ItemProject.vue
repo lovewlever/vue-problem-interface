@@ -10,12 +10,13 @@
                     <div
                             class="progress-bar"
                             role="progressbar"
-                            style="width: 25%;"
-                            aria-valuenow="25"
+                            :style="{width: doubleDataList[0].overallProgress + '%'}"
+                            :aria-valuenow="doubleDataList[0].overallProgress"
                             aria-valuemin="0"
                             aria-valuemax="100"
+
                     >
-                        25%
+                        {{doubleDataList[0].overallProgress}}%
                     </div>
                 </div>
                 <div class="progress-bottom">
@@ -49,12 +50,12 @@
                     <div
                             class="progress-bar"
                             role="progressbar"
-                            style="width: 25%;"
-                            aria-valuenow="25"
+                            :style="{width: doubleDataList[1].overallProgress + '%'}"
+                            :aria-valuenow="doubleDataList[1].overallProgress"
                             aria-valuemin="0"
                             aria-valuemax="100"
                     >
-                        25%
+                        {{doubleDataList[1].overallProgress}}%
                     </div>
                 </div>
                 <div class="progress-bottom">
