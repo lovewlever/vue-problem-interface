@@ -2,10 +2,14 @@
   <div>
     <div>
       <ul class="hmc-top-label">
-        <li class="label-li label-li-active">我添加的项目</li>
-        <li  class="label-li">我添加的项目问题</li>
-        <li  class="label-li">未修改完成的问题</li>
-        <li  class="label-li">已修改的问题</li>
+        <li :class="['label-li',{'label-li-active': chooseProjectLabelId === 'myAddProject'}]"
+            @click="chooseTopProjectLabel('myAddProject')">我添加的项目</li>
+        <li  :class="['label-li',{'label-li-active': chooseProjectLabelId === 'myAddProjectProblem'}]"
+             @click="chooseTopProjectLabel('myAddProjectProblem')">我添加的问题</li>
+        <li  :class="['label-li',{'label-li-active': chooseProjectLabelId === 'myNotFinishedProblem'}]"
+             @click="chooseTopProjectLabel('myNotFinishedProblem')">已选择未完成的问题</li>
+        <li  :class="['label-li',{'label-li-active': chooseProjectLabelId === 'myFinishedProblem'}]"
+             @click="chooseTopProjectLabel('myFinishedProblem')">已修改完成的问题</li>
       </ul>
     </div>
 
@@ -36,7 +40,8 @@ export default {
   components: { ItemProject },
   data() {
     return {
-      projectDataList: []
+      projectDataList: [],
+      chooseProjectLabelId: "myAddProject" //选中的某个标签
     }
   },
   created() {
@@ -55,6 +60,9 @@ export default {
     this.queryProjectList()
   },
   methods: {
+    chooseTopProjectLabel(selId) {
+      this.chooseProjectLabelId = selId
+    },
     queryProjectList() { //查询我的项目
       const urlParams = new URLSearchParams();
       urlParams.append("page", 1);

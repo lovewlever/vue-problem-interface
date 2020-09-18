@@ -2,8 +2,10 @@
   <div>
     <div>
       <ul class="hmc-top-label">
-        <li class="label-li label-li-active">最新</li>
-        <li class="label-li" v-for="(obj, index) in projectLabelList" :key="index">
+        <li :class="['label-li',{'label-li-active': chooseProjectLabelId === 'fa'}]" @click="chooseTopProjectLabel('fa')">最新</li>
+        <li :class="['label-li',{'label-li-active': chooseProjectLabelId === obj?.id}]"
+            v-for="(obj, index) in projectLabelList" :key="index"
+            @click="chooseTopProjectLabel(obj?.id)">
           {{ obj?.projectName }}
         </li>
       </ul>
@@ -43,7 +45,8 @@ export default {
   data() {
     return {
       projectLabelList: [], // 顶部项目标签
-      problemList: []
+      problemList: [],
+      chooseProjectLabelId: "fa" //选中的某个标签
     };
   },
   created() {},
@@ -62,6 +65,9 @@ export default {
     this.queryProjectLabelList();
   },
   methods: {
+    chooseTopProjectLabel(selId) {
+      this.chooseProjectLabelId = selId
+    },
     queryProjectLabelList() {
       // 查询顶部项目标签
       const urlParams = new URLSearchParams();
