@@ -285,12 +285,9 @@ export default {
           } else {
             FuncCommon.showConsoleInfo(data);
             if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
-              window.localStorage.setItem(
-                ConstWeb.STORAGE_KEY.KEY_SAVE_UNSUBMITTED_PROBLEM_OBJ,
-                JSON.stringify("")
-              );
+              window.localStorage.removeItem(ConstWeb.STORAGE_KEY.KEY_SAVE_UNSUBMITTED_PROBLEM_OBJ);
               //刷新
-              window.location.reload();
+              this.$router.push({path: "/homeProjectDetailsComponent",query: {projectId: this.projectId}})
             } else {
               alert("提交失败：" + data.data.msg);
             }

@@ -21,10 +21,10 @@
                 </div>
                 <div class="progress-bottom">
                     <div class="progress-bottom-lr">
-                        <p>最新问题：----</p>
+                        <p>最新问题：{{doubleDataList[0]?.tprojectProblemEntity?.ppContent}}</p>
                     </div>
                     <div class="progress-bottom-lr">
-                        <p>添加时间：20-09-12</p>
+                        <p>添加时间：{{formatDate(doubleDataList[0]?.tprojectProblemEntity?.ppAddTimestamp)}}</p>
                     </div>
                 </div>
 
@@ -60,10 +60,10 @@
                 </div>
                 <div class="progress-bottom">
                     <div class="progress-bottom-lr">
-                        <p>最新问题：----</p>
+                        <p>最新问题：{{doubleDataList[1]?.tprojectProblemEntity?.ppContent}}</p>
                     </div>
                     <div class="progress-bottom-lr">
-                        <p>添加时间：20-09-12</p>
+                        <p>添加时间：{{doubleDataList[1]?.tprojectProblemEntity?.ppAddTimestamp}}</p>
                     </div>
                 </div>
 
@@ -83,6 +83,8 @@
 <script>
     import "bootstrap/dist/css/bootstrap.min.css";
     import "bootstrap/dist/js/bootstrap.min";
+    import {formatDate2} from "@/constants/Filter";
+    import FuncCommon from "@/constants/FuncCommon";
 
     export default {
         name: "ItemProject",
@@ -97,6 +99,12 @@
             clickToProjectDetails(projectId) {
                 console.info(projectId)
                 this.$router.push({path:"/homeProjectDetailsComponent",query: {projectId: projectId}})
+            },
+            formatDate(time) {
+                FuncCommon.showConsoleInfo("毫秒转Date：")
+                FuncCommon.showConsoleInfo(time)
+                const data = new Date(time);
+                return formatDate2(data,'yyyy-MM-dd HH:mm:ss');
             }
         }
     };
