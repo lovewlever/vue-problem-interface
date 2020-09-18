@@ -2,67 +2,31 @@
   <div style="display: flex">
     <div class="item-problem-content">
       <div style="display: flex;margin-bottom: 4px">
-        <div style="width: 40px;height: 40px;margin: auto 12px auto 0">
-          <LoadingComponents :progress2="problemObj?.ppCompleteSchedule" />
-        </div>
+        <template v-if="problemObj?.ppCompleteSchedule < 100">
+          <div style="width: 40px;height: 40px;margin: auto 12px auto 0">
+            <LoadingComponents :progress2="problemObj?.ppCompleteSchedule" />
+          </div>
+        </template>
         <div style="margin: auto 12px auto 0">
           <!--进度为100时 显示完成图标-->
           <template v-if="problemObj?.ppCompleteSchedule === 100">
-            <svg
-              t="1600227691504"
-              class="icon"
-              viewBox="0 0 1024 1024"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              p-id="9648"
-              width="32"
-              height="32"
-            >
-              <path
-                d="M511.800117 0c282.689574 0 511.800078 229.110504 511.800078 511.800078s-229.110504 511.800078-511.800078 511.800078-511.800078-229.110504-511.800078-511.800078 229.210465-511.800078 511.800078-511.800078z"
-                fill="#3E5BF2"
-                p-id="9649"
-              ></path>
-              <path
-                d="M511.800117 321.874268m-149.941429 0a149.941429 149.941429 0 1 0 299.882858 0 149.941429 149.941429 0 1 0-299.882858 0Z"
-                fill="#FFFFFF"
-                p-id="9650"
-              ></path>
-              <path
-                d="M511.800117 701.725888m-149.941429 0a149.941429 149.941429 0 1 0 299.882858 0 149.941429 149.941429 0 1 0-299.882858 0Z"
-                fill="#FFFFFF"
-                p-id="9651"
-              ></path>
-              <path
-                d="M701.725927 511.800078m-149.941429 0a149.941429 149.941429 0 1 0 299.882859 0 149.941429 149.941429 0 1 0-299.882859 0Z"
-                fill="#FFFFFF"
-                p-id="9652"
-              ></path>
-              <path
-                d="M321.874307 511.800078m-149.941429 0a149.941429 149.941429 0 1 0 299.882858 0 149.941429 149.941429 0 1 0-299.882858 0Z"
-                fill="#FFFFFF"
-                p-id="9653"
-              ></path>
-              <path
-                d="M464.118743 464.018743c-44.382663-14.894182-79.568918-50.080437-94.463101-94.463101 44.382663 14.994143 79.568918 50.080437 94.463101 94.463101zM654.044553 369.655603c-14.894182 44.382663-50.080437 79.568918-94.4631 94.463101 14.894182-44.482624 49.980476-79.568918 94.4631-94.463101zM464.118743 559.581414c-14.894182 44.382663-50.080437 79.568918-94.463101 94.4631 14.894182-44.482624 49.980476-79.568918 94.463101-94.4631zM654.044553 653.944553c-44.382663-14.894182-79.568918-50.080437-94.4631-94.4631 44.382663 14.994143 79.568918 50.080437 94.4631 94.4631z"
-                fill="#3E5BF2"
-                opacity=".3"
-                p-id="9654"
-              ></path>
-            </svg>
+            <svg t="1600421117879" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7838" width="32" height="32"><path d="M277.9 742s167.9-294.1 465.3-465.3C575.7 577.8 277.9 742 277.9 742z" fill="#FFFFFF" p-id="7839"></path><path d="M743.1 742S575.2 447.9 277.8 276.7C445.3 577.8 743.1 742 743.1 742z" fill="#FFFFFF" p-id="7840"></path><path d="M513.2 959.8S639.3 933 746.8 817.7C841.4 716.2 868.2 483.6 868.2 151c-224.2 31.2-355-87-355-87h-2.3s-130.8 118.2-355.1 87c0 332.5 26.8 565.5 121.5 667 107.5 115.3 233.6 142 233.6 142" fill="#0EC469" p-id="7841"></path><path d="M303.6 474.4s57 132.9 145.6 132.9c85.4 0 345-302.1 345-302.1S541.9 717 457.6 717c-70.2 0-120.8-100.2-154-242.6z" fill="#FFFFFF" p-id="7842"></path></svg>
           </template>
         </div>
 
         <h6 class="item-title">
-          {{
-            problemObj?.refTProjectSystemDevicesEntity?.systemDevicesName
-          }}&nbsp;=>&nbsp;{{
-            problemObj?.refTProjectEntity?.projectName
-          }}&nbsp;=>&nbsp;<span>{{ problemObj?.ppModulePage }}</span>
+          {{ problemObj?.refTProjectEntity?.projectName }}&nbsp;=>&nbsp;<span
+            style="color: #a3d900"
+            >{{
+              problemObj?.refTProjectSystemDevicesEntity?.systemDevicesName
+            }}</span
+          >&nbsp;=>&nbsp;<span>{{ problemObj?.ppModulePage }}</span>
         </h6>
       </div>
       <span class="item-c-time"
-        >2020-01-01&nbsp;00:00&nbsp;&nbsp;=>=>&nbsp;&nbsp;</span
+        >{{
+          formatDate(problemObj?.ppAddTimestamp)
+        }}&nbsp;&nbsp;=>=>&nbsp;&nbsp;</span
       ><span class="item-c-content">{{ problemObj?.ppContent }} </span>
       <div style="width: 100%;text-align: right">
         <ul class="item-bottom-info">
@@ -197,12 +161,12 @@
               <div style="color: #AAAAAA;font-size: .75rem">
                 <span>
                   <template v-if="problemObj?.ppCompleteSchedule >= 100">
-                    修改完成&nbsp;BY
+                    修改完成&nbsp;&nbsp;BY&nbsp;
                   </template>
                   <template v-else>
-                    正在修改：
-                  </template> </span
-                >&nbsp;002
+                    正在修改：&nbsp;
+                  </template></span
+                >002
               </div>
             </li>
           </template>
@@ -258,6 +222,7 @@ import FuncCommon from "../../constants/FuncCommon";
 import LoadingComponents from "./LoadingComponents";
 import ConstWeb from "../../constants/ConstWeb";
 import $ from "jquery";
+import { formatDate2 } from "@/constants/Filter";
 
 export default {
   name: "ItemProblem",
@@ -347,11 +312,12 @@ export default {
           params,
           data => {
             if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
-              _this.problemObj.userIdForChoose = data?.data?.data[0].userIdForChoose;
+              _this.problemObj.userIdForChoose =
+                data?.data?.data[0].userIdForChoose;
               _this.problemObj.chooseProblemTUserEntity =
-                      data?.data?.data[0].chooseProblemTUserEntity;
+                data?.data?.data[0].chooseProblemTUserEntity;
               _this.localLoginUserId =
-                      data?.data?.data[0].chooseProblemTUserEntity?.id;
+                data?.data?.data[0].chooseProblemTUserEntity?.id;
             } else {
               $("#dialogMsg").html(data.data.msg);
               $("#exampleModal").modal();
@@ -367,6 +333,12 @@ export default {
           }
         );
       });
+    },
+    formatDate(time) {
+      FuncCommon.showConsoleInfo("毫秒转Date：");
+      FuncCommon.showConsoleInfo(time);
+      const data = new Date(time);
+      return formatDate2(data, "yyyy-MM-dd HH:mm:ss");
     }
   }
 };

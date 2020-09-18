@@ -2,7 +2,7 @@
     <div>
         <div style="display: flex">
             <ul class="hmc-top-label">
-                <li>:{{projectObj?.projectName}}&nbsp;BY&nbsp;{{projectObj?.tuserEntity?.unickname}}</li>
+                <li><q>{{projectObj?.projectName}}</q>&nbsp;@{{projectObj?.tuserEntity?.unickname}}</li>
             </ul>
 
             <ul class="hpdc-top-add">
@@ -29,9 +29,9 @@
                       </svg>
                   </span>
                         <div>
-                            <p style="margin: 0">{{obj?.tporOperateType}}&{{obj?.tporName}}->{{obj?.tporOperateContent}}&nbsp;&nbsp;<span>&nbsp;BY&nbsp;{{obj?.refTUserEntity?.unickname}}</span></p>
+                            <p style="margin: 0;color: #B9B8B8">{{obj?.tporOperateType}}&{{obj?.tporOperateContent}}&nbsp;&nbsp;<span>&nbsp;@{{obj?.refTUserEntity?.unickname}}</span></p>
                             <hr style="margin: 8px 0"/>
-                            <p style="margin: 0">{{obj?.tporOperateType}}<span>&nbsp;&nbsp;{{obj?.tporTimestamp}}</span></p>
+                            <p style="margin: 0;color: #7D7D7D">{{obj?.tporOperateType}}<span>&nbsp;&nbsp;{{formatDate(obj?.tporTimestamp)}}</span></p>
                         </div>
                     </div>
                     <div style="border-left: 1px red solid;height: 40px"></div>
@@ -47,6 +47,7 @@
     import $ from "jquery";
     import ConstWeb from "../constants/ConstWeb";
     import FuncCommon from "../constants/FuncCommon";
+    import {formatDate2} from "@/constants/Filter";
 
     export default {
         name: "HomeProjectDetailsComponent",
@@ -118,7 +119,13 @@
                         projectId: _this.projectId,
                         projectName: _this.projectObj?.projectName
                     }})
-            }
+            },
+        formatDate(time) {
+            FuncCommon.showConsoleInfo("毫秒转Date：")
+            FuncCommon.showConsoleInfo(time)
+            const data = new Date(time);
+            return formatDate2(data,'yyyy-MM-dd HH:mm:ss');
+        }
         }
     };
 </script>

@@ -4,7 +4,7 @@
         <div class="item-con" v-if="doubleDataList.length > 0" @click="clickToProjectDetails(doubleDataList[0].id)">
             <div class="item-con-c-left">
                 <h5 style="color: #CDCDCD;margin: 14px 0 auto 24px">
-                    {{doubleDataList[0].projectName}}&nbsp;&nbsp;BY {{doubleDataList[0].tuserEntity.unickname}}
+                    {{doubleDataList[0].projectName}}&nbsp;&nbsp;@{{doubleDataList[0].tuserEntity.unickname}}
                 </h5>
                 <div class="progress">
                     <div
@@ -44,7 +44,7 @@
         <div class="item-con"  v-if="doubleDataList.length > 1" @click="clickToProjectDetails(doubleDataList[1].id)">
             <div class="item-con-c-right">
                 <h5 style="color: #CDCDCD;margin: 14px 0 auto 24px">
-                    {{doubleDataList[1].projectName}}&nbsp;&nbsp;BY {{doubleDataList[1].tuserEntity.unickname}}
+                    {{doubleDataList[1].projectName}}&nbsp;&nbsp;@{{doubleDataList[1].tuserEntity.unickname}}
                 </h5>
                 <div class="progress">
                     <div
@@ -63,7 +63,7 @@
                         <p>最新问题：{{doubleDataList[1]?.tprojectProblemEntity?.ppContent}}</p>
                     </div>
                     <div class="progress-bottom-lr">
-                        <p>添加时间：{{doubleDataList[1]?.tprojectProblemEntity?.ppAddTimestamp}}</p>
+                        <p>添加时间：{{formatDate(doubleDataList[1]?.tprojectProblemEntity?.ppAddTimestamp)}}</p>
                     </div>
                 </div>
 
