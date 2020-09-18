@@ -14,14 +14,13 @@
     </div>
 
     <div class="hmc-item-content" id="setHeight">
-      <ItemProject v-for="(obj,index) in projectDataList" :key="index" :double-data-list="obj" />
 
-      <div style="left: 50%;margin: 24px 0">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
+      <ItemProject v-for="obj in projectDataList" :key="obj.id" :double-data-list="obj" />
+
+      <div style="margin: 40px auto 40px auto" v-if="isShowLoading">
+        <div class="spinner-border text-primary" role="status" >
+          <span class="sr-only">Loading...</span>
+        </div>
       </div>
     </div>
   </div>
@@ -39,35 +38,61 @@ export default {
   name: "HomeProjectListComponent",
   data() {
     return {
-      projectDataList: []
+      projectDataList: [],
+      pagination: Object,
+      isShowLoading: false, //是否显示 加载圈
+      loadPageCountSize: 10, //每次加载多少条数据
+      loadCurPage: 1 //加载数据的当前页
     };
   },
   components: { ItemProject },
   mounted() {
-    window.onresize = () => {
-      return (() => {
-        console.info(
-          document.body.clientWidth + "==" + document.body.clientHeight
-        );
-        $("#setHeight").height(document.body.clientHeight - 101);
-      })();
-    };
+   this.onscrollS();
     this.queryProjectList();
   },
   methods: {
+    onscrollS() {
+      const _that = this
+      $("#setHeight").height(document.body.clientHeight - 101);
+      window.onresize = () => {
+        return (() => {
+          console.info(
+                  document.body.clientWidth + "==" + document.body.clientHeight
+          );
+          $("#setHeight").height(document.body.clientHeight - 101);
+        })();
+      };
+      //容器div滚动事件
+      $("#setHeight").scroll(function () {
+        const h = $(this).height();
+        const sh = $(this)[0].scrollHeight;
+        const st = $(this)[0].scrollTop;
+        if(h+st>=sh){
+          if (_that.pagination?.curPage < _that.pagination?.totalPage) { //如果当前页小于等于总页数 则加载下一页的数据
+            _that.loadCurPage = _that.pagination?.curPage + 1;
+            const timer = setInterval(() => {
+              clearInterval(timer);
+              _that.queryProjectList();
+            }, 1000)
+            FuncCommon.showConsoleInfo("加载下一页，页码：");
+            FuncCommon.showConsoleInfo(_that.loadCurPage);
+          }
+        }
+      })
+    },
     queryProjectList() {
       const urlParams = new URLSearchParams();
-      urlParams.append("page", 1);
-      urlParams.append("pageCountSize", 10);
+      urlParams.append("page", this.loadCurPage);
+      urlParams.append("pageCountSize", this.loadPageCountSize);
       ConstWeb.axiosRequest(
         ConstWeb.WebApi.QUERY_PROJECT_LIST,
         urlParams,
         data => {
-          FuncCommon.showConsoleInfo(data)
+          FuncCommon.showConsoleInfo(data);
           let arr = [];
           const array = data.data.data;
           for (let index in array) {
-            FuncCommon.showConsoleInfo(index)
+            FuncCommon.showConsoleInfo(index);
             if (index % 2 === 0) { //偶数
               arr.push(array[index]);
               this.projectDataList.push(arr);
@@ -75,6 +100,13 @@ export default {
               arr.push(array[index]);
               arr = [];
             }
+          }
+          //分页数据
+          this.pagination = data.data.pagination;
+          if (this.pagination?.curPage === this.pagination?.totalPage) { //当前页等于总页数，没有数据了
+            this.isShowLoading = false;
+          } else {
+            this.isShowLoading = true;
           }
           FuncCommon.showConsoleInfo(this.projectDataList)
         },
@@ -85,6 +117,8 @@ export default {
     }
   }
 };
+
+
 </script>
 
 <style scoped>
@@ -128,5 +162,17 @@ export default {
   text-align: center;
   display: inline-block;
   margin: 0;
+}
+
+/*列表过度动画*/
+/** 插入过程 **/
+.v-enter,
+.v-leave-to{
+  opacity: 0;
+  transform: translateY(80px);
+}
+.v-enter-active,
+.v-leave-active{
+  transition: all 0.6s ease;
 }
 </style>

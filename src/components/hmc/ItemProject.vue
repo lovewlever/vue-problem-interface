@@ -166,4 +166,5 @@
     .progress-bottom-lr {
         flex: 1;
     }
+
 </style>

@@ -335,8 +335,6 @@ export default {
       });
     },
     formatDate(time) {
-      FuncCommon.showConsoleInfo("毫秒转Date：");
-      FuncCommon.showConsoleInfo(time);
       const data = new Date(time);
       return formatDate2(data, "yyyy-MM-dd HH:mm:ss");
     }
