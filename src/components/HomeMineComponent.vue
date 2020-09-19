@@ -80,7 +80,8 @@ export default {
       pagination: Object,
       isShowLoading: false, //是否显示 加载圈
       loadPageCountSize: 10, //每次加载多少条数据
-      loadCurPage: 1 //加载数据的当前页
+      loadCurPage: 1, //加载数据的当前页
+      isLoadingNow: false //是否正在加载数据
     };
   },
   created() {},
@@ -108,6 +109,7 @@ export default {
         if (h + st >= sh) {
           if (_that.pagination?.curPage < _that.pagination?.totalPage) {
             //如果当前页小于等于总页数 则加载下一页的数据
+            if (this.isLoadingNow) return; //如果正在请求数据，等待请求完成后再继续下一次请求
             _that.loadCurPage = _that.pagination?.curPage + 1;
             const timer = setInterval(() => {
               clearInterval(timer);
@@ -124,6 +126,7 @@ export default {
     },
     queryProjectList() {
       //查询我的项目
+      this.isLoadingNow = true;
       const urlParams = new URLSearchParams();
       urlParams.append("page", this.loadCurPage);
       urlParams.append("pageCountSize", this.loadPageCountSize);
@@ -155,9 +158,12 @@ export default {
           } else {
             this.isShowLoading = true;
           }
+
+          this.isLoadingNow = false;
           FuncCommon.showConsoleInfo(this.projectDataList[0]);
         },
         error => {
+          this.isLoadingNow = false;
           FuncCommon.showConsoleError(error);
         }
       );

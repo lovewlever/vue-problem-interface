@@ -120,22 +120,22 @@
     .item-con-c-left {
         flex: 1;
         text-align: left;
-        margin: 0 25px 0 50px;
+        margin: 10px 25px 0 50px;
         border-radius: 8px;
-        border: 1px #090909 solid;
-        background: #090909;
-        box-shadow: 0 5px 5px black;
+        border: 1px #202020 solid;
+        background: #202020;
+        box-shadow: 0 0 10px #090909;
         transition: box-shadow 500ms;
     }
 
     .item-con-c-right {
         flex: 1;
         text-align: left;
-        margin: 0 50px 0 25px;
+        margin: 10px 50px 0 25px;
         border-radius: 8px;
-        border: 1px #090909 solid;
-        background: #090909;
-        box-shadow: 0 5px 5px black;
+        border: 1px #202020 solid;
+        background: #202020;
+        box-shadow: 0 0 10px #090909;
         transition: box-shadow 500ms;
     }
 
