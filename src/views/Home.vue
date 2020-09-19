@@ -102,6 +102,9 @@ export default {
       } else if (choose === "problem") {
         // 跳转项目问题列表
         this.$router.push({path: "/homeProblemListComponent",query:{timestamp:FuncCommon.getTimestamp()}});
+      } else if (choose === "interface") {
+        //接口列表
+        this.$router.push({path: "/homeInterfaceListComponent",query:{timestamp:FuncCommon.getTimestamp()}});
       }
     },
     openOrHiddenLeftList() {

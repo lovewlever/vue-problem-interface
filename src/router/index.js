@@ -60,6 +60,11 @@ const routes = [
         path: "/homeAddInterfaceToProjectComponent",
         name: "HomeAddInterfaceToProjectComponent",
         component: () => import("../components/HomeAddInterfaceToProjectComponent.vue")
+      },
+      { // 接口列表
+        path: "/homeInterfaceListComponent",
+        name: "HomeInterfaceListComponent",
+        component: () => import("../components/HomeInterfaceListComponent.vue")
       }
     ]
   }

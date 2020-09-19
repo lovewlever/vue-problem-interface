@@ -10,30 +10,6 @@
         <li
           :class="[
             'label-li',
-            { 'label-li-active': chooseProjectId === 'new' }
-          ]"
-          @click="chooseTopProjectLabel('new')"
-        >
-          最新
-        </li>
-        <li
-          :class="[
-            'label-li',
-            { 'label-li-active': chooseProjectId === obj?.id }
-          ]"
-          v-for="(obj, index) in projectRecommendLabelList"
-          :key="index"
-          @click="chooseTopProjectLabel(obj?.id)"
-        >
-          {{ obj?.projectName }}
-        </li>
-        <!--推荐标签和全部标签 分割线-->
-        <li class="label-li" style="border: none;margin: auto 0;padding: 0">
-          <span>|</span>
-        </li>
-        <li
-          :class="[
-            'label-li',
             { 'label-li-active': chooseProjectId === obj?.id }
           ]"
           v-for="(obj, index) in projectLabelList"
@@ -63,7 +39,7 @@
 
     <div class="hmc-item-content" id="setHeight">
       <transition-group name="list" tag="div">
-        <ItemProblem
+        <ItemInterface
           v-for="(obj, index) in problemList"
           :key="index"
           :problem-o="obj"
@@ -84,14 +60,13 @@ import "bootstrap/dist/js/bootstrap.min";
 import $ from "jquery";
 import ConstWeb from "../constants/ConstWeb";
 import FuncCommon from "../constants/FuncCommon";
-import ItemProblem from "../components/hmc/ItemProblem";
+import ItemInterface from "../components/hmc/ItemInterface";
 
 export default {
-  name: "HomeProblemListComponent",
-  components: { ItemProblem },
+  name: "HomeInterfaceListComponent",
+  components: { ItemInterface },
   data() {
     return {
-      projectRecommendLabelList: [], // 顶部推荐的项目标签
       projectLabelList: [], //顶部标签（全部项目 分页查询）
       problemList: [],
       chooseProjectId: "new", //选中的某个标签
@@ -107,7 +82,6 @@ export default {
   created() {},
   mounted() {
     this.onscrollS();
-    this.queryProjectRecommendLabelList();
     this.queryProjectAllLabelListByPagination();
   },
   methods: {
@@ -143,7 +117,7 @@ export default {
         if (h + st >= sh) {
           if (_that.pagination?.curPage < _that.pagination?.totalPage) {
             //如果当前页小于等于总页数 则加载下一页的数据
-            if (this.isLoadingNow) return; //如果正在请求数据，等待请求完成后再继续请求下一页
+            if (this.isLoadingNow) return; //如果正在请求数据，等待请求完成后再继续下一次请求
             _that.loadCurPage = _that.pagination?.curPage + 1;
             const timer = setInterval(() => {
               clearInterval(timer);
@@ -167,23 +141,6 @@ export default {
         this.problemList = [];
         this.queryProjectProblemListById(); //如果点击的标签是项目，则查询当前点击的项目id
       }
-    },
-    queryProjectRecommendLabelList() {
-      // 查询顶部推荐项目标签
-      const urlParams = new URLSearchParams();
-      urlParams.append("labelNum", 10);
-      ConstWeb.axiosRequest(
-        ConstWeb.WebApi.QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM,
-        urlParams,
-        data => {
-          FuncCommon.showConsoleInfo(data);
-          this.projectRecommendLabelList = data.data.data;
-          this.queryNewProjectProblemListByCount();
-        },
-        error => {
-          FuncCommon.showConsoleError(error);
-        }
-      );
     },
     loadMoreProjectLabels() {
       //加载更多项目标签
