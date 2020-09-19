@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div style="display: flex">
       <ul class="hmc-top-label">
         <li
           :class="[
@@ -22,7 +22,24 @@
         >
           {{ obj?.projectName }}
         </li>
+        <!--推荐标签和全部标签 分割线-->
+        <li class="label-li" style="border: none;margin: auto 0;padding: 0"><span>|</span></li>
+        <li
+          :class="[
+            'label-li',
+            { 'label-li-active': chooseProjectId === obj?.id }
+          ]"
+          v-for="(obj, index) in projectRecommendLabelList"
+          :key="index"
+          @click="chooseTopProjectLabel(obj?.id)"
+        >
+          {{ obj?.projectName }}
+        </li>
       </ul>
+      <template v-if="projectLabelPagination?.curPage !== projectLabelPagination?.totalPage">
+        <!--分页查询全部项目标签时 如果还有下一页 则显示此按钮-->
+        <span class="label-load-more" id="loadMoreProjectLabel" @click.prevent="loadMoreProjectLabels">加载更多 >></span>
+      </template>
     </div>
 
     <hr />
@@ -57,10 +74,13 @@ export default {
   components: { ItemProblem },
   data() {
     return {
-      projectLabelList: [], // 顶部项目标签
+      projectRecommendLabelList: [], // 顶部推荐的项目标签
+      projectLabelList: [], //顶部标签（全部项目 分页查询）
       problemList: [],
       chooseProjectId: "new", //选中的某个标签
       pagination: Object,
+      projectLabelPagination: Object, // 顶部项目标签 分页数据
+      loadLabelCurPage: 1, // 加载标签的当前页
       isShowLoading: false, //是否显示 加载圈
       loadPageCountSize: 10, //每次加载多少条数据
       loadCurPage: 1 //加载数据的当前页
@@ -69,18 +89,19 @@ export default {
   created() {},
   mounted() {
     this.onscrollS();
-    this.queryProjectLabelList();
+    this.queryProjectRecommendLabelList();
+    this.queryProjectAllLabelListByPagination();
   },
   methods: {
     onscrollS() {
       const _that = this;
-      $("#setHeight").height(document.body.clientHeight - 130);
+      $("#setHeight").height(document.body.clientHeight - 140);
       window.onresize = () => {
         return (() => {
           console.info(
             document.body.clientWidth + "==" + document.body.clientHeight
           );
-          $("#setHeight").height(document.body.clientHeight - 130);
+          $("#setHeight").height(document.body.clientHeight - 140);
         })();
       };
       //容器div滚动事件
@@ -94,7 +115,7 @@ export default {
             _that.loadCurPage = _that.pagination?.curPage + 1;
             const timer = setInterval(() => {
               clearInterval(timer);
-              _that.queryProjectProblemList();
+              _that.queryProjectProblemListById();
             }, 1000);
             FuncCommon.showConsoleInfo("加载下一页，页码：");
             FuncCommon.showConsoleInfo(_that.loadCurPage);
@@ -102,20 +123,21 @@ export default {
         }
       });
     },
-    chooseTopProjectLabel(selId) { // 标签点击事件/查询项目的问题列表
+    chooseTopProjectLabel(selId) {
+      // 标签点击事件/查询项目的问题列表
       this.chooseProjectId = selId;
       if (this.chooseProjectId === "new") {
         this.problemList = [];
-        this.queryNewProjectProblemListCount(); //如果点击的标签是最新，则查询推荐的
+        this.queryNewProjectProblemListByCount(); //如果点击的标签是最新，则查询推荐的
       } else {
         this.pagination = null;
         this.loadCurPage = 1;
         this.problemList = [];
-        this.queryProjectProblemList(); //如果点击的标签是项目，则查询当前点击的项目id
+        this.queryProjectProblemListById(); //如果点击的标签是项目，则查询当前点击的项目id
       }
     },
-    queryProjectLabelList() {
-      // 查询顶部项目标签
+    queryProjectRecommendLabelList() {
+      // 查询顶部推荐项目标签
       const urlParams = new URLSearchParams();
       urlParams.append("labelNum", 10);
       ConstWeb.axiosRequest(
@@ -123,16 +145,48 @@ export default {
         urlParams,
         data => {
           FuncCommon.showConsoleInfo(data);
-          this.projectLabelList = data.data.data;
-          this.queryProjectProblemList();
-          this.queryNewProjectProblemListCount();
+          this.projectRecommendLabelList = data.data.data;
+          this.queryNewProjectProblemListByCount();
         },
         error => {
           FuncCommon.showConsoleError(error);
         }
       );
     },
-    queryProjectProblemList() {
+    loadMoreProjectLabels() { //加载更多项目标签
+      if (this.projectLabelPagination?.curPage < this.projectLabelPagination?.totalPage) {
+        this.loadLabelCurPage = this.projectLabelPagination?.curPage + 1;
+        this.queryProjectAllLabelListByPagination();
+      }
+    },
+    queryProjectAllLabelListByPagination() {
+      // 查询顶部全部项目标签（分页）
+      const urlParams = new URLSearchParams();
+      urlParams.append("page", this.loadLabelCurPage);
+      urlParams.append("pageCountSize", 10);
+      ConstWeb.axiosRequest(
+        ConstWeb.WebApi.QUERY_PROJECT_LABEL_FOR_PROBLEM_BY_PAGINATION,
+        urlParams,
+        data => {
+          FuncCommon.showConsoleInfo(data);
+          const lPagE = data.data?.pagination;
+          const lList = data.data?.data;
+          if (lPagE?.curPage === 1) {
+            this.projectLabelList = lList;
+          } else {
+            for (let index in lList) {
+              this.projectLabelList.push(lList[index]);
+            }
+          };
+          this.projectLabelPagination = lPagE;
+
+        },
+        error => {
+          FuncCommon.showConsoleError(error);
+        }
+      );
+    },
+    queryProjectProblemListById() {
       const _that = this;
       // 根据项目id查询问题列表
       const params = new URLSearchParams();
@@ -178,7 +232,7 @@ export default {
         }
       );
     },
-    queryNewProjectProblemListCount() {
+    queryNewProjectProblemListByCount() {
       // 查询最新添加的指定条问题
       const params = new URLSearchParams();
       params.append("pageCountSize", 30);
@@ -231,7 +285,17 @@ hr {
   color: #ffc107;
   box-shadow: 0 0 4px #202020;
 }
-.hmc-top-label li:hover {
+
+.label-load-more {
+  display: inline;
+  margin: auto 12px auto auto;
+  padding: 0px 10px 6px 10px;
+  font-size: 0.8rem;
+  color: #696969;
+  box-shadow: 0 0 4px #202020;
+}
+
+.hmc-top-label li, .label-load-more:hover {
   cursor: pointer;
 }
 

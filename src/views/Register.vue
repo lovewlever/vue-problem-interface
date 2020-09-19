@@ -132,7 +132,7 @@ export default {
             console.info(data);
             if (data.data.code === 200) {
               let timer = setInterval(() => {
-                this.$router.push("/login");
+                this.$router.push({path: "/login",query:{timestamp:FuncCommon.getTimestamp()}});
                 clearInterval(timer);
               }, 1000);
             }

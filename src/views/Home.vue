@@ -69,6 +69,7 @@
 import Navigation from "@/views/Navigation";
 import $ from "jquery";
 import WebSocket from "../constants/WebSocketCommon";
+import FuncCommon from "@/constants/FuncCommon";
 
 export default {
   name: "Home",
@@ -94,13 +95,13 @@ export default {
       this.cssActiveLeftTitle = choose;
       if (choose === "mine") {
         //跳转我的
-        this.$router.push("/homeMineComponent");
+        this.$router.push({path: "/homeMineComponent",query:{timestamp:FuncCommon.getTimestamp()}});
       } else if (choose === "project") {
         // 跳转项目列表
-        this.$router.push("/homeProjectListComponent");
+        this.$router.push({path: "/homeProjectListComponent",query:{timestamp:FuncCommon.getTimestamp()}});
       } else if (choose === "problem") {
         // 跳转项目问题列表
-        this.$router.push("/homeProblemListComponent");
+        this.$router.push({path: "/homeProblemListComponent",query:{timestamp:FuncCommon.getTimestamp()}});
       }
     },
     openOrHiddenLeftList() {
@@ -118,7 +119,7 @@ export default {
     },
     createProject() {
       this.cssActiveLeftTitle = "project";
-      this.$router.push("/homeCreateProjectComponent");
+      this.$router.push({path: "/homeCreateProjectComponent",query:{timestamp:FuncCommon.getTimestamp()}});
     }
   }
 };

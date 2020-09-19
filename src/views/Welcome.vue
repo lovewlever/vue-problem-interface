@@ -48,7 +48,7 @@ export default {
       let info = FuncCommon.getStorageLoginInfo();
       FuncCommon.showConsoleInfo(info);
       if (info === null) {
-        this.$router.push("/login");
+        this.$router.push({path: "/login",query:{timestamp:FuncCommon.getTimestamp()}});
       } else {
         FuncCommon.showConsoleInfo(info);
         $.ajax({
@@ -60,14 +60,14 @@ export default {
           success: function(data) {
             FuncCommon.showConsoleInfo(data);
             if (data.code === 200) {
-              _this.$router.push("/home");
+              _this.$router.push({path: "/home",query:{timestamp:FuncCommon.getTimestamp()}});
             } else {
-              _this.$router.push("/login");
+              _this.$router.push({path: "/login",query:{timestamp:FuncCommon.getTimestamp()}});
             }
           },
           error: function(e) {
             FuncCommon.showConsoleError(e);
-            _this.$router.push("/login");
+            _this.$router.push({path: "/login",query:{timestamp:FuncCommon.getTimestamp()}});
           }
         });
       }

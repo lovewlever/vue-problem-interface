@@ -95,11 +95,16 @@ function uuid() {
   return s.join("");
 }
 
+function getTimestamp() {
+  return new Date().getTime().toString();
+}
+
 export default {
   getVerify,
   getSessionKey,
   getStorageLoginInfo,
   showConsoleInfo,
   showConsoleError,
+  getTimestamp,
   mainJs
 };

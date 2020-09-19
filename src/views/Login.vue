@@ -152,7 +152,7 @@ export default {
         ConstWeb.STORAGE_KEY.KEY_USER_LOGIN_INFO,
         JSON.stringify(info.data[0])
       );
-      this.$router.push("/home");
+      this.$router.push({path: "/home",query:{timestamp:FuncCommon.getTimestamp()}});
     }
   }
 };

@@ -2,11 +2,11 @@ import _axios from "axios";
 import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
-const BASIS_URL = "http://192.168.3.21:8099";
-const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+//const BASIS_URL = "http://192.168.3.21:8099";
+//const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
 
-//const BASIS_URL = "http://192.168.1.113:8099";
-//const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
+const BASIS_URL = "http://192.168.1.113:8099";
+const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
 
 const WebApi = {
   USER_LOGIN: BASIS_URL + "/usr/login", //
@@ -19,8 +19,8 @@ const WebApi = {
   QUERY_PROJECT_DETAILS: BASIS_URL + "/pc/queryProjectById", //查询项目详情
   QUERY_PROJECT_OPERATE_RECORDER:
     BASIS_URL + "/pc/queryProjectOperateRecorders", //查询项目的操作记录
-  QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM:
-    BASIS_URL + "/ppc/recommendProjectLabelsForProblem", //查询问题页面上面项目标签
+  QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM: BASIS_URL + "/ppc/recommendProjectLabelsForProblem", //查询问题页面上面项目标签
+  QUERY_PROJECT_LABEL_FOR_PROBLEM_BY_PAGINATION: BASIS_URL + "/ppc/queryProjectLabelsForProblemByPagination", //查询问题页面上面项目标签
   QUERY_PROJECT_SYSTEM_DEVICES: BASIS_URL + "/ppc/queryProjectSystemDevices", //查询添加问题时选择的设备列表
   SAVE_PROJECT_SAVE_PROBLEM_LIST: BASIS_URL + "/ppc/saveProjectSaveProblemList", //查询添加问题时选择的设备列表
   QUERY_PROBLEM_LIST_BY_PROJECT_ID: BASIS_URL + "/ppc/queryProblemListByProjectId", //根据项目id查询问题列表
@@ -62,7 +62,7 @@ function axiosRequest(url, urlParams, success, error) {
   )
     .then(data => {
       if (data.data.code === RESULT_CODE.RESULT_CODE_NOT_LOGIN) {
-        mainJs.vue.$router.push("/login");
+        mainJs.vue.$router.push({path: "/login",query:{timestamp:FuncCommon.getTimestamp()}});
       } else {
         FuncCommon.showConsoleInfo(data);
         success(data);

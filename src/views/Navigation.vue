@@ -142,7 +142,7 @@ export default {
   created() {
     let storageLoginInfo = FuncCommon.getStorageLoginInfo();
     if (storageLoginInfo === null) {
-      this.$router.push("/login");
+      this.$router.push({path: "/login",query:{timestamp:FuncCommon.getTimestamp()}});
     } else {
       this.userNickname = storageLoginInfo.unickname;
       if (storageLoginInfo.uavatar !== "") {
