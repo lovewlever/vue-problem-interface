@@ -115,7 +115,7 @@
             },
             clickToAddInterfaceToProject() {
                 const _this = this
-                this.$router.push({path: "/homeAddInterfaceToProjectComponent", query: {
+                this.$router.push({path: "/homeInterfaceAddOrEditAndDetailsComponent", query: {
                         projectId: _this.projectId,
                         projectName: _this.projectObj?.projectName
                     }})

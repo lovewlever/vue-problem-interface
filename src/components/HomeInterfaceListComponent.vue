@@ -175,10 +175,12 @@ export default {
               this.projectLabelList.push(lList[index]);
             }
           }
-          const tim = setInterval(() => {
-            $("#labelUl")[0].scrollLeft += 1000;
-            clearInterval(tim);
-          }, 500);
+          if (lPagE?.curPage !== 1) {
+            const tim = setInterval(() => {
+              $("#labelUl")[0].scrollLeft += 1000;
+              clearInterval(tim);
+            }, 500);
+          }
           this.projectLabelPagination = lPagE;
           this.isLoadingNow = false;
         },

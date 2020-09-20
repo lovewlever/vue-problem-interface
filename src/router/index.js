@@ -57,9 +57,9 @@ const routes = [
         component: () => import("../components/HomeAddProblemToProjectComponent.vue")
       },
       { // 添加问题到项目
-        path: "/homeAddInterfaceToProjectComponent",
-        name: "HomeAddInterfaceToProjectComponent",
-        component: () => import("../components/HomeAddInterfaceToProjectComponent.vue")
+        path: "/homeInterfaceAddOrEditAndDetailsComponent",
+        name: "HomeInterfaceAddOrEditAndDetailsComponent",
+        component: () => import("../components/HomeInterfaceAddOrEditAndDetailsComponent.vue")
       },
       { // 接口列表
         path: "/homeInterfaceListComponent",
