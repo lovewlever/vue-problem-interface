@@ -41,7 +41,7 @@
 
 
         <!--右-->
-        <div class="item-con"  v-if="doubleDataList.length > 1" @click="clickToProjectDetails(doubleDataList[1].id)">
+        <div class="item-con" v-if="doubleDataList.length > 1" @click="clickToProjectDetails(doubleDataList[1].id)">
             <div class="item-con-c-right">
                 <h5 style="color: #CDCDCD;margin: 14px 0 auto 24px">
                     {{doubleDataList[1].projectName}}&nbsp;&nbsp;@{{doubleDataList[1].tuserEntity.unickname}}
@@ -84,13 +84,11 @@
     import "bootstrap/dist/css/bootstrap.min.css";
     import "bootstrap/dist/js/bootstrap.min";
     import {formatDate2} from "@/constants/Filter";
-    import FuncCommon from "@/constants/FuncCommon";
 
     export default {
         name: "ItemProject",
         data() {
-            return {
-            }
+            return {}
         },
         props: {
             doubleDataList: Array()
@@ -98,13 +96,15 @@
         methods: {
             clickToProjectDetails(projectId) {
                 console.info(projectId)
-                this.$router.push({path:"/homeProjectDetailsComponent",query: {projectId: projectId}})
+                this.$router.push({path: "/homeProjectDetailsComponent", query: {projectId: projectId}})
             },
-            formatDate(time) {
-                FuncCommon.showConsoleInfo("毫秒转Date：")
-                FuncCommon.showConsoleInfo(time)
-                const data = new Date(time);
-                return formatDate2(data,'yyyy-MM-dd HH:mm:ss');
+            formatDate(time) { //
+                if (time !== undefined) {
+                    const data = new Date(time);
+                    return formatDate2(data, 'yyyy-MM-dd HH:mm:ss');
+                } else {
+                    return "--"
+                }
             }
         }
     };

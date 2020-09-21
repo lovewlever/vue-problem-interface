@@ -29,9 +29,11 @@
                       </svg>
                   </span>
                         <div>
-                            <p style="margin: 0;color: #B9B8B8">{{obj?.tporOperateType}}&{{obj?.tporOperateContent}}&nbsp;&nbsp;<span>&nbsp;@{{obj?.refTUserEntity?.unickname}}</span></p>
+                            <p style="margin: 0;color: #B9B8B8">{{obj?.tporOperateType}}&{{obj?.tporOperateContent}}&nbsp;&nbsp;<span>&nbsp;@{{obj?.refTUserEntity?.unickname}}</span>
+                            </p>
                             <hr style="margin: 8px 0"/>
-                            <p style="margin: 0;color: #7D7D7D">{{obj?.tporOperateType}}<span>&nbsp;&nbsp;{{formatDate(obj?.tporTimestamp)}}</span></p>
+                            <p style="margin: 0;color: #7D7D7D">{{obj?.tporOperateType}}<span>&nbsp;&nbsp;{{formatDate(obj?.tporTimestamp)}}</span>
+                            </p>
                         </div>
                     </div>
                     <div style="border-left: 1px red solid;height: 40px"></div>
@@ -115,17 +117,21 @@
             },
             clickToAddInterfaceToProject() {
                 const _this = this
-                this.$router.push({path: "/homeInterfaceAddOrEditAndDetailsComponent", query: {
+                this.$router.push({
+                    path: "/homeInterfaceAddOrEditAndDetailsComponent", query: {
                         projectId: _this.projectId,
                         projectName: _this.projectObj?.projectName
-                    }})
+                    }
+                })
             },
-        formatDate(time) {
-            FuncCommon.showConsoleInfo("毫秒转Date：")
-            FuncCommon.showConsoleInfo(time)
-            const data = new Date(time);
-            return formatDate2(data,'yyyy-MM-dd HH:mm:ss');
-        }
+            formatDate(time) {
+                if (time !== undefined) {
+                    const data = new Date(time);
+                    return formatDate2(data, 'yyyy-MM-dd HH:mm:ss');
+                } else {
+                    return "--"
+                }
+            }
         }
     };
 </script>
@@ -191,9 +197,11 @@
         border: 1px solid;
         border-radius: 6px;
     }
+
     .hpdc-top-add li:hover {
         cursor: pointer;
     }
+
     .hpdc-top-add li a {
         color: #696969;
     }
