@@ -100,9 +100,11 @@
               <div class="request-input-content-url">
                 <label>
                   <input
+                          id="inputUrlId"
                     type="text"
                     placeholder="https://"
-                    v-model="requestAllParams.requestUrl"
+                    :value="requestAllParams.requestUrl"
+                          @change.prevent="urlInputChange"
                   />
                 </label>
               </div>
@@ -369,7 +371,8 @@ export default {
       projectId: String,
       projectName: String,
       errorMsg: "",
-      showOrHiddenErrorMsg: false
+      showOrHiddenErrorMsg: false,
+      isParse: false
     };
   },
   components: {},
@@ -429,27 +432,48 @@ export default {
     },
     //URL输入框改变事件
     urlInputChange() {
-      FuncCommon.showConsoleInfo(this.requestAllParams);
+      const $inputUrlId = $("#inputUrlId");
+      this.requestAllParams.requestUrl = $inputUrlId.val();
+      let inputUrl = this.requestAllParams.requestUrl;
+      if (inputUrl.indexOf("?") !== -1) {
+        let urlParams = inputUrl.substring(inputUrl.indexOf("?") + 1,inputUrl.length);
+        let kDv = urlParams.split("&");
+        FuncCommon.showConsoleInfo(kDv);
+        FuncCommon.showConsoleInfo(urlParams);
+        let paramsArr = [];
+        for (let pos in kDv) {
+          let kv = kDv[pos].split("=");
+          let pah = new ParamsAndHeaders();
+          pah.key = kv[0];
+          pah.value = kv[1];
+          paramsArr.push(pah);
+        }
+        FuncCommon.showConsoleInfo(paramsArr);
+        this.requestAllParams.params = paramsArr;
+      }
     }
+  },
+  computed: {
   },
   watch: {
     requestAllParams: {
-      handler (newVal, oldVal) {
-        //
-        FuncCommon.showConsoleInfo(JSON.stringify(newVal) + "---" + JSON.stringify(oldVal));
+      handler(newVal,oleVal) {
+        FuncCommon.showConsoleInfo(newVal + oleVal);
         const params = newVal.params;
         FuncCommon.showConsoleInfo(params.length);
         let urlParams = "?";
         for (let index in params) {
-          if (index === "0") {
-            urlParams += ("" + params[index].key + "=" + params[index].value)
-          } else {
-            urlParams += ("&" + params[index].key + "=" + params[index].value)
+          if (params[index].checked) {
+            if (index === "0") {
+              urlParams += ("" + params[index].key + "=" + params[index].value)
+            } else {
+              urlParams += ("&" + params[index].key + "=" + params[index].value)
+            }
           }
         }
         if (urlParams === "?=") {
           urlParams = "";
-        };
+        }
         let url = this.requestAllParams.requestUrl;
         FuncCommon.showConsoleInfo(url);
         if (url.indexOf("?") !== -1) {
@@ -458,7 +482,7 @@ export default {
         this.requestAllParams.requestUrl = url + urlParams;
         FuncCommon.showConsoleInfo(urlParams);
       },
-      deep: true
+      deep:true
     }
   }
 };
