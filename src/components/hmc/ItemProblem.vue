@@ -166,7 +166,7 @@
                   <template v-else>
                     正在修改：&nbsp;
                   </template></span
-                >002
+                >{{problemObj?.chooseProblemTUserEntity?.unickname}}
               </div>
             </li>
           </template>
