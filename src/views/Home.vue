@@ -124,6 +124,18 @@ export default {
       this.cssActiveLeftTitle = "project";
       this.$router.push({path: "/homeCreateProjectComponent",query:{timestamp:FuncCommon.getTimestamp()}});
     }
+  },
+  mounted() {
+    //浏览器刷新时 获取当前显示的页面，选中对应的Item
+    if (this.$route.path === "/homeMineComponent") {
+      this.cssActiveLeftTitle = "mine";
+    } else if (this.$route.path === "/homeProjectListComponent") {
+      this.cssActiveLeftTitle = "project";
+    } else if (this.$route.path === "/homeProblemListComponent") {
+      this.cssActiveLeftTitle = "problem";
+    } else if (this.$route.path === "/homeInterfaceListComponent") {
+      this.cssActiveLeftTitle = "interface";
+    }
   }
 };
 </script>

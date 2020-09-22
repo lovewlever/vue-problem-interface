@@ -2,11 +2,11 @@ import _axios from "axios";
 import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
-//const BASIS_URL = "http://192.168.3.21:8099";
-//const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+const BASIS_URL = "http://192.168.3.21:8099";
+const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
 
-const BASIS_URL = "http://192.168.1.113:8099";
-const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
+//const BASIS_URL = "http://192.168.1.113:8099";
+//const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
 
 const WebApi = {
   USER_LOGIN: BASIS_URL + "/usr/login", //
@@ -17,8 +17,7 @@ const WebApi = {
   QUERY_PROJECT_LIST: BASIS_URL + "/pc/queryPlist", //查询项目列表
   QUERY_PROJECT_LIST_FOR_ME: BASIS_URL + "/pc/queryProjectsByUserId", //查询我发布的项目
   QUERY_PROJECT_DETAILS: BASIS_URL + "/pc/queryProjectById", //查询项目详情
-  QUERY_PROJECT_OPERATE_RECORDER:
-    BASIS_URL + "/pc/queryProjectOperateRecorders", //查询项目的操作记录
+  QUERY_PROJECT_OPERATE_RECORDER: BASIS_URL + "/pc/queryProjectOperateRecorders", //查询项目的操作记录
   QUERY_RECOMMEND_PROJECT_LABEL_FOR_PROBLEM: BASIS_URL + "/ppc/recommendProjectLabelsForProblem", //查询问题页面上面项目标签
   QUERY_PROJECT_LABEL_FOR_PROBLEM_BY_PAGINATION: BASIS_URL + "/ppc/queryProjectLabelsForProblemByPagination", //查询问题页面上面项目标签
   QUERY_PROJECT_SYSTEM_DEVICES: BASIS_URL + "/ppc/queryProjectSystemDevices", //查询添加问题时选择的设备列表
@@ -26,7 +25,8 @@ const WebApi = {
   QUERY_PROBLEM_LIST_BY_PROJECT_ID: BASIS_URL + "/ppc/queryProblemListByProjectId", //根据项目id查询问题列表
   QUERY_PROBLEM_LIST_NEW_TIME_COUNT: BASIS_URL + "/ppc/queryProblemListNewTimeCount", //查询最新添加的指定条问题
   CHOOSE_PROBLEM: BASIS_URL + "/ppc/queryChooseProblem", //选择一个问题
-  UPDATE_MODIFY_PROBLEM_PROGRESS: BASIS_URL + "/ppc/updateProblemProgress" //修改问题进度
+  UPDATE_MODIFY_PROBLEM_PROGRESS: BASIS_URL + "/ppc/updateProblemProgress", //修改问题进度
+  QUERY_MINE_COMPLETED_OR_NOT_COMPLETED_PROBLEMS: BASIS_URL + "/ppc/queryMineCompletedOrNotProblems" //查询我的 选中未修改完或者已修改完成的问题
 };
 const RESULT_CODE = {
   RESULT_CODE_SUCCESS: 200, //成功

@@ -15,17 +15,6 @@
           :class="[
             'label-li',
             {
-              'label-li-active': chooseProjectLabelId === 'myAddProjectProblem'
-            }
-          ]"
-          @click="chooseTopProjectLabel('myAddProjectProblem')"
-        >
-          我添加的问题
-        </li>
-        <li
-          :class="[
-            'label-li',
-            {
               'label-li-active': chooseProjectLabelId === 'myNotFinishedProblem'
             }
           ]"
@@ -53,6 +42,14 @@
           :double-data-list="obj"
         />
       </transition-group>
+
+      <transition-group name="list" tag="div">
+        <ItemProblem
+                v-for="(obj, index) in problemList"
+                :key="index"
+                :problem-o="obj"
+        />
+      </transition-group>
       <div style="margin: 40px auto 40px auto" v-if="isShowLoading">
         <div class="spinner-border text-primary" role="status">
           <span class="sr-only">Loading...</span>
@@ -66,17 +63,19 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import ItemProject from "../components/hmc/ItemProject";
+import ItemProblem from "../components/hmc/ItemProblem";
 import $ from "jquery";
 import ConstWeb from "../constants/ConstWeb";
 import FuncCommon from "../constants/FuncCommon";
 
 export default {
   name: "HomeMineComponent",
-  components: { ItemProject },
+  components: { ItemProject,ItemProblem },
   data() {
     return {
-      projectDataList: [],
-      chooseProjectLabelId: "myAddProject", //选中的某个标签
+      projectDataList: [], //项目列表
+      problemList: [], //问题列表
+      chooseProjectLabelId: "myNotFinishedProblem", //选中的某个标签
       pagination: Object,
       isShowLoading: false, //是否显示 加载圈
       loadPageCountSize: 10, //每次加载多少条数据
@@ -87,7 +86,7 @@ export default {
   created() {},
   mounted() {
     this.onscrollS();
-    this.queryProjectList();
+    this.queryNotCompletedProblems("NotCompleted");
   },
   methods: {
     onscrollS() {
@@ -112,8 +111,17 @@ export default {
             if (this.isLoadingNow) return; //如果正在请求数据，等待请求完成后再继续下一次请求
             _that.loadCurPage = _that.pagination?.curPage + 1;
             const timer = setInterval(() => {
+              if (_that.chooseProjectLabelId === "myAddProject") {
+                _that.problemList = [];
+                _that.queryProjectList();
+              } else if ( _that.chooseProjectLabelId === "myNotFinishedProblem") {
+                _that.projectDataList = [];
+                _that.queryNotCompletedProblems("NotCompleted");
+              } else if ( _that.chooseProjectLabelId === "myFinishedProblem") {
+                _that.projectDataList = [];
+                _that.queryNotCompletedProblems("Completed");
+              }
               clearInterval(timer);
-              _that.queryProjectList();
             }, 1000);
             FuncCommon.showConsoleInfo("加载下一页，页码：");
             FuncCommon.showConsoleInfo(_that.loadCurPage);
@@ -123,9 +131,24 @@ export default {
     },
     chooseTopProjectLabel(selId) {
       this.chooseProjectLabelId = selId;
+      if (this.chooseProjectLabelId === "myAddProject") {
+        this.loadCurPage = 1;
+        this.problemList = [];
+        this.queryProjectList();
+      } else if (this.chooseProjectLabelId === "myNotFinishedProblem") {
+        this.loadCurPage = 1;
+        this.projectDataList = [];
+        this.problemList = [];
+        this.queryNotCompletedProblems("NotCompleted");
+      } else if (this.chooseProjectLabelId === "myFinishedProblem") {
+        this.loadCurPage = 1;
+        this.projectDataList = [];
+        this.problemList = [];
+        this.queryNotCompletedProblems("Completed");
+      }
     },
+    //查询我的项目
     queryProjectList() {
-      //查询我的项目
       this.isLoadingNow = true;
       const urlParams = new URLSearchParams();
       urlParams.append("page", this.loadCurPage);
@@ -166,6 +189,55 @@ export default {
           this.isLoadingNow = false;
           FuncCommon.showConsoleError(error);
         }
+      );
+    },
+    //查询我选中的未修改完的问题列表
+    queryNotCompletedProblems(findType) {
+      const _that = this;
+      this.isLoadingNow = true;
+      const urlParams = new URLSearchParams();
+      urlParams.append("findType", findType);
+      urlParams.append("page", this.loadCurPage);
+      urlParams.append("pageCountSize", this.loadPageCountSize);
+      ConstWeb.axiosRequest(
+              ConstWeb.WebApi.QUERY_MINE_COMPLETED_OR_NOT_COMPLETED_PROBLEMS,
+              urlParams,
+              data => {
+                FuncCommon.showConsoleInfo(data);
+                const ds = data.data?.data;
+                //放数据
+                if (_that.pagination?.curPage === 1) {
+                  FuncCommon.showConsoleInfo("CUR_PAGE=1");
+                  _that.problemList = ds;
+                } else {
+                  FuncCommon.showConsoleInfo("CUR_PAGE!=1");
+                  for (let index in ds) {
+                    _that.problemList?.push(ds[index]);
+                  }
+                  _that.$forceUpdate();
+                }
+
+                //数据为空，隐藏加载条
+                if (_that.problemList.length === 0) {
+                  _that.isShowLoading = false;
+                }
+
+                //分页数据
+                this.pagination = data.data.pagination;
+                if (this.pagination?.curPage === this.pagination?.totalPage) {
+                  //当前页等于总页数，没有数据了
+                  this.isShowLoading = false;
+                } else {
+                  this.isShowLoading = true;
+                }
+
+                this.isLoadingNow = false;
+                FuncCommon.showConsoleInfo(this.problemList);
+              },
+              error => {
+                this.isLoadingNow = false;
+                FuncCommon.showConsoleError(error);
+              }
       );
     }
   }
