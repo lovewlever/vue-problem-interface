@@ -290,7 +290,10 @@ export default {
       $("#dialogCommit").bind("click", function() {
         $("#exampleModal").modal("hide");
         $("#dialogCommit").unbind("click");
-        _this.transferIssues(problemId,toUid);
+        const time = setInterval(() => {
+          clearInterval(time);
+          _this.transferIssues(problemId, toUid);
+        }, 500);
       });
       FuncCommon.showConsoleInfo(event);
       FuncCommon.showConsoleInfo(toUid);
