@@ -73,7 +73,7 @@ export default {
         const st = $(this)[0].scrollTop;
         if(h+st>=sh){
           if (_that.pagination?.curPage < _that.pagination?.totalPage) { //如果当前页小于等于总页数 则加载下一页的数据
-            if (this.isLoadingNow) return; //如果正在请求数据，等待请求完成后再继续下一次请求
+            if (_that.isLoadingNow) return; //如果正在请求数据，等待请求完成后再继续下一次请求
             _that.loadCurPage = _that.pagination?.curPage + 1;
             const timer = setInterval(() => {
               clearInterval(timer);

@@ -110,12 +110,12 @@ export default {
     openOrHiddenLeftList() {
       const $cll = $("#content-left-list");
       const $span = $("#content-left-list ul li span");
-      if ($cll.width() === 250) {
+      if ($cll.width() === 200) {
         $span.animate({ opacity: 0 }, 200);
         $cll.animate({ width: "72px" }, 500);
         $span.animate({ width: "0px" }, 400);
       } else {
-        $cll.animate({ width: "250px" }, 500);
+        $cll.animate({ width: "200px" }, 500);
         $span.animate({ width: "50px" }, 400);
         $span.animate({ opacity: 1 }, 200);
       }
@@ -151,7 +151,7 @@ export default {
   display: flex;
 }
 .app-content-left {
-  width: 250px;
+  width: 200px;
   height: 100%;
   background: #202020;
 }
