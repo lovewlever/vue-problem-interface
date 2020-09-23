@@ -79,6 +79,9 @@ export default {
       isLoadingNow: false //是否正在加载数据
     };
   },
+  beforeCreate() {
+    document.title = "INTERFACE";
+  },
   created() {},
   mounted() {
     this.onscrollS();

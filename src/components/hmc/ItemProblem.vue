@@ -36,7 +36,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                @click.prevent="clickChooseProblem(problemObj?.id)"
+                @click.prevent="clickChooseProblem(problemObj?.id, 'Selected')"
               >
                 <span
                   class="spinner-border spinner-border-sm"
@@ -57,18 +57,24 @@
             "
           >
             <li>
-              <button
-                type="button"
-                class="btn btn-success"
-                @click.prevent="clickCompleteProblem(problemObj?.id)"
-              >
+              <label>
                 <span
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                        style="color: white"
                 ></span>
-                完成该问题
-              </button>
+                <select
+                        name="operating"
+                        style="background: #28a745;color: white"
+                        @change.prevent="changeOperatingProblem($event, problemObj?.id)"
+                >
+                  <option label="操作" value=""></option>
+                  <option label="完成修改" value="Complete"></option>
+                  <option label="取消修改" value="Cancel"></option>
+                  <option label="编辑" value="Modify"></option>
+                </select>
+              </label>
             </li>
 
             <li>
@@ -161,7 +167,7 @@
               <div style="color: #AAAAAA;font-size: .75rem">
                 <span>
                   <template v-if="problemObj?.ppCompleteSchedule >= 100">
-                    修改完成&nbsp;&nbsp;BY&nbsp;
+                    {{formatDate(problemObj?.ppCompleteTimestamp).substring(0,10)}}：&nbsp;修改完成&nbsp;&nbsp;BY&nbsp;
                   </template>
                   <template v-else>
                     正在修改：&nbsp;
@@ -254,23 +260,28 @@ export default {
         this.modifyProblemProgress(pId, schedule);
       }
     },
-    clickCompleteProblem(pId) {
-      // 完成该问题
+    // 对问题进行其他操作
+    changeOperatingProblem(event,pId) {
+      const operating = event.target.value;
       const _this = this;
-      const $dialog = $("#dialogMsg");
-      $dialog.html("请确定问题已修改完成？");
-      $dialog.css("color", "red");
-      $("#exampleModal").modal();
-      $("#dialogCommit").bind("click", function() {
-        $("#exampleModal").modal("hide");
-        $("#dialogCommit").unbind("click");
-        _this.modifyProblemProgress(pId, 100);
-      });
+      if (operating === "Complete") { //完成该问题
+        const $dialog = $("#dialogMsg");
+        $dialog.html("请确定问题已修改完成？");
+        $dialog.css("color", "red");
+        $("#exampleModal").modal();
+        $("#dialogCommit").bind("click", function() {
+          $("#exampleModal").modal("hide");
+          $("#dialogCommit").unbind("click");
+          _this.modifyProblemProgress(pId, 100);
+        });
+      } else if (operating === "Cancel") { //取消修改该问题
+        this.clickChooseProblem(pId, "Cancel");
+      }
+      event.target.value = "";
     },
     modifyProblemProgress(pId, schedule) {
       //修改问题进度
       const _this = this;
-      //选择修改一个问题
       const params = new URLSearchParams();
       params.append("problemId", pId);
       params.append("schedule", schedule);
@@ -296,10 +307,14 @@ export default {
         }
       );
     },
-    clickChooseProblem(pId) {
-      //确认选择修改选中的问题
+    //选择或取消选择修改问题
+    clickChooseProblem(pId, operatingType) {
       const _this = this;
-      $("#dialogMsg").html("确定选择修改该问题？");
+      if (operatingType === "Selected") { //完成该问题
+        $("#dialogMsg").html("确定选择修改该问题？");
+      } else if (operatingType === "Cancel") { //取消修改该问题
+        $("#dialogMsg").html("确定取消修改该问题？");
+      }
       $("#exampleModal").modal();
       $("#dialogCommit").bind("click", function() {
         $("#exampleModal").modal("hide");
@@ -307,8 +322,9 @@ export default {
         //选择修改一个问题
         const params = new URLSearchParams();
         params.append("problemId", pId);
+        params.append("operatingType", operatingType);
         ConstWeb.axiosRequest(
-          ConstWeb.WebApi.CHOOSE_PROBLEM,
+          ConstWeb.WebApi.CHOOSE_OR_CANCEL_PROBLEM,
           params,
           data => {
             if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {

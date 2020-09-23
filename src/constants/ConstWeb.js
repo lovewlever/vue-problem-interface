@@ -2,11 +2,11 @@ import _axios from "axios";
 import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
-const BASIS_URL = "http://192.168.3.21:8099";
-const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+//const BASIS_URL = "http://192.168.3.21:8099";
+//const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
 
-//const BASIS_URL = "http://192.168.1.113:8099";
-//const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
+const BASIS_URL = "http://192.168.1.113:8099";
+const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
 
 const WebApi = {
   USER_LOGIN: BASIS_URL + "/usr/login", //
@@ -24,7 +24,7 @@ const WebApi = {
   SAVE_PROJECT_SAVE_PROBLEM_LIST: BASIS_URL + "/ppc/saveProjectSaveProblemList", //查询添加问题时选择的设备列表
   QUERY_PROBLEM_LIST_BY_PROJECT_ID: BASIS_URL + "/ppc/queryProblemListByProjectId", //根据项目id查询问题列表
   QUERY_PROBLEM_LIST_NEW_TIME_COUNT: BASIS_URL + "/ppc/queryProblemListNewTimeCount", //查询最新添加的指定条问题
-  CHOOSE_PROBLEM: BASIS_URL + "/ppc/queryChooseProblem", //选择一个问题
+  CHOOSE_OR_CANCEL_PROBLEM: BASIS_URL + "/ppc/queryChooseOrCancelProblem", //选择或取消选择一个问题
   UPDATE_MODIFY_PROBLEM_PROGRESS: BASIS_URL + "/ppc/updateProblemProgress", //修改问题进度
   QUERY_MINE_COMPLETED_OR_NOT_COMPLETED_PROBLEMS: BASIS_URL + "/ppc/queryMineCompletedOrNotProblems" //查询我的 选中未修改完或者已修改完成的问题
 };

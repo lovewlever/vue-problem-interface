@@ -104,6 +104,9 @@ export default {
       isLoadingNow: false //是否正在加载数据
     };
   },
+  beforeCreate() {
+    document.title = "PROBLEM";
+  },
   created() {},
   mounted() {
     this.onscrollS();

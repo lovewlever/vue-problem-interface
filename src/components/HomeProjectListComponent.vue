@@ -47,6 +47,9 @@ export default {
     };
   },
   components: { ItemProject },
+  beforeCreate() {
+    document.title = "PROJECT";
+  },
   mounted() {
    this.onscrollS();
     this.queryProjectList();

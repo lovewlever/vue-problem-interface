@@ -83,6 +83,9 @@ export default {
       isLoadingNow: false //是否正在加载数据
     };
   },
+  beforeCreate() {
+    document.title = "HOME";
+  },
   created() {},
   mounted() {
     this.onscrollS();
@@ -224,7 +227,7 @@ export default {
 
                 //分页数据
                 this.pagination = data.data.pagination;
-                if (this.pagination?.curPage === this.pagination?.totalPage) {
+                if (this.pagination?.curPage === this.pagination?.totalPage || this.pagination?.totalPage === 0) {
                   //当前页等于总页数，没有数据了
                   this.isShowLoading = false;
                 } else {
@@ -300,21 +303,18 @@ export default {
 
 
 /** 插入过程 **/
-/*进入前效果*/
-.list-enter  {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-/*//进入的过渡时间和函数*/
 .list-enter-active{
   transition: all 1s;
 }
-/*//进入后效果*/
-.list-enter-to {
-  opacity: 1;
+/** 移除过程 **/
+.list-leave-active {
+  transition: all 1s;
+}
+/*** 开始插入、移除结束的位置变化 ***/
+.list-enter, .list-leave-to {
+  opacity: 0;
   transform: translateY(30px);
 }
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s
 }
