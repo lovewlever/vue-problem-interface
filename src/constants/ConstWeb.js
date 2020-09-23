@@ -26,7 +26,8 @@ const WebApi = {
   QUERY_PROBLEM_LIST_NEW_TIME_COUNT: BASIS_URL + "/ppc/queryProblemListNewTimeCount", //查询最新添加的指定条问题
   CHOOSE_OR_CANCEL_PROBLEM: BASIS_URL + "/ppc/queryChooseOrCancelProblem", //选择或取消选择一个问题
   UPDATE_MODIFY_PROBLEM_PROGRESS: BASIS_URL + "/ppc/updateProblemProgress", //修改问题进度
-  QUERY_MINE_COMPLETED_OR_NOT_COMPLETED_PROBLEMS: BASIS_URL + "/ppc/queryMineCompletedOrNotProblems" //查询我的 选中未修改完或者已修改完成的问题
+  QUERY_MINE_COMPLETED_OR_NOT_COMPLETED_PROBLEMS: BASIS_URL + "/ppc/queryMineCompletedOrNotProblems", //查询我的 选中未修改完或者已修改完成的问题
+  UPDATE_TRANSFER_ISSUES: BASIS_URL + "/ppc/updateTransferIssues" //转让问题给其他用户
 };
 const RESULT_CODE = {
   RESULT_CODE_SUCCESS: 200, //成功

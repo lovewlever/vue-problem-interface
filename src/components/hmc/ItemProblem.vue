@@ -154,8 +154,8 @@
                   aria-hidden="true"
                   style="color: white"
                 ></span>
-                <select name="progress">
-                  <option label="转让该问题" value=""></option>
+                <select name="progress" @change.prevent="changeOperatingTransferIssues($event, problemObj?.id)">
+                  <option label="转让该问题" value="" ></option>
                   <option label="001" value="jfklejka54seaasdyr6"></option>
                 </select>
               </label>
@@ -279,8 +279,53 @@ export default {
       }
       event.target.value = "";
     },
+    //转让该问题
+    changeOperatingTransferIssues(event,problemId) {
+      const toUid = event.target.value;
+      const _this = this;
+      const $dialog = $("#dialogMsg");
+      $dialog.html("确定转让该问题？");
+      $dialog.css("color", "red");
+      $("#exampleModal").modal();
+      $("#dialogCommit").bind("click", function() {
+        $("#exampleModal").modal("hide");
+        $("#dialogCommit").unbind("click");
+        _this.transferIssues(problemId,toUid);
+      });
+      FuncCommon.showConsoleInfo(event);
+      FuncCommon.showConsoleInfo(toUid);
+      FuncCommon.showConsoleInfo(problemId);
+      event.target.value = "";
+    },
+    //网络请求，转让问题
+    transferIssues(problemId, toUserId) {
+      const params = new URLSearchParams();
+      params.append("toUserId", toUserId);
+      params.append("problemId", problemId);
+      ConstWeb.axiosRequest(
+              ConstWeb.WebApi.UPDATE_TRANSFER_ISSUES,
+              params,
+              data => {
+                FuncCommon.showConsoleInfo("修改问题进度:");
+                FuncCommon.showConsoleInfo(data);
+                if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
+                  this.problemObj = data?.data?.data[0];
+                } else {
+                  $("#dialogMsg").html(data.data.msg);
+                  $("#dialogMsg").css("color", "red");
+                  $("#exampleModal").modal();
+                }
+              },
+              err => {
+                FuncCommon.showConsoleInfo("修改问题进度:");
+                FuncCommon.showConsoleInfo(err);
+                $("#dialogMsg").html(err);
+                $("#exampleModal").modal();
+              }
+      );
+    },
+    //修改问题进度
     modifyProblemProgress(pId, schedule) {
-      //修改问题进度
       const _this = this;
       const params = new URLSearchParams();
       params.append("problemId", pId);
