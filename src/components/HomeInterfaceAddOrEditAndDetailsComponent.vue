@@ -110,7 +110,7 @@
               </div>
             </div>
             <!--发送请求-->
-            <button type="button" class="btn btn-success btn-send-request">
+            <button type="button" class="btn btn-success btn-send-request" @click.prevent="sendRequest">
               发送请求
             </button>
           </div>
@@ -314,6 +314,8 @@
           <p>返回值</p>
           <!--hr-->
           <hr />
+
+          <pre style="color: wheat" id="responseContent"></pre>
         </div>
       </div>
     </div>
@@ -362,6 +364,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import $ from "jquery";
 import FuncCommon from "../constants/FuncCommon";
+import Axios from "axios";
 
 export default {
   name: "HomeInterfaceAddOrEditAndDetailsComponent",
@@ -451,11 +454,28 @@ export default {
         FuncCommon.showConsoleInfo(paramsArr);
         this.requestAllParams.params = paramsArr;
       }
+    },
+    //发送请求
+    sendRequest() {
+      Axios({
+        url: this.requestAllParams.requestUrl,
+        method: this.requestAllParams.requestType,
+        data: {},
+        headers: {
+
+        }
+      }, { withCredentials: true }).then((data) => {
+        $("#responseContent").text(JSON.stringify(data, null,2))
+      }).catch(error => {
+        $("#responseContent").text(JSON.stringify(error, null,2))
+        $("#responseContent").css("color","red")
+      });
     }
   },
   computed: {
   },
   watch: {
+    //监听参数变化，实时更新到URL栏
     requestAllParams: {
       handler(newVal,oleVal) {
         FuncCommon.showConsoleInfo(newVal + oleVal);
