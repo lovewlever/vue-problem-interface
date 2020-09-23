@@ -34,7 +34,6 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                @click.prevent="clickChooseProblem(problemObj?.id)"
               >
                 <span
                   class="spinner-border spinner-border-sm"
@@ -48,7 +47,6 @@
               <button
                 type="button"
                 class="btn btn-success"
-                @click.prevent="clickCompleteProblem(problemObj?.id)"
               >
                 <span
                   class="spinner-border spinner-border-sm"
@@ -123,7 +121,6 @@
 <script>
 import FuncCommon from "../../constants/FuncCommon";
 import LoadingComponents from "./LoadingComponents";
-import ConstWeb from "../../constants/ConstWeb";
 import $ from "jquery";
 import { formatDate2 } from "@/constants/Filter";
 
@@ -146,96 +143,6 @@ export default {
   methods: {
     clickDialogCancel() {
       $("#dialogCommit").unbind("click");
-    },
-    clickModifyProgress(event, pId) {
-      //修改问题进度
-      //const schedule = $("#selectModifyProblemProgress option:selected").val();
-      const schedule = event.target.value;
-      if (schedule === "100") {
-        this.clickCompleteProblem(pId);
-      } else {
-        this.modifyProblemProgress(pId, schedule);
-      }
-    },
-    clickCompleteProblem(pId) {
-      // 完成该问题
-      const _this = this;
-      const $dialog = $("#dialogMsg");
-      $dialog.html("请确定问题已修改完成？");
-      $dialog.css("color", "red");
-      $("#exampleModal").modal();
-      $("#dialogCommit").bind("click", function() {
-        $("#exampleModal").modal("hide");
-        $("#dialogCommit").unbind("click");
-        _this.modifyProblemProgress(pId, 100);
-      });
-    },
-    modifyProblemProgress(pId, schedule) {
-      //修改问题进度
-      const _this = this;
-      //选择修改一个问题
-      const params = new URLSearchParams();
-      params.append("problemId", pId);
-      params.append("schedule", schedule);
-      ConstWeb.axiosRequest(
-        ConstWeb.WebApi.UPDATE_MODIFY_PROBLEM_PROGRESS,
-        params,
-        data => {
-          FuncCommon.showConsoleInfo("修改问题进度:");
-          FuncCommon.showConsoleInfo(data);
-          if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
-            _this.problemObj = data?.data?.data[0];
-          } else {
-            $("#dialogMsg").html(data.data.msg);
-            $("#dialogMsg").css("color", "red");
-            $("#exampleModal").modal();
-          }
-        },
-        err => {
-          FuncCommon.showConsoleInfo("修改问题进度:");
-          FuncCommon.showConsoleInfo(err);
-          $("#dialogMsg").html(err);
-          $("#exampleModal").modal();
-        }
-      );
-    },
-    clickChooseProblem(pId) {
-      //确认选择修改选中的问题
-      const _this = this;
-      $("#dialogMsg").html("确定选择修改该问题？");
-      $("#exampleModal").modal();
-      $("#dialogCommit").bind("click", function() {
-        $("#exampleModal").modal("hide");
-        $("#dialogCommit").unbind("click");
-        //选择修改一个问题
-        const params = new URLSearchParams();
-        params.append("problemId", pId);
-        ConstWeb.axiosRequest(
-          ConstWeb.WebApi.CHOOSE_PROBLEM,
-          params,
-          data => {
-            if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
-              _this.problemObj.userIdForChoose =
-                data?.data?.data[0].userIdForChoose;
-              _this.problemObj.chooseProblemTUserEntity =
-                data?.data?.data[0].chooseProblemTUserEntity;
-              _this.localLoginUserId =
-                data?.data?.data[0].chooseProblemTUserEntity?.id;
-            } else {
-              $("#dialogMsg").html(data.data.msg);
-              $("#exampleModal").modal();
-            }
-            FuncCommon.showConsoleInfo("选择修改一个问题结果:");
-            FuncCommon.showConsoleInfo(data);
-          },
-          err => {
-            FuncCommon.showConsoleInfo("选择修改一个问题结果:");
-            FuncCommon.showConsoleInfo(err);
-            $("#dialogMsg").html(err);
-            $("#exampleModal").modal();
-          }
-        );
-      });
     },
     formatDate(time) {
       const data = new Date(time);

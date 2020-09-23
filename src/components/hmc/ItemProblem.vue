@@ -250,8 +250,8 @@ export default {
     clickDialogCancel() {
       $("#dialogCommit").unbind("click");
     },
+    //修改问题进度
     clickModifyProgress(event, pId) {
-      //修改问题进度
       //const schedule = $("#selectModifyProblemProgress option:selected").val();
       const schedule = event.target.value;
       if (schedule === "100") {
@@ -259,6 +259,19 @@ export default {
       } else {
         this.modifyProblemProgress(pId, schedule);
       }
+    },
+    // 完成该问题
+    clickCompleteProblem(pId) {
+      const _this = this;
+      const $dialog = $("#dialogMsg");
+      $dialog.html("请确定问题已修改完成？");
+      $dialog.css("color", "red");
+      $("#exampleModal").modal();
+      $("#dialogCommit").bind("click", function() {
+        $("#exampleModal").modal("hide");
+        $("#dialogCommit").unbind("click");
+        _this.modifyProblemProgress(pId, 100);
+      });
     },
     // 对问题进行其他操作
     changeOperatingProblem(event,pId) {
