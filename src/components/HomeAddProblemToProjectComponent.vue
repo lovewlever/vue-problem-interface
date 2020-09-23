@@ -249,16 +249,19 @@ export default {
 
     //判断本地保存的问题列表 没有的话重新请求服务器查询
     const localList = JSON.parse(
-      window.localStorage.getItem(
-        ConstWeb.STORAGE_KEY.KEY_SAVE_UNSUBMITTED_PROBLEM_OBJ
-      )
+      window.localStorage.getItem(this.projectId)
     );
     FuncCommon.showConsoleInfo("本地保存的问题列表:");
     FuncCommon.showConsoleInfo(localList);
     if (localList === null || localList === "" || localList.length === 0) {
       this.querySystemDevicesList();
     } else {
-      this.problemList = localList;
+      //判断是否是本项目存储的未提交问题
+      if (localList[0]?.projectId === this.projectId) {
+        this.problemList = localList;
+      } else {
+        this.querySystemDevicesList();
+      }
     }
   },
   methods: {
@@ -285,9 +288,13 @@ export default {
           } else {
             FuncCommon.showConsoleInfo(data);
             if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
-              window.localStorage.removeItem(ConstWeb.STORAGE_KEY.KEY_SAVE_UNSUBMITTED_PROBLEM_OBJ);
+              window.localStorage.removeItem(this.projectId);
               //刷新
-              this.$router.push({path: "/homeProjectDetailsComponent",query: {projectId: this.projectId}})
+              $("#myModal").modal("hide");
+              const ti = setInterval(() => {
+                clearInterval(ti);
+                this.$router.push({path: "/homeProjectDetailsComponent",query: {projectId: this.projectId}})
+              }, 500);
             } else {
               alert("提交失败：" + data.data.msg);
             }
@@ -297,8 +304,8 @@ export default {
           FuncCommon.showConsoleError(err);
         });
     },
+    // 查询添加问题时选择的设备列表
     querySystemDevicesList() {
-      // 查询添加问题时选择的设备列表
       ConstWeb.axiosRequest(
         ConstWeb.WebApi.QUERY_PROJECT_SYSTEM_DEVICES,
         {},
@@ -315,28 +322,29 @@ export default {
         }
       );
     },
+    //添加一行输入框
     addInputProblem() {
-      //添加一行输入框
       const proD4 = new ProblemData();
       proD4.devicesList = this.problemList[0]?.devicesList;
       proD4.projectId = this.projectId;
       this.problemList.push(proD4);
     },
+    //移除一行输入框
     removeInputProblem(index) {
-      //移除一行输入框
       if (this.problemList.length > 1) {
         this.problemList.splice(index, 1);
         FuncCommon.showConsoleInfo(this.problemList);
+      } else {
+        window.localStorage.removeItem(this.projectId);
       }
     },
+    //保存未提交的问题
     clickSaveUnSubmittedProblemToLocal() {
-      window.localStorage.setItem(
-        ConstWeb.STORAGE_KEY.KEY_SAVE_UNSUBMITTED_PROBLEM_OBJ,
-        JSON.stringify(this.problemList)
-      );
+      window.localStorage.setItem( this.projectId, JSON.stringify(this.problemList));
     }
   },
   watch: {
+    //监听输入框改变事件
     problemList: {
       handler: function(val, oldval) {
         this.clickSaveUnSubmittedProblemToLocal();
