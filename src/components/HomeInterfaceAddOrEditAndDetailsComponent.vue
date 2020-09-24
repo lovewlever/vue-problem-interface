@@ -315,7 +315,7 @@
           <!--hr-->
           <hr />
 
-          <pre style="color: wheat" id="responseContent"></pre>
+          <pre style="color: wheat;width: 800px;overflow-x: initial" id="responseContent"></pre>
         </div>
       </div>
     </div>
