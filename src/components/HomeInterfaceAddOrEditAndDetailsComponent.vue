@@ -61,6 +61,28 @@
             </div>
           </div>
           <br /><br />
+          <div>
+            <label style="color: gray">
+              接口名:&nbsp;&nbsp;
+              <input
+                  type="text"
+                  class="params-input"
+                  style="width: 400px"
+                  v-model="requestAllParams.interfaceTitle"
+              />
+            </label>
+            <br/>
+            <label  style="color: gray">
+              描述述:&nbsp;&nbsp;
+              <input
+                  type="text"
+                  class="params-input"
+                  style="width: 400px"
+                  v-model="requestAllParams.interfaceDescription"
+              />
+            </label>
+          </div>
+          <br/>
           <!--输入-->
           <div style="width: 100%;display: flex">
             <!--选择请求类型 输入请求连接-->
@@ -315,6 +337,10 @@
           <!--hr-->
           <hr />
 
+          <label style="width: 100%">
+            <textarea type="text" style="width: 100%;height: 1000px"></textarea>
+          </label>
+
           <pre style="color: wheat;width: 800px;overflow-x: initial" id="responseContent"></pre>
         </div>
       </div>
@@ -502,14 +528,16 @@ export default {
         this.requestAllParams.requestUrl = url + urlParams;
         FuncCommon.showConsoleInfo(urlParams);
       },
-      deep:true
+      deep: true
     }
   }
 };
 
 class RequestParams {
   requestType = "get";
-  requestUrl = "https://";
+  requestUrl = "";
+  interfaceTitle = "";
+  interfaceDescription = "";
   params = [ParamsAndHeaders];
   headers = [ParamsAndHeaders];
 }
