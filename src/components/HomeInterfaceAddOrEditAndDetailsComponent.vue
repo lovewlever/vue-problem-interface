@@ -305,6 +305,7 @@
                           ></path>
                         </svg>
                       </span>
+
                       <span
                         class="add-or-remove-click"
                         @click.prevent="removeParamsForHeaders(index)"
