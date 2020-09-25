@@ -339,10 +339,8 @@
           <hr />
 
           <label style="width: 100%">
-            <textarea type="text" style="width: 100%;height: 1000px"></textarea>
+            <textarea id="responseTextarea" type="text" style="width: 100%;height: 1000px" class="params-input"></textarea>
           </label>
-
-          <pre style="color: wheat;width: 800px;overflow-x: initial" id="responseContent"></pre>
         </div>
       </div>
     </div>
@@ -391,7 +389,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import $ from "jquery";
 import FuncCommon from "../constants/FuncCommon";
-import Axios from "axios";
+import ConstWeb from "@/constants/ConstWeb";
 
 export default {
   name: "HomeInterfaceAddOrEditAndDetailsComponent",
@@ -484,19 +482,15 @@ export default {
     },
     //发送请求
     sendRequest() {
-      Axios({
-        url: this.requestAllParams.requestUrl,
-        method: this.requestAllParams.requestType,
-        data: {},
-        headers: {
-
-        }
-      }, { withCredentials: true }).then((data) => {
-        $("#responseContent").text(JSON.stringify(data, null,2))
-      }).catch(error => {
-        $("#responseContent").text(JSON.stringify(error, null,2))
-        $("#responseContent").css("color","red")
-      });
+      const params = new URLSearchParams()
+      params.append("url", this.requestAllParams.requestUrl)
+      ConstWeb.axiosRequest(ConstWeb.WebApi.INTERFACE_REQUEST_AND_RETURN, params,
+          data => {
+            $("#responseTextarea").text(JSON.stringify(data, null, 2))
+          }, error => {
+            $("#responseTextarea").text(JSON.stringify(error, null, 2))
+            $("#responseTextarea").css("color", "red")
+          });
     }
   },
   computed: {
@@ -539,6 +533,7 @@ class RequestParams {
   requestUrl = "";
   interfaceTitle = "";
   interfaceDescription = "";
+  interfaceResponse = "";
   params = [ParamsAndHeaders];
   headers = [ParamsAndHeaders];
 }
