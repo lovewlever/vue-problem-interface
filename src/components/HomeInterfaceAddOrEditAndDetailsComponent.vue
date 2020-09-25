@@ -12,7 +12,6 @@
         </ul>
       </div>
       <hr />
-      <br />
       <div class="hmc-item-content" id="setHeight" style="text-align: left">
         <div style="margin: auto 60px;flex: 1">
           <!--操作区-->
@@ -397,7 +396,7 @@ export default {
     return {
       requestAllParams: RequestParams,
       projectId: String,
-      projectName: String,
+      interfaceId: String,
       errorMsg: "",
       showOrHiddenErrorMsg: false,
       isParse: false
@@ -406,7 +405,7 @@ export default {
   components: {},
   created() {
     this.projectId = this.$route.query.projectId;
-    this.projectName = this.$route.query.projectName;
+    this.interfaceId = this.$route.query.interfaceId;
     FuncCommon.showConsoleInfo(this.projectId);
     //生成默认的参数列表
     const params = new ParamsAndHeaders();

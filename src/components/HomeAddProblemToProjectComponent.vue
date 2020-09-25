@@ -216,7 +216,6 @@ import Axios from "axios";
 import $ from "jquery";
 import FuncCommon from "../constants/FuncCommon";
 import ConstWeb from "../constants/ConstWeb";
-import mainJs from "@/main";
 
 export default {
   name: "HomeAddProblemToProjectComponent",
@@ -284,7 +283,7 @@ export default {
       )
         .then(data => {
           if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_NOT_LOGIN) {
-            mainJs.vue.$router.push("/login");
+            this.$router.push({ path: "/login",query: { timestamp: FuncCommon.getTimestamp()}})
           } else {
             FuncCommon.showConsoleInfo(data);
             if (data.data.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
@@ -293,7 +292,7 @@ export default {
               $("#myModal").modal("hide");
               const ti = setInterval(() => {
                 clearInterval(ti);
-                this.$router.push({path: "/homeProjectDetailsComponent",query: {projectId: this.projectId}})
+                this.$router.push({ path: "/homeProjectDetailsComponent",query: { timestamp: FuncCommon.getTimestamp(), projectId: this.projectId}})
               }, 500);
             } else {
               alert("提交失败：" + data.data.msg);

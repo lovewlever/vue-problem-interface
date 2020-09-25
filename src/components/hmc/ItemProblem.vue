@@ -430,7 +430,7 @@ export default {
 }
 
 .item-bottom-info {
-  margin-top: 16px;
+  margin-top: 2px;
   margin-bottom: 10px;
 }
 
