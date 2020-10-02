@@ -8,7 +8,9 @@
     <div>
       <div>
         <ul class="hmc-top-label">
-          <li>添加接口&nbsp;->&nbsp;{{ projectName }}</li>
+          <li>
+            {{ projectName }}&nbsp;->&nbsp;{{ requestAllParams.interfaceTitle }}
+          </li>
         </ul>
       </div>
       <hr />
@@ -27,11 +29,9 @@
                 操作
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
+                <a class="dropdown-item" href="#" @click="saveOrAddInterface">保存/修改</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Separated link</a>
+                <a class="dropdown-item" href="#">删除</a>
               </div>
             </div>
 
@@ -64,24 +64,24 @@
             <label style="color: gray">
               接口名:&nbsp;&nbsp;
               <input
-                  type="text"
-                  class="params-input"
-                  style="width: 400px"
-                  v-model="requestAllParams.interfaceTitle"
+                type="text"
+                class="params-input"
+                style="width: 400px"
+                v-model="requestAllParams.interfaceTitle"
               />
             </label>
-            <br/>
-            <label  style="color: gray">
+            <br />
+            <label style="color: gray">
               描述述:&nbsp;&nbsp;
               <input
-                  type="text"
-                  class="params-input"
-                  style="width: 400px"
-                  v-model="requestAllParams.interfaceDescription"
+                type="text"
+                class="params-input"
+                style="width: 400px"
+                v-model="requestAllParams.interfaceDescription"
               />
             </label>
           </div>
-          <br/>
+          <br />
           <!--输入-->
           <div style="width: 100%;display: flex">
             <!--选择请求类型 输入请求连接-->
@@ -121,17 +121,21 @@
               <div class="request-input-content-url">
                 <label>
                   <input
-                          id="inputUrlId"
+                    id="inputUrlId"
                     type="text"
                     placeholder="https://"
                     :value="requestAllParams.requestUrl"
-                          @change.prevent="urlInputChange"
+                    @change.prevent="urlInputChange"
                   />
                 </label>
               </div>
             </div>
             <!--发送请求-->
-            <button type="button" class="btn btn-success btn-send-request" @click.prevent="sendRequest">
+            <button
+              type="button"
+              class="btn btn-success btn-send-request"
+              @click.prevent="sendRequest"
+            >
               发送请求
             </button>
           </div>
@@ -139,8 +143,6 @@
           <p>参数</p>
           <!--hr-->
           <hr />
-
-
 
           <!--参数-->
           <div style="width: 100%;margin-top: 14px">
@@ -160,8 +162,12 @@
                   :key="index"
                 >
                   <tr>
-                    <td  class="table-select-td">
-                      <input type="checkbox" v-model="item.checked" style="margin-left: 8px"/>
+                    <td class="table-select-td">
+                      <input
+                        type="checkbox"
+                        v-model="item.checked"
+                        style="margin-left: 8px"
+                      />
                     </td>
                     <td class="table-params-td">
                       <input
@@ -239,7 +245,6 @@
           <!--hr-->
           <hr />
 
-
           <!--Headers-->
           <div style="width: 100%;margin-top: 14px">
             <table>
@@ -259,7 +264,11 @@
                 >
                   <tr>
                     <td class="table-select-td">
-                      <input type="checkbox" v-model="item.checked" style="margin-left: 8px" />
+                      <input
+                        type="checkbox"
+                        v-model="item.checked"
+                        style="margin-left: 8px"
+                      />
                     </td>
                     <td class="table-params-td">
                       <input
@@ -338,7 +347,12 @@
           <hr />
 
           <label style="width: 100%">
-            <textarea id="responseTextarea" type="text" style="width: 100%;height: 1000px" class="params-input"></textarea>
+            <textarea
+              id="responseTextarea"
+              type="text"
+              style="width: 100%;height: 1000px"
+              class="params-input"
+            ></textarea>
           </label>
         </div>
       </div>
@@ -396,7 +410,8 @@ export default {
     return {
       requestAllParams: RequestParams,
       projectId: String,
-      interfaceId: String,
+      projectName: String,
+      interfaceId: "",
       errorMsg: "",
       showOrHiddenErrorMsg: false,
       isParse: false
@@ -406,6 +421,7 @@ export default {
   created() {
     this.projectId = this.$route.query.projectId;
     this.interfaceId = this.$route.query.interfaceId;
+    this.projectName = this.$route.query.projectName;
     FuncCommon.showConsoleInfo(this.projectId);
     //生成默认的参数列表
     const params = new ParamsAndHeaders();
@@ -430,28 +446,67 @@ export default {
         $("#setHeight").height(document.body.clientHeight - 160);
       })();
     };
+
+    this.queryInterfaceDetails();
   },
   methods: {
     clickCommit() {
       return false;
     },
-      //添加一行参数输入
-      addParamsForParams() {
-        this.requestAllParams.params.push(new ParamsAndHeaders())
-      },
-    //移除一行输入参数
-      removeParamsForParams(index) {
-        if (this.requestAllParams.params.length > 1) {
-          this.requestAllParams.params.splice(index, 1);
-          FuncCommon.showConsoleInfo(this.requestAllParams.params);
+    //保存或添加接口
+    saveOrAddInterface() {
+      const params = new URLSearchParams();
+      params.append("projectId", this.projectId);
+      params.append("interfaceId", this.interfaceId);
+      params.append("jsonData", JSON.stringify(this.requestAllParams));
+      ConstWeb.axiosRequest(
+        ConstWeb.WebApi.SAVE_A_INTERFACE,
+        params,
+        data => {
+          FuncCommon.showConsoleInfo(data);
+        },
+        error => {
+          FuncCommon.showConsoleError(error);
         }
-      },
+      );
+    },
+    //查询接口详情
+    queryInterfaceDetails() {
+      const params = new URLSearchParams();
+      params.append("interfaceId", this.interfaceId);
+      ConstWeb.axiosRequest(
+        ConstWeb.WebApi.QUERY_INTERFACE_BY_ID,
+        params,
+        data => {
+          FuncCommon.showConsoleInfo(data);
+          let dataa = data.data.data[0];
+          this.requestAllParams = JSON.parse(dataa.piDataJson);
+          this.interfaceId = dataa.id;
+          this.projectName = dataa.refTProjectEntity?.projectName;
+          $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
+        },
+        error => {
+          FuncCommon.showConsoleError(error);
+        }
+      );
+    },
+    //添加一行参数输入
+    addParamsForParams() {
+      this.requestAllParams.params.push(new ParamsAndHeaders());
+    },
+    //移除一行输入参数
+    removeParamsForParams(index) {
+      if (this.requestAllParams.params.length > 1) {
+        this.requestAllParams.params.splice(index, 1);
+        FuncCommon.showConsoleInfo(this.requestAllParams.params);
+      }
+    },
     //添加一行Headers输入框
     addParamsForHeaders() {
-      this.requestAllParams.headers.push(new ParamsAndHeaders())
+      this.requestAllParams.headers.push(new ParamsAndHeaders());
     },
     //移除一行Headers输入框
-    removeParamsForHeaders(index){
+    removeParamsForHeaders(index) {
       if (this.requestAllParams.headers.length > 1) {
         this.requestAllParams.headers.splice(index, 1);
         FuncCommon.showConsoleInfo(this.requestAllParams.headers);
@@ -463,7 +518,10 @@ export default {
       this.requestAllParams.requestUrl = $inputUrlId.val();
       let inputUrl = this.requestAllParams.requestUrl;
       if (inputUrl.indexOf("?") !== -1) {
-        let urlParams = inputUrl.substring(inputUrl.indexOf("?") + 1,inputUrl.length);
+        let urlParams = inputUrl.substring(
+          inputUrl.indexOf("?") + 1,
+          inputUrl.length
+        );
         let kDv = urlParams.split("&");
         FuncCommon.showConsoleInfo(kDv);
         FuncCommon.showConsoleInfo(urlParams);
@@ -481,23 +539,28 @@ export default {
     },
     //发送请求
     sendRequest() {
-      const params = new URLSearchParams()
-      params.append("url", this.requestAllParams.requestUrl)
-      ConstWeb.axiosRequest(ConstWeb.WebApi.INTERFACE_REQUEST_AND_RETURN, params,
-          data => {
-            $("#responseTextarea").text(JSON.stringify(data, null, 2))
-          }, error => {
-            $("#responseTextarea").text(JSON.stringify(error, null, 2))
-            $("#responseTextarea").css("color", "red")
-          });
+      const params = new URLSearchParams();
+      params.append("url", this.requestAllParams.requestUrl);
+      ConstWeb.axiosRequest(
+        ConstWeb.WebApi.INTERFACE_REQUEST_AND_RETURN,
+        params,
+        data => {
+          this.requestAllParams.interfaceResponse = data;
+          $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
+        },
+        error => {
+          this.requestAllParams.interfaceResponse = error;
+          $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
+          $("#responseTextarea").css("color", "red");
+        }
+      );
     }
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     //监听参数变化，实时更新到URL栏
     requestAllParams: {
-      handler(newVal,oleVal) {
+      handler(newVal, oleVal) {
         FuncCommon.showConsoleInfo(newVal + oleVal);
         const params = newVal.params;
         FuncCommon.showConsoleInfo(params.length);
@@ -505,9 +568,9 @@ export default {
         for (let index in params) {
           if (params[index].checked) {
             if (index === "0") {
-              urlParams += ("" + params[index].key + "=" + params[index].value)
+              urlParams += "" + params[index].key + "=" + params[index].value;
             } else {
-              urlParams += ("&" + params[index].key + "=" + params[index].value)
+              urlParams += "&" + params[index].key + "=" + params[index].value;
             }
           }
         }
@@ -619,7 +682,7 @@ table {
   flex: 1;
   background: #202020;
   height: 38px;
-    border: 1px #616061 solid;
+  border: 1px #616061 solid;
 }
 
 .request-input-content-select {
@@ -628,16 +691,16 @@ table {
   height: 100%;
   outline: none;
   border: none;
-    background: #202020;
-    padding: 0 6px;
-    border-right: 1px #616061 solid;
+  background: #202020;
+  padding: 0 6px;
+  border-right: 1px #616061 solid;
 }
 
 .request-input-content-url {
   flex: 1;
   margin: auto 0;
   height: 100%;
-    padding: 0 6px;
+  padding: 0 6px;
 }
 
 .request-input-content-url label {
@@ -649,10 +712,10 @@ table {
 .request-input-content-url label input {
   width: 100%;
   height: 100%;
-    background: none;
+  background: none;
   outline: none;
   border: none;
-    color: white;
+  color: white;
 }
 
 .btn-send-request {
@@ -660,10 +723,10 @@ table {
 }
 
 .table-params-td {
-    width: 180px;
+  width: 180px;
 }
 .table-select-td {
-    width: 50px;
+  width: 50px;
 }
 
 .params-input {
@@ -672,24 +735,24 @@ table {
   border-radius: 1px;
   outline: none;
   color: wheat;
-    width: 100%;
-    border: 1px #616061 solid;
-    padding: 0 8px;
+  width: 100%;
+  border: 1px #616061 solid;
+  padding: 0 8px;
 }
 
 thead tr th {
-    color: gray;
+  color: gray;
 }
 
 .add-or-remove-click {
-    margin: auto 0 auto 0;
-    padding: 4px;
+  margin: auto 0 auto 0;
+  padding: 4px;
 }
 .add-or-remove-click:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
-    .operating-td {
-        width: 84px;
-        text-align: center;
-    }
+.operating-td {
+  width: 84px;
+  text-align: center;
+}
 </style>

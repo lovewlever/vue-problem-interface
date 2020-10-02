@@ -124,7 +124,7 @@ export default {
             _that.loadCurPage = _that.pagination?.curPage + 1;
             const timer = setInterval(() => {
               clearInterval(timer);
-              _that.queryProjectProblemListById();
+              _that.queryProjectInterfaceListById();
             }, 1000);
             FuncCommon.showConsoleInfo("加载下一页，页码：");
             FuncCommon.showConsoleInfo(_that.loadCurPage);
@@ -132,21 +132,16 @@ export default {
         }
       });
     },
+    // 标签点击事件/查询项目的接口列表
     chooseTopProjectLabel(selId) {
-      // 标签点击事件/查询项目的问题列表
       this.chooseProjectId = selId;
-      if (this.chooseProjectId === "new") {
-        this.problemList = [];
-        this.queryNewProjectProblemListByCount(); //如果点击的标签是最新，则查询推荐的
-      } else {
-        this.pagination = null;
-        this.loadCurPage = 1;
-        this.problemList = [];
-        this.queryProjectProblemListById(); //如果点击的标签是项目，则查询当前点击的项目id
-      }
+      this.pagination = null;
+      this.loadCurPage = 1;
+      this.problemList = [];
+      this.queryProjectInterfaceListById(); //如果点击的标签是项目，则查询当前点击的项目id
     },
+    //加载更多项目标签
     loadMoreProjectLabels() {
-      //加载更多项目标签
       FuncCommon.showConsoleInfo("加载更多项目标签：");
       FuncCommon.showConsoleInfo(this.projectLabelPagination);
       if (
@@ -158,8 +153,8 @@ export default {
         this.queryProjectAllLabelListByPagination();
       }
     },
+    // 查询顶部全部项目标签（分页）
     queryProjectAllLabelListByPagination() {
-      // 查询顶部全部项目标签（分页）
       this.isLoadingNow = true;
       const urlParams = new URLSearchParams();
       urlParams.append("page", this.loadLabelCurPage);
@@ -193,15 +188,15 @@ export default {
         }
       );
     },
-    queryProjectProblemListById() {
+    // 根据项目id查询接口列表
+    queryProjectInterfaceListById() {
       const _that = this;
-      // 根据项目id查询问题列表
       const params = new URLSearchParams();
       params.append("projectId", this.chooseProjectId);
       params.append("page", this.loadCurPage);
       params.append("pageCountSize", this.loadPageCountSize);
       ConstWeb.axiosRequest(
-        ConstWeb.WebApi.QUERY_PROBLEM_LIST_BY_PROJECT_ID,
+        ConstWeb.WebApi.QUERY_INTERFACES_BY_PROJECT_ID,
         params,
         data => {
           if (data.data?.code === ConstWeb.RESULT_CODE.RESULT_CODE_SUCCESS) {
@@ -240,25 +235,6 @@ export default {
         },
         err => {
           FuncCommon.showConsoleError("根据项目id查询问题列表:");
-          FuncCommon.showConsoleError(err);
-        }
-      );
-    },
-    queryNewProjectProblemListByCount() {
-      // 查询最新添加的指定条问题
-      const params = new URLSearchParams();
-      params.append("pageCountSize", 30);
-      ConstWeb.axiosRequest(
-        ConstWeb.WebApi.QUERY_PROBLEM_LIST_NEW_TIME_COUNT,
-        params,
-        data => {
-          FuncCommon.showConsoleInfo("查询最新添加的指定条问题:");
-          FuncCommon.showConsoleInfo(data);
-          this.problemList = data.data?.data;
-          this.isShowLoading = false;
-        },
-        err => {
-          FuncCommon.showConsoleError("查询最新添加的指定条问题:");
           FuncCommon.showConsoleError(err);
         }
       );

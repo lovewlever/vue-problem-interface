@@ -2,20 +2,59 @@
   <div style="display: flex;margin: 8px 0 0 0">
     <div class="item-problem-content" @click.prevent="clickToInterfaceDetails">
       <div style="display: flex;margin-bottom: 8px">
-
         <div style="margin: auto 12px auto 0">
-            <svg t="1600421117879" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7838" width="32" height="32"><path d="M277.9 742s167.9-294.1 465.3-465.3C575.7 577.8 277.9 742 277.9 742z" fill="#FFFFFF" p-id="7839"></path><path d="M743.1 742S575.2 447.9 277.8 276.7C445.3 577.8 743.1 742 743.1 742z" fill="#FFFFFF" p-id="7840"></path><path d="M513.2 959.8S639.3 933 746.8 817.7C841.4 716.2 868.2 483.6 868.2 151c-224.2 31.2-355-87-355-87h-2.3s-130.8 118.2-355.1 87c0 332.5 26.8 565.5 121.5 667 107.5 115.3 233.6 142 233.6 142" fill="#0EC469" p-id="7841"></path><path d="M303.6 474.4s57 132.9 145.6 132.9c85.4 0 345-302.1 345-302.1S541.9 717 457.6 717c-70.2 0-120.8-100.2-154-242.6z" fill="#FFFFFF" p-id="7842"></path></svg>
+          <svg
+            t="1600421117879"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="7838"
+            width="32"
+            height="32"
+          >
+            <path
+              d="M277.9 742s167.9-294.1 465.3-465.3C575.7 577.8 277.9 742 277.9 742z"
+              fill="#FFFFFF"
+              p-id="7839"
+            ></path>
+            <path
+              d="M743.1 742S575.2 447.9 277.8 276.7C445.3 577.8 743.1 742 743.1 742z"
+              fill="#FFFFFF"
+              p-id="7840"
+            ></path>
+            <path
+              d="M513.2 959.8S639.3 933 746.8 817.7C841.4 716.2 868.2 483.6 868.2 151c-224.2 31.2-355-87-355-87h-2.3s-130.8 118.2-355.1 87c0 332.5 26.8 565.5 121.5 667 107.5 115.3 233.6 142 233.6 142"
+              fill="#0EC469"
+              p-id="7841"
+            ></path>
+            <path
+              d="M303.6 474.4s57 132.9 145.6 132.9c85.4 0 345-302.1 345-302.1S541.9 717 457.6 717c-70.2 0-120.8-100.2-154-242.6z"
+              fill="#FFFFFF"
+              p-id="7842"
+            ></path>
+          </svg>
         </div>
 
         <div>
           <h6 class="item-title">
             {{ problemObj?.refTProjectEntity?.projectName }}&nbsp;=>&nbsp;
-            <span style="color: #a3d900">(差强人意)&nbsp;接口名</span>&nbsp;=>&nbsp;
-            <span>描述</span>
+            <span style="color: #a3d900"
+              >(差强人意)&nbsp;{{ problemObj?.piName }}</span
+            >&nbsp;=>&nbsp;
+            <span>{{
+              JSON.parse(problemObj?.piDataJson)?.interfaceDescription
+            }}</span>
           </h6>
 
-          <div  class="item-c-content" @click.stop="clickBlank">
-            <span class="item-c-time">{{formatDate(problemObj?.ppAddTimestamp)}}&nbsp;&nbsp;=>=>&nbsp;&nbsp;http://www.w3.org/2000/svghttp://www.w3.org/2000/svghttp://www.w3.org/2000/svghttp://www.w3.org/2000/svghttp://www.w3.org/2000/svghttp://www.w3.org/2000/svghttp://www.w3.org/2000/svghttp://www.w3.org/2000/svghttp://www.w3.org/2000/svghttp://www.w3.org/2000/svg</span>
+          <div class="item-c-content" @click.stop="clickBlank">
+            <span class="item-c-time"
+              >{{
+                formatDate(problemObj?.piAddTimestamp)
+              }}&nbsp;&nbsp;=>=>&nbsp;&nbsp;{{
+                JSON.parse(problemObj?.piDataJson)?.requestUrl
+              }}</span
+            >
           </div>
         </div>
       </div>
@@ -80,21 +119,24 @@ export default {
       localLoginUserId: String
     };
   },
-  components: {  },
+  components: {},
   created() {
     this.localLoginUserId = FuncCommon.getStorageLoginInfo().id;
   },
   mounted() {},
   methods: {
     clickBlank() {
-    return false
+      return false;
     },
     clickToInterfaceDetails() {
-      this.$router.push({path:"/homeInterfaceAddOrEditAndDetailsComponent",query:{
+      this.$router.push({
+        path: "/homeInterfaceAddOrEditAndDetailsComponent",
+        query: {
           timestamp: FuncCommon.getTimestamp(),
           interfaceId: this.problemObj.id,
           projectId: this.problemObj.projectId
-        }})
+        }
+      });
     },
     clickDialogCancel() {
       $("#dialogCommit").unbind("click");

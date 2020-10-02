@@ -2,11 +2,8 @@ import _axios from "axios";
 import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
-//const BASIS_URL = "http://192.168.3.21:8099";
-//const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
-
-const BASIS_URL = "http://192.168.123.127:8099";
-const WS_URL = "ws://192.168.123.127/ws/websocket.server";
+const BASIS_URL = "http://192.168.3.21:8099";
+const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
 
 //const BASIS_URL = "http://192.168.1.113:8099";
 //const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
@@ -31,7 +28,11 @@ const WebApi = {
   UPDATE_MODIFY_PROBLEM_PROGRESS: BASIS_URL + "/ppc/updateProblemProgress", //修改问题进度
   QUERY_MINE_COMPLETED_OR_NOT_COMPLETED_PROBLEMS: BASIS_URL + "/ppc/queryMineCompletedOrNotProblems", //查询我的 选中未修改完或者已修改完成的问题
   UPDATE_TRANSFER_ISSUES: BASIS_URL + "/ppc/updateTransferIssues", //转让问题给其他用户
-  INTERFACE_REQUEST_AND_RETURN: BASIS_URL + "/pif/requestInterface" //请求用户填写的接口并返回数据
+  INTERFACE_REQUEST_AND_RETURN: BASIS_URL + "/pif/requestInterface", //请求用户填写的接口并返回数据
+  QUERY_INTERFACE_BY_ID: BASIS_URL + "/pif/queryInterfaceById", // 查询接口详情
+  QUERY_INTERFACES_BY_PROJECT_ID: BASIS_URL + "/pif/queryInterfacesByProjectId", // 分页查询项目下的接口
+  SAVE_A_INTERFACE: BASIS_URL + "/pif/saveInterface" // 新增一个接口
+
 };
 const RESULT_CODE = {
   RESULT_CODE_SUCCESS: 200, //成功
