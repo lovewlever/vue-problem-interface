@@ -9,9 +9,17 @@
                 <li @click="clickToAddProblemToProject">
                     <span>添加问题</span>
                 </li>
-                <li @click="clickToAddInterfaceToProject">
-                    <span>添加接口</span>
-                </li>
+              <li>
+                <span>导出问题文档(TXT)</span>
+              </li>
+              <li style="background: none;border: none;"><span>|</span></li>
+
+              <li @click="clickToAddInterfaceToProject">
+                <span>添加接口</span>
+              </li>
+              <li>
+                <span>导出接口文档(Excel)</span>
+              </li>
             </ul>
         </div>
         <hr/>
