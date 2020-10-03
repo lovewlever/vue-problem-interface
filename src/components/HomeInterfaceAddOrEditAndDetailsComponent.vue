@@ -17,7 +17,7 @@
       <div class="hmc-item-content" id="setHeight" style="text-align: left">
         <div style="margin: auto 60px;flex: 1">
           <!--操作区-->
-          <div>
+          <div style="margin-top: 2px">
             <div class="btn-group">
               <button
                 type="button"
@@ -26,6 +26,13 @@
                 aria-haspopup="true"
                 aria-expanded="false"
               >
+                <span
+                    id="btnOperatingLoading"
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    style="display: none"
+                    aria-hidden="true"
+                ></span>
                 操作
               </button>
               <div class="dropdown-menu">
@@ -35,31 +42,9 @@
               </div>
             </div>
 
-            <div class="btn-group" style="margin: 0 0 0 24px">
-              <button
-                type="button"
-                class="btn btn-success dropdown-toggle"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                评分
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">1</a>
-                <a class="dropdown-item" href="#">2</a>
-                <a class="dropdown-item" href="#">3</a>
-                <a class="dropdown-item" href="#">4</a>
-                <a class="dropdown-item" href="#">5</a>
-                <a class="dropdown-item" href="#">6</a>
-                <a class="dropdown-item" href="#">7</a>
-                <a class="dropdown-item" href="#">8</a>
-                <a class="dropdown-item" href="#">9</a>
-                <a class="dropdown-item" href="#">10</a>
-              </div>
-            </div>
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#commentAndScore" style="margin: 0 0 0 24px">评分</button>
           </div>
-          <br /><br />
+          <br />
           <div>
             <label style="color: gray">
               接口名:&nbsp;&nbsp;
@@ -136,6 +121,13 @@
               class="btn btn-success btn-send-request"
               @click.prevent="sendRequest"
             >
+              <span
+                  id="sendRequestLoading"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  style="display: none"
+                  aria-hidden="true"
+              ></span>
               发送请求
             </button>
           </div>
@@ -350,6 +342,7 @@
             <textarea
               id="responseTextarea"
               type="text"
+              name="responseName"
               style="width: 100%;height: 1000px"
               class="params-input"
             ></textarea>
@@ -357,6 +350,7 @@
         </div>
       </div>
     </div>
+
   </form>
 
   <!--确认提交的弹出框-->
@@ -372,7 +366,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
-            添加接口到&nbsp;=>&nbsp;{{ projectName }}
+            {{ projectName }}&nbsp;=>&nbsp;‘{{ requestAllParams.interfaceTitle }}’
           </h5>
           <button
             type="button"
@@ -383,18 +377,79 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body"></div>
+        <div class="modal-body">
+          <sapn>{{errorMsg}}</sapn>
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            不提交
+            取消
           </button>
-          <button type="button" class="btn btn-primary">
-            提交并保存
+          <button id="dialogCommit" type="button" class="btn btn-primary">
+            确定
           </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!--评论/评分-->
+  <div
+      id="commentAndScore"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            评论/评分&nbsp;=>&nbsp;‘{{ requestAllParams.interfaceTitle }}’
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group" style="text-align: left">
+            <label class="col-form-label">评分:</label>
+            <nav aria-label="...">
+              <ul class="pagination pagination-sm">
+                <li :class="['page-item', {'active': scoreActive === '1'}]"><a class="page-link" href="#" @click.prevent="chooseScore('1')">1</a></li>
+                <li :class="['page-item', {'active': scoreActive === '2'}]"><a class="page-link" href="#" @click.prevent="chooseScore('2')">2</a></li>
+                <li :class="['page-item', {'active': scoreActive === '3'}]"><a class="page-link" href="#" @click.prevent="chooseScore('3')">3</a></li>
+                <li :class="['page-item', {'active': scoreActive === '4'}]"><a class="page-link" href="#" @click.prevent="chooseScore('4')">4</a></li>
+                <li :class="['page-item', {'active': scoreActive === '5'}]"><a class="page-link" href="#" @click.prevent="chooseScore('5')">5</a></li>
+                <li :class="['page-item', {'active': scoreActive === '6'}]"><a class="page-link" href="#" @click.prevent="chooseScore('6')">6</a></li>
+                <li :class="['page-item', {'active': scoreActive === '7'}]"><a class="page-link" href="#" @click.prevent="chooseScore('7')">7</a></li>
+                <li :class="['page-item', {'active': scoreActive === '8'}]"><a class="page-link" href="#" @click.prevent="chooseScore('8')">8</a></li>
+                <li :class="['page-item', {'active': scoreActive === '9'}]"><a class="page-link" href="#" @click.prevent="chooseScore('9')">9</a></li>
+                <li :class="['page-item', {'active': scoreActive === '10'}]"><a class="page-link" href="#" @click.prevent="chooseScore('10')">10</a></li>
+              </ul>
+            </nav>
+          </div>
+          <div class="form-group" style="text-align: left">
+            <label for="message-text" class="col-form-label" style="text-align: left">评论:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+          <div style="text-align: left">
+            <label for="anonymous">
+              <p><input id="anonymous" type="checkbox" style="border: 1px solid #dee2e6;" checked>&nbsp;匿名</p>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+          <button type="button" class="btn btn-primary" @click="addOrModifyCommentScore">
+            提交
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -414,7 +469,8 @@ export default {
       interfaceId: "",
       errorMsg: "",
       showOrHiddenErrorMsg: false,
-      isParse: false
+      isParse: false,
+      scoreActive: "10"
     };
   },
   components: {},
@@ -447,28 +503,59 @@ export default {
       })();
     };
 
+    //代码框文本改变事件
+    $("#responseTextarea[name='responseName']").change(() => {
+      let text = $("#responseTextarea[name='responseName']").val();
+      FuncCommon.showConsoleInfo(text);
+      this.requestAllParams.interfaceResponse = text;
+    });
     this.queryInterfaceDetails();
   },
   methods: {
     clickCommit() {
       return false;
     },
+    showOrHiddenLoading($el,bool) {
+      if (bool) {
+        $el.css("display", "inline-block");
+      } else {
+        $el.css("display", "none");
+      };
+    },
     //保存或添加接口
     saveOrAddInterface() {
-      const params = new URLSearchParams();
-      params.append("projectId", this.projectId);
-      params.append("interfaceId", this.interfaceId);
-      params.append("jsonData", JSON.stringify(this.requestAllParams));
-      ConstWeb.axiosRequest(
-        ConstWeb.WebApi.SAVE_A_INTERFACE,
-        params,
-        data => {
-          FuncCommon.showConsoleInfo(data);
-        },
-        error => {
-          FuncCommon.showConsoleError(error);
-        }
-      );
+      const _that = this;
+      this.errorMsg = "确定保存该接口？请确保注释完整！";
+      $("#myModal").modal();
+      $("#dialogCommit").bind("click", function() {
+        $("#myModal").modal("hide");
+        $("#dialogCommit").unbind("click");
+        const time = setInterval(() => {
+          clearInterval(time);
+          _that.showOrHiddenLoading($("#btnOperatingLoading"), true);
+          const params = new URLSearchParams();
+          params.append("projectId", _that.projectId);
+          params.append("interfaceId", _that.interfaceId);
+          params.append("jsonData", JSON.stringify(_that.requestAllParams));
+          ConstWeb.axiosRequest(
+              ConstWeb.WebApi.SAVE_A_INTERFACE,
+              params,
+              data => {
+                _that.showOrHiddenLoading($("#btnOperatingLoading"), false);
+                FuncCommon.showConsoleInfo(data);
+                _that.errorMsg = data.data.msg;
+                $("#myModal").modal();
+              },
+              error => {
+                _that.showOrHiddenLoading($("#btnOperatingLoading"), false);
+                FuncCommon.showConsoleError(error);
+                _that.errorMsg = error.message;
+                $("#myModal").modal();
+              }
+          );
+        }, 500);
+      });
+
     },
     //查询接口详情
     queryInterfaceDetails() {
@@ -483,7 +570,7 @@ export default {
           this.requestAllParams = JSON.parse(dataa.piDataJson);
           this.interfaceId = dataa.id;
           this.projectName = dataa.refTProjectEntity?.projectName;
-          $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
+          $("#responseTextarea").text(this.requestAllParams.interfaceResponse);
         },
         error => {
           FuncCommon.showConsoleError(error);
@@ -539,22 +626,49 @@ export default {
     },
     //发送请求
     sendRequest() {
+      this.showOrHiddenLoading($("#sendRequestLoading"),true);
       const params = new URLSearchParams();
       params.append("url", this.requestAllParams.requestUrl);
       ConstWeb.axiosRequest(
         ConstWeb.WebApi.INTERFACE_REQUEST_AND_RETURN,
         params,
         data => {
+          this.showOrHiddenLoading($("#sendRequestLoading"),false);
           this.requestAllParams.interfaceResponse = data;
           $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
         },
         error => {
+          this.showOrHiddenLoading($("#sendRequestLoading"),false);
           this.requestAllParams.interfaceResponse = error;
           $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
           $("#responseTextarea").css("color", "red");
         }
       );
-    }
+    },
+    //添加或修改评论
+    addOrModifyCommentScore() {
+      $("#commentAndScore").modal("hide")
+      const params = new URLSearchParams();
+      params.append("interfaceId", this.interfaceId);
+      params.append("point", this.scoreActive);
+      params.append("commentContent", $("#message-text").val());
+      params.append("isAnonymous", $("#anonymous")[0].checked ? "Y" : "N");
+      ConstWeb.axiosRequest(
+          ConstWeb.WebApi.ADD_OR_UPDATE_CS, params,
+          data => {
+            FuncCommon.showConsoleInfo(data);
+            this.errorMsg = data.data.msg;
+            $("#myModal").modal();
+          },
+          error => {
+            FuncCommon.showConsoleError(error);
+            this.errorMsg = error.message;
+            $("#myModal").modal();
+          }
+      );
+    },
+    //评分选择
+    chooseScore(score) { this.scoreActive = score }
   },
   computed: {},
   watch: {
@@ -637,18 +751,12 @@ class ParamsAndHeaders {
   display: none;
 }
 
-.page-item a {
-  background: #202020;
-  border-color: #383838;
+.pagination-sm li {
+  margin: auto;
 }
 
 hr {
   background: #383838;
-}
-
-.hcpc-input-button {
-  text-align: center;
-  margin: 0 0 0 65px;
 }
 
 .hcpc-input-button button {
@@ -673,7 +781,7 @@ table {
 }
 
 .modal-dialog {
-  max-width: 700px;
+  max-width: 500px;
 }
 
 .request-input-content {
@@ -754,5 +862,14 @@ thead tr th {
 .operating-td {
   width: 84px;
   text-align: center;
+}
+
+#responseTextarea::-webkit-scrollbar {
+  background: #202020;
+  width: 12px;
+}
+#responseTextarea::-webkit-scrollbar-thumb {
+  background: #0C0C0C;
+  border-radius: 6px;
 }
 </style>

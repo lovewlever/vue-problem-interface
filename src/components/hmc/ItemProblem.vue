@@ -39,8 +39,10 @@
                 @click.prevent="clickChooseProblem(problemObj?.id, 'Selected')"
               >
                 <span
+                  id="btnChooseProblemLoading"
                   class="spinner-border spinner-border-sm"
                   role="status"
+                  style="display: none"
                   aria-hidden="true"
                 ></span>
                 选择该问题
@@ -59,10 +61,11 @@
             <li>
               <label>
                 <span
+                    id="btnOperatingLoading"
                         class="spinner-border spinner-border-sm"
                         role="status"
                         aria-hidden="true"
-                        style="color: white"
+                        style="color: white;display: none"
                 ></span>
                 <select
                         name="operating"
@@ -80,10 +83,11 @@
             <li>
               <label>
                 <span
+                    id="btnModifyProgressLoading"
                   class="spinner-border spinner-border-sm"
                   role="status"
                   aria-hidden="true"
-                  style="color: white"
+                  style="color: white;display: none"
                 ></span>
                 <select
                   id="selectModifyProblemProgress"
@@ -149,10 +153,11 @@
             <li>
               <label>
                 <span
+                    id="transferLoading"
                   class="spinner-border spinner-border-sm"
                   role="status"
                   aria-hidden="true"
-                  style="color: white"
+                  style="color: white;display: none"
                 ></span>
                 <select name="progress" @change.prevent="changeOperatingTransferIssues($event, problemObj?.id)">
                   <option label="转让该问题" value="" ></option>
@@ -247,6 +252,14 @@ export default {
   },
   mounted() {},
   methods: {
+    //显示或隐藏某个元素
+    showOrHiddenLoading($el,bool) {
+      if (bool) {
+        $el.css("display", "inline-block");
+      } else {
+        $el.css("display", "none");
+      };
+    },
     clickDialogCancel() {
       $("#dialogCommit").unbind("click");
     },
@@ -315,6 +328,7 @@ export default {
     },
     //网络请求，转让问题
     transferIssues(problemId, toUserId) {
+      this.showOrHiddenLoading($("#transferLoading"), true);
       const params = new URLSearchParams();
       params.append("toUserId", toUserId);
       params.append("problemId", problemId);
@@ -331,8 +345,10 @@ export default {
                   $("#dialogMsg").css("color", "red");
                   $("#exampleModal").modal();
                 }
+                this.showOrHiddenLoading($("#transferLoading"), false);
               },
               err => {
+                this.showOrHiddenLoading($("#transferLoading"), false);
                 FuncCommon.showConsoleInfo("修改问题进度:");
                 FuncCommon.showConsoleInfo(err);
                 $("#dialogMsg").html(err);
@@ -342,6 +358,7 @@ export default {
     },
     //修改问题进度
     modifyProblemProgress(pId, schedule) {
+      this.showOrHiddenLoading($("#btnModifyProgressLoading"), true);
       const _this = this;
       const params = new URLSearchParams();
       params.append("problemId", pId);
@@ -359,8 +376,11 @@ export default {
             $("#dialogMsg").css("color", "red");
             $("#exampleModal").modal();
           }
+
+          this.showOrHiddenLoading($("#btnModifyProgressLoading"), false);
         },
         err => {
+          this.showOrHiddenLoading($("#btnModifyProgressLoading"), false);
           FuncCommon.showConsoleInfo("修改问题进度:");
           FuncCommon.showConsoleInfo(err);
           $("#dialogMsg").html(err);
@@ -380,6 +400,8 @@ export default {
       $("#dialogCommit").bind("click", function() {
         $("#exampleModal").modal("hide");
         $("#dialogCommit").unbind("click");
+        //显示加载条
+        _this.showOrHiddenLoading($("#btnOperatingLoading"), true);
         //选择修改一个问题
         const params = new URLSearchParams();
         params.append("problemId", pId);
@@ -399,10 +421,14 @@ export default {
               $("#dialogMsg").html(data.data.msg);
               $("#exampleModal").modal();
             }
+            //隐藏加载条
+            _this.showOrHiddenLoading($("#btnOperatingLoading"), false);
             FuncCommon.showConsoleInfo("选择修改一个问题结果:");
             FuncCommon.showConsoleInfo(data);
           },
           err => {
+            //隐藏加载条
+            _this.showOrHiddenLoading($("#btnOperatingLoading"), false);
             FuncCommon.showConsoleInfo("选择修改一个问题结果:");
             FuncCommon.showConsoleInfo(err);
             $("#dialogMsg").html(err);
