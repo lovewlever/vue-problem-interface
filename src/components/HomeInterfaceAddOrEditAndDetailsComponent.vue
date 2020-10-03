@@ -9,7 +9,7 @@
       <div>
         <ul class="hmc-top-label">
           <li>
-            {{ projectName }}&nbsp;->&nbsp;{{ requestAllParams.interfaceTitle }}
+            {{ projectName }}&nbsp;->&nbsp;{{ requestAllParams.interfaceTitle }}&nbsp;&nbsp;<span style="color: #d57a01">({{theAverageScoreStr}})</span>
           </li>
         </ul>
       </div>
@@ -42,7 +42,7 @@
               </div>
             </div>
 
-            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#commentAndScore" style="margin: 0 0 0 24px">评分</button>
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#commentAndScope" style="margin: 0 0 0 24px">评分</button>
           </div>
           <br />
           <div>
@@ -394,7 +394,7 @@
 
   <!--评论/评分-->
   <div
-      id="commentAndScore"
+      id="commentAndScope"
       class="modal fade"
       tabindex="-1"
       role="dialog"
@@ -415,16 +415,16 @@
             <label class="col-form-label">评分:</label>
             <nav aria-label="...">
               <ul class="pagination pagination-sm">
-                <li :class="['page-item', {'active': scoreActive === '1'}]"><a class="page-link" href="#" @click.prevent="chooseScore('1')">1</a></li>
-                <li :class="['page-item', {'active': scoreActive === '2'}]"><a class="page-link" href="#" @click.prevent="chooseScore('2')">2</a></li>
-                <li :class="['page-item', {'active': scoreActive === '3'}]"><a class="page-link" href="#" @click.prevent="chooseScore('3')">3</a></li>
-                <li :class="['page-item', {'active': scoreActive === '4'}]"><a class="page-link" href="#" @click.prevent="chooseScore('4')">4</a></li>
-                <li :class="['page-item', {'active': scoreActive === '5'}]"><a class="page-link" href="#" @click.prevent="chooseScore('5')">5</a></li>
-                <li :class="['page-item', {'active': scoreActive === '6'}]"><a class="page-link" href="#" @click.prevent="chooseScore('6')">6</a></li>
-                <li :class="['page-item', {'active': scoreActive === '7'}]"><a class="page-link" href="#" @click.prevent="chooseScore('7')">7</a></li>
-                <li :class="['page-item', {'active': scoreActive === '8'}]"><a class="page-link" href="#" @click.prevent="chooseScore('8')">8</a></li>
-                <li :class="['page-item', {'active': scoreActive === '9'}]"><a class="page-link" href="#" @click.prevent="chooseScore('9')">9</a></li>
-                <li :class="['page-item', {'active': scoreActive === '10'}]"><a class="page-link" href="#" @click.prevent="chooseScore('10')">10</a></li>
+                <li :class="['page-item', {'active': scopeActive === '1'}]"><a class="page-link" href="#" @click.prevent="chooseScope('1')">1</a></li>
+                <li :class="['page-item', {'active': scopeActive === '2'}]"><a class="page-link" href="#" @click.prevent="chooseScope('2')">2</a></li>
+                <li :class="['page-item', {'active': scopeActive === '3'}]"><a class="page-link" href="#" @click.prevent="chooseScope('3')">3</a></li>
+                <li :class="['page-item', {'active': scopeActive === '4'}]"><a class="page-link" href="#" @click.prevent="chooseScope('4')">4</a></li>
+                <li :class="['page-item', {'active': scopeActive === '5'}]"><a class="page-link" href="#" @click.prevent="chooseScope('5')">5</a></li>
+                <li :class="['page-item', {'active': scopeActive === '6'}]"><a class="page-link" href="#" @click.prevent="chooseScope('6')">6</a></li>
+                <li :class="['page-item', {'active': scopeActive === '7'}]"><a class="page-link" href="#" @click.prevent="chooseScope('7')">7</a></li>
+                <li :class="['page-item', {'active': scopeActive === '8'}]"><a class="page-link" href="#" @click.prevent="chooseScope('8')">8</a></li>
+                <li :class="['page-item', {'active': scopeActive === '9'}]"><a class="page-link" href="#" @click.prevent="chooseScope('9')">9</a></li>
+                <li :class="['page-item', {'active': scopeActive === '10'}]"><a class="page-link" href="#" @click.prevent="chooseScope('10')">10</a></li>
               </ul>
             </nav>
           </div>
@@ -469,8 +469,9 @@ export default {
       interfaceId: "",
       errorMsg: "",
       showOrHiddenErrorMsg: false,
+      theAverageScoreStr: "暂无评分",
       isParse: false,
-      scoreActive: "10"
+      scopeActive: "10"
     };
   },
   components: {},
@@ -568,9 +569,16 @@ export default {
           FuncCommon.showConsoleInfo(data);
           let dataa = data.data.data[0];
           this.requestAllParams = JSON.parse(dataa.piDataJson);
+          this.theAverageScoreStr = dataa.theAverageScoreStr;
           this.interfaceId = dataa.id;
           this.projectName = dataa.refTProjectEntity?.projectName;
-          $("#responseTextarea").text(this.requestAllParams.interfaceResponse);
+          //如果是对象用JSON解析，如果是字符串直接输出
+          if (this.requestAllParams.interfaceResponse instanceof Object) {
+            $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
+          } else {
+            $("#responseTextarea").text(this.requestAllParams.interfaceResponse);
+          }
+
         },
         error => {
           FuncCommon.showConsoleError(error);
@@ -647,10 +655,10 @@ export default {
     },
     //添加或修改评论
     addOrModifyCommentScore() {
-      $("#commentAndScore").modal("hide")
+      $("#commentAndScope").modal("hide");
       const params = new URLSearchParams();
       params.append("interfaceId", this.interfaceId);
-      params.append("point", this.scoreActive);
+      params.append("point", this.scopeActive);
       params.append("commentContent", $("#message-text").val());
       params.append("isAnonymous", $("#anonymous")[0].checked ? "Y" : "N");
       ConstWeb.axiosRequest(
@@ -659,6 +667,7 @@ export default {
             FuncCommon.showConsoleInfo(data);
             this.errorMsg = data.data.msg;
             $("#myModal").modal();
+            this.queryInterfaceDetails()
           },
           error => {
             FuncCommon.showConsoleError(error);
@@ -668,7 +677,7 @@ export default {
       );
     },
     //评分选择
-    chooseScore(score) { this.scoreActive = score }
+    chooseScope(scope) { this.scopeActive = scope }
   },
   computed: {},
   watch: {

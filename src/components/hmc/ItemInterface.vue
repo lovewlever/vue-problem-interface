@@ -40,7 +40,7 @@
           <h6 class="item-title">
             {{ problemObj?.refTProjectEntity?.projectName }}&nbsp;=>&nbsp;
             <span style="color: #a3d900"
-              >(差强人意)&nbsp;{{ problemObj?.piName }}</span
+              >{{ problemObj?.piName }}</span
             >&nbsp;=>&nbsp;
             <span>{{
               JSON.parse(problemObj?.piDataJson)?.interfaceDescription
