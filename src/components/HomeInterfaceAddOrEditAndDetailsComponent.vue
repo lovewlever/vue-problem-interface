@@ -358,7 +358,7 @@
                 id="textareaOtherInstructions"
                 type="text"
                 name="otherInstructionsName"
-                style="width: 100%;height: 500px"
+                style="width: 100%;height: 494px"
                 class="params-input"
             ></textarea>
           </label>
@@ -897,11 +897,13 @@ thead tr th {
   text-align: center;
 }
 
-#responseTextarea::-webkit-scrollbar {
+#responseTextarea::-webkit-scrollbar,
+#textareaOtherInstructions::-webkit-scrollbar {
   background: #202020;
   width: 12px;
 }
-#responseTextarea::-webkit-scrollbar-thumb {
+#responseTextarea::-webkit-scrollbar-thumb,
+#textareaOtherInstructions::-webkit-scrollbar-thumb{
   background: #0C0C0C;
   border-radius: 6px;
 }

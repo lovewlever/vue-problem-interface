@@ -133,9 +133,9 @@
         text-align: left;
         margin: 10px 50px 0 0px;
         border-radius: 8px;
-      border: 1px #202020 solid;
+      border: 1px #696969 solid;
         background: #202020;
-        box-shadow: 0 0 10px #090909;
+      box-shadow: 0 0 0px #090909;
         transition: box-shadow 500ms;
     }
 
