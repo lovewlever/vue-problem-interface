@@ -91,9 +91,8 @@
       <div class="user-popup">
         <a class="user-popup-item" href="#">{{ userNickname }}</a>
         <div class="user-popup-item-divider"></div>
-        <a class="user-popup-item" href="#">Action</a>
-        <a class="user-popup-item" href="#">Another action</a>
-        <a class="user-popup-item" href="#">Something else here</a>
+        <a class="user-popup-item" href="#">设置</a>
+        <a class="user-popup-item" href="#">查看通知</a>
         <div class="user-popup-item-divider"></div>
         <a @click.prevent="clickLogOut" class="user-popup-item" href="#">退出账号</a>
       </div>

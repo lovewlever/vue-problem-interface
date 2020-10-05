@@ -9,7 +9,7 @@
       <div>
         <ul class="hmc-top-label">
           <li>
-            {{ projectName }}&nbsp;->&nbsp;{{ requestAllParams.interfaceTitle }}&nbsp;&nbsp;<span style="color: #d57a01">({{theAverageScoreStr}})</span>
+            {{ projectName }}&nbsp;->&nbsp;{{ requestAllParams.interfaceTitle }}&nbsp;&nbsp;(<span style="color: #d57a01">&nbsp;{{theAverageScoreStr}}&nbsp;</span>)
           </li>
         </ul>
       </div>
@@ -343,8 +343,23 @@
               id="responseTextarea"
               type="text"
               name="responseName"
-              style="width: 100%;height: 1000px"
+              style="width: 100%;height: 712px"
               class="params-input"
+            ></textarea>
+          </label>
+
+          <br />
+          <p>其他说明</p>
+          <!--hr-->
+          <hr />
+
+          <label style="width: 100%">
+            <textarea
+                id="textareaOtherInstructions"
+                type="text"
+                name="otherInstructionsName"
+                style="width: 100%;height: 500px"
+                class="params-input"
             ></textarea>
           </label>
         </div>
@@ -494,13 +509,13 @@ export default {
   },
   mounted() {
     //设置容器高度 防止内容移除
-    $("#setHeight").height(document.body.clientHeight - 160);
+    $("#setHeight").height(document.body.clientHeight - 140);
     window.onresize = () => {
       return (() => {
         FuncCommon.showConsoleInfo(
           document.body.clientWidth + "==" + document.body.clientHeight
         );
-        $("#setHeight").height(document.body.clientHeight - 160);
+        $("#setHeight").height(document.body.clientHeight - 140);
       })();
     };
 
@@ -510,6 +525,13 @@ export default {
       FuncCommon.showConsoleInfo(text);
       this.requestAllParams.interfaceResponse = text;
     });
+    //其他说明文本框改变事件
+    $("#textareaOtherInstructions[name='otherInstructionsName']").change(() => {
+      let text = $("#textareaOtherInstructions[name='otherInstructionsName']").val();
+      FuncCommon.showConsoleInfo(text);
+      this.requestAllParams.interfaceResponseDesc = text;
+    });
+
     this.queryInterfaceDetails();
   },
   methods: {
@@ -577,7 +599,8 @@ export default {
             $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
           } else {
             $("#responseTextarea").text(this.requestAllParams.interfaceResponse);
-          }
+          };
+          $("#textareaOtherInstructions").text(this.requestAllParams.interfaceResponseDesc);
 
         },
         error => {
@@ -642,7 +665,7 @@ export default {
         params,
         data => {
           this.showOrHiddenLoading($("#sendRequestLoading"),false);
-          this.requestAllParams.interfaceResponse = data;
+          this.requestAllParams.interfaceResponse = data.data;
           $("#responseTextarea").text(JSON.stringify(this.requestAllParams.interfaceResponse, null, 2));
         },
         error => {
@@ -719,6 +742,7 @@ class RequestParams {
   interfaceTitle = "";
   interfaceDescription = "";
   interfaceResponse = "";
+  interfaceResponseDesc = "";
   params = [ParamsAndHeaders];
   headers = [ParamsAndHeaders];
 }

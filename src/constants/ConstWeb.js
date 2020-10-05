@@ -2,11 +2,11 @@ import _axios from "axios";
 import mainJs from "../main";
 import FuncCommon from "./FuncCommon";
 
-const BASIS_URL = "http://192.168.3.21:8099";
-const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
+//const BASIS_URL = "http://192.168.3.21:8099";
+//const WS_URL = "ws://192.168.3.21:8099/ws/websocket.server";
 
-//const BASIS_URL = "http://192.168.1.113:8099";
-//const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
+const BASIS_URL = "http://192.168.1.113:8099";
+const WS_URL = "ws://192.168.1.113:8099/ws/websocket.server";
 
 const WebApi = {
   USER_LOGIN: BASIS_URL + "/usr/login", //
@@ -42,7 +42,8 @@ const RESULT_CODE = {
 
 const STORAGE_KEY = {
   KEY_USER_LOGIN_INFO: "keyUserLoginInfo",
-  KEY_GET_VERIFY_CODE_SESSION_KEY: "sessionKey"
+  KEY_GET_VERIFY_CODE_SESSION_KEY: "sessionKey",
+  KEY_HISTORY_CLICK_PROJECT_LABEL_FOR_INTERFACE: "historyClickProjectLabelForInterface"
 };
 
 /**

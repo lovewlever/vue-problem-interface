@@ -1,21 +1,18 @@
 <template>
   <div>
     <div style="display: flex;">
-      <ul
-        id="labelUl"
-        class="hmc-top-label"
-        style="width: 900px;overflow-x: scroll;overflow-y: hidden;white-space: nowrap"
-        @mousewheel="mouseWheel"
-      >
-        <li
-          :class="[
-            'label-li',
-            { 'label-li-active': chooseProjectId === obj?.id }
-          ]"
-          v-for="(obj, index) in projectLabelList"
-          :key="index"
-          @click="chooseTopProjectLabel(obj?.id)"
-        >
+      <ul id="labelUl" class="hmc-top-label" style="width: 900px;overflow-x: scroll;overflow-y: hidden;white-space: nowrap" @mousewheel="mouseWheel" >
+        <li v-if="historyClickProjectLabel"
+            :class="[ 'label-li', { 'label-li-active': chooseProjectId === historyClickProjectLabel?.projectId } ]"
+            @click="chooseTopProjectLabel(historyClickProjectLabel?.projectId,historyClickProjectLabel?.projectName)">
+          {{ historyClickProjectLabel?.projectName }}
+        </li>
+        <!--上方为上次点击的项目 分割线-->
+        <li class="label-li" style="border: none;margin: auto 0;padding: 0">
+          <span>|</span>
+        </li>
+        <li :class="[ 'label-li', { 'label-li-active': chooseProjectId === obj?.id } ]"
+          v-for="(obj, index) in projectLabelList" :key="index" @click="chooseTopProjectLabel(obj?.id,obj?.projectName)" >
           {{ obj?.projectName }}
         </li>
       </ul>
@@ -68,6 +65,7 @@ export default {
   data() {
     return {
       projectLabelList: [], //顶部标签（全部项目 分页查询）
+      historyClickProjectLabel: null, //存在本地的上次点击的标签
       problemList: [],
       chooseProjectId: "new", //选中的某个标签
       pagination: Object,
@@ -76,7 +74,7 @@ export default {
       isShowLoading: false, //是否显示 加载圈
       loadPageCountSize: 10, //每次加载多少条数据
       loadCurPage: 1, //加载数据的当前页
-      isLoadingNow: false //是否正在加载数据
+      isLoadingNow: false //是否正在加载数据，
     };
   },
   beforeCreate() {
@@ -86,6 +84,13 @@ export default {
   mounted() {
     this.onscrollS();
     this.queryProjectAllLabelListByPagination();
+
+    //查询上次点击的历史项目并查询项目下的接口
+    this.historyClickProjectLabel = JSON.parse(window.localStorage.getItem(ConstWeb.STORAGE_KEY.KEY_HISTORY_CLICK_PROJECT_LABEL_FOR_INTERFACE));
+    if (this.historyClickProjectLabel !== null) {
+      this.chooseProjectId = this.historyClickProjectLabel.projectId;
+      this.queryProjectInterfaceListById();
+    }
   },
   methods: {
     mouseWheel(event) {
@@ -133,11 +138,17 @@ export default {
       });
     },
     // 标签点击事件/查询项目的接口列表
-    chooseTopProjectLabel(selId) {
+    chooseTopProjectLabel(selId,pName) {
       this.chooseProjectId = selId;
       this.pagination = null;
       this.loadCurPage = 1;
       this.problemList = [];
+      //把点击的标签存在本地
+      this.historyClickProjectLabel = {
+        projectName: pName,
+        projectId: selId
+      };
+      window.localStorage.setItem(ConstWeb.STORAGE_KEY.KEY_HISTORY_CLICK_PROJECT_LABEL_FOR_INTERFACE,JSON.stringify(this.historyClickProjectLabel))
       this.queryProjectInterfaceListById(); //如果点击的标签是项目，则查询当前点击的项目id
     },
     //加载更多项目标签
