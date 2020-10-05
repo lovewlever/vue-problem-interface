@@ -1,9 +1,6 @@
 <template>
-    <!-- Position it -->
-    <div style="position: absolute; top: 90px; right: 30px;">
-      <!-- Then put toasts within -->
-      <template v-for="(obj, index) in notifys" :key="index" >
-
+  <div style="position: absolute; top: 90px; right: 30px;">
+    <template v-for="(obj, index) in notifys" :key="index">
       <div :id="'nt' + index" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
         <div class="toast-header">
           <img src="../assets/logo.png" alt="..." width="16px" height="16px">
@@ -21,8 +18,8 @@
           {{removeNotification("nt" + index)}}
         </span>
       </div>
-      </template>
-    </div>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -33,7 +30,7 @@ export default {
 name: "NotificationToast",
   data() {
     return {
-      jq: jQuery
+
     }
   },
   methods: {
@@ -50,14 +47,12 @@ name: "NotificationToast",
       }, 4000);
     }
   },
-computed: {
-  notifys () {
-    return this.$store.state.notifications
+  computed: {
+    notifys() {
+      return this.$store.state.notifications;
+    }
   }
-}
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

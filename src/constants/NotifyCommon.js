@@ -6,8 +6,8 @@ import mainJs from "../main";
  * @param notificationInfo
  */
 function sendNotification(notificationInfo) {
-    FuncCommon.showConsoleInfo(notificationInfo)
-    mainJs.vue.$store.commit("addNotification", notificationInfo);
+  FuncCommon.showConsoleInfo(notificationInfo);
+  mainJs.vue.$store.commit("addNotification", notificationInfo);
 }
 
 export default {

@@ -1,28 +1,22 @@
 <template>
-    <router-view />
-  <!-- Position it -->
-  <NotificationToast/>
+  <router-view />
+
+  <NotificationToast />
 </template>
 
 <script>
-  import "bootstrap/dist/css/bootstrap.min.css";
-  import "bootstrap/dist/js/bootstrap.min";
-  import NotificationToast from "@/components/NotificationToast";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min";
+import NotificationToast from "@/components/NotificationToast";
 
-  export default {
-    components: {NotificationToast},
-    data() {
-      return {
-      }
-    },
-    created() {
-
-    },
-    mounted() {
-
-    }
-  };
-
+export default {
+  components: { NotificationToast },
+  data() {
+    return {};
+  },
+  created() {},
+  mounted() {}
+};
 </script>
 
 <style>
@@ -47,15 +41,14 @@ html {
 .toast {
   min-width: 250px;
 }
-  .toast-content {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    max-height: 600px;
-    overflow-y: auto;
-  }
+.toast-content {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  max-height: 600px;
+  overflow-y: auto;
+}
 .toast-content::-webkit-scrollbar {
   display: none;
 }
 </style>
-
