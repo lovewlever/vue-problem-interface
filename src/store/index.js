@@ -7,6 +7,10 @@ export default createStore({
   mutations: {
     addNotification(state,str) {
       state.notifications.push(str);
+    },
+    removeFirstNotification(state,str) {
+      str;
+      state.notifications = state.notifications.slice(0).shift();
     }
   },
   actions: {

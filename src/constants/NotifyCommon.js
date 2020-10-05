@@ -1,5 +1,5 @@
 import FuncCommon from "@/constants/FuncCommon";
-//import mainJs from "../main";
+import mainJs from "../main";
 
 /**
  * 发送通知
@@ -7,7 +7,7 @@ import FuncCommon from "@/constants/FuncCommon";
  */
 function sendNotification(notificationInfo) {
     FuncCommon.showConsoleInfo(notificationInfo)
-    //mainJs.vue.$store.commit("addNotification", notificationInfo);
+    mainJs.vue.$store.commit("addNotification", notificationInfo);
 }
 
 export default {
