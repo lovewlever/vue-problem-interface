@@ -224,6 +224,133 @@
           </div>
         </div>
       </div>
+
+      <!--编辑问题-->
+      <div
+          class="modal fade"
+          id="editProblemDialog"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">编辑问题</h5>
+              <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <div>
+                <label>
+                  <select
+                      required
+                      class="input-height uniform-style item-sel-devices "
+                      name="devices"
+                      v-model="problemObj.systemDevicesId"
+                  >
+                    <option label="请选择" value="" selected></option>
+                    <option
+                        v-for="(dev, index) in problemObj?.devicesList"
+                        :key="index"
+                        :label="dev?.systemDevicesName"
+                        :value="dev?.id"
+                        :selected="problemObj.systemDevicesId === dev?.id"
+                    ></option>
+                  </select>
+                </label>
+              </div>
+
+              <div>
+              <label>
+                <input
+                    type="text"
+                    v-model="problemObj.ppModulePage"
+                    name="page"
+                    placeholder=""
+                    required
+                    class="input-height uniform-style"
+                /> </label>
+              </div>
+              <div>
+                <label style="width: 100%;display: flex">
+                  <textarea
+                      type="text"
+                      name="page"
+                      placeholder=""
+                      required
+                      v-model="problemObj.ppContent"
+                      class="input-height uniform-style item-input-problem"
+                  ></textarea>
+                  <span
+                      class="add-or-remove-click"
+                      @click.prevent="addInputProblem"
+                  >
+                    <svg
+                        t="1600088454811"
+                        class="icon"
+                        viewBox="0 0 1024 1024"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        p-id="1152"
+                        width="32"
+                        height="32"
+                    >
+                      <path
+                          d="M512 70.283c-244.514 0-442.732 197.763-442.732 441.717s198.218 441.717 442.732 441.717 442.732-197.763 442.732-441.717-198.218-441.717-442.732-441.717M735.045 558.604h-176.442v176.442c0 25.738-20.866 46.604-46.604 46.604s-46.604-20.866-46.604-46.604v-176.442h-176.442c-25.738 0-46.604-20.866-46.604-46.604s20.866-46.604 46.604-46.604h176.442v-176.442c0-25.738 20.866-46.604 46.604-46.604s46.604 20.866 46.604 46.604v176.442h176.442c25.738 0 46.604 20.866 46.604 46.604s-20.866 46.604-46.604 46.604z"
+                          fill="#ffffff"
+                          p-id="1153"
+                      ></path>
+                    </svg>
+                  </span>
+                  <span
+                      class="add-or-remove-click"
+                      @click.prevent="removeInputProblem(index)"
+                  >
+                    <svg
+                        t="1600088525141"
+                        class="icon"
+                        viewBox="0 0 1024 1024"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        p-id="2189"
+                        width="32"
+                        height="32"
+                    >
+                      <path
+                          d="M507.904 52.224q95.232 0 179.2 36.352t145.92 98.304 98.304 145.408 36.352 178.688-36.352 179.2-98.304 145.92-145.92 98.304-179.2 36.352-178.688-36.352-145.408-98.304-98.304-145.92-36.352-179.2 36.352-178.688 98.304-145.408 145.408-98.304 178.688-36.352zM736.256 573.44q30.72 0 55.296-15.872t24.576-47.616q0-30.72-24.576-45.568t-55.296-14.848l-452.608 0q-30.72 0-56.32 14.848t-25.6 45.568q0 31.744 25.6 47.616t56.32 15.872l452.608 0z"
+                          p-id="2190"
+                          fill="#ffffff"
+                      ></path>
+                    </svg>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                  @click.prevent="clickDialogCancel"
+              >
+                取消
+              </button>
+              <button type="button" class="btn btn-primary" @click.prevent="clickEditProblem">
+                确定
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -243,7 +370,8 @@ export default {
   data() {
     return {
       problemObj: this.problemO,
-      localLoginUserId: String
+      localLoginUserId: String,
+      devicesList: []
     };
   },
   components: { LoadingComponents },
@@ -302,8 +430,29 @@ export default {
         });
       } else if (operating === "Cancel") { //取消修改该问题
         this.clickChooseProblem(pId, "Cancel");
+      } else if (operating === "Modify") { //编辑该问题
+        //查询设备列表
+        FuncCommon.showConsoleInfo("this.problemObj");
+        FuncCommon.showConsoleInfo(this.problemObj);
+        this.querySystemDevicesListL();
+        $("#editProblemDialog").modal();
       }
       event.target.value = "";
+    },
+    // 查询添加问题时选择的设备列表
+    querySystemDevicesListL() {
+      ConstWeb.axiosRequest(
+          ConstWeb.WebApi.QUERY_PROJECT_SYSTEM_DEVICES,
+          {},
+          data => {
+            this.problemObj.devicesList = data.data.data;
+            FuncCommon.showConsoleInfo("this.problemObj");
+            FuncCommon.showConsoleInfo(this.problemObj);
+          },
+          error => {
+            FuncCommon.showConsoleError(error);
+          }
+      );
     },
     //转让该问题
     changeOperatingTransferIssues(event,problemId) {
@@ -440,6 +589,25 @@ export default {
     formatDate(time) {
       const data = new Date(time);
       return formatDate2(data, "yyyy-MM-dd HH:mm:ss");
+    },
+    //请求修改问题
+    clickEditProblem() {
+      const params = new URLSearchParams();
+      params.append("problemId", "");
+      params.append("problemModulePage", "");
+      params.append("problemContent", "");
+      params.append("systemDevicesId", "");
+      ConstWeb.axiosRequest(
+          ConstWeb.WebApi.UPDATE_EDIT_MODIFY_PROBLEM,
+          params,
+          data => {
+            FuncCommon.showConsoleError("编辑修改问题：");
+            FuncCommon.showConsoleError(data);
+          },
+          error => {
+            FuncCommon.showConsoleError(error);
+          }
+      );
     }
   }
 };
@@ -513,5 +681,21 @@ select:hover {
 .spinner-border-sm {
   width: 0.8rem;
   height: 0.8rem;
+}
+
+/*编辑问题*/
+.input-height {
+  height: 42px;
+}
+.uniform-style {
+  border-radius: 6px;
+  background: #202020;
+  color: wheat;
+  padding: 0 4px 0 6px;
+  border: 1px #616061 solid;
+}
+.item-input-problem {
+  width: 90%;
+  height: 100px;
 }
 </style>
