@@ -39,9 +39,8 @@ function openWebSocket() {
 
     ws.onmessage = function(e) {
       //处理信息
-      e = e || event; //获取事件，这样写是为了兼容IE浏览器
-      console.log("ws.onmessage");
-      console.log(e.data);
+      FuncCommon.showConsoleInfo(e.data);
+      e = e || event;
       if (e.data === "HeartbeatSuccess") {
         heartCheck.reset();
       } else {
