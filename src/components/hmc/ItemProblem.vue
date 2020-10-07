@@ -171,7 +171,7 @@
             <li>
               <div style="color: #AAAAAA;font-size: .75rem">
                 <span>
-                  <template v-if="problemObj?.ppCompleteSchedule >= 100">
+                  <template v-if="problemObj?.ppCompleteSchedule > 99">
                     {{formatDate(problemObj?.ppCompleteTimestamp).substring(0,10)}}：&nbsp;修改完成&nbsp;&nbsp;BY&nbsp;
                   </template>
                   <template v-else>
