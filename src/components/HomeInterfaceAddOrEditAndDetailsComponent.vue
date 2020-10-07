@@ -872,7 +872,7 @@ table {
 
 .params-input {
   background: #202020;
-  height: 40px;
+  height: 36px;
   border-radius: 1px;
   outline: none;
   color: wheat;
