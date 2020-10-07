@@ -33,7 +33,7 @@ const WebApi = {
   QUERY_INTERFACES_BY_PROJECT_ID: BASIS_URL + "/pif/queryInterfacesByProjectId", // 分页查询项目下的接口
   SAVE_A_INTERFACE: BASIS_URL + "/pif/saveInterface", // 新增一个接口
   ADD_OR_UPDATE_CS: BASIS_URL + "/pics/addOrUpdateInterfaceCs", //添加或修改接口评论/评分
-  UPDATE_EDIT_MODIFY_PROBLEM: BASIS_URL + "/updateEditProblem" // 编辑修改某个问题
+  UPDATE_EDIT_MODIFY_PROBLEM: BASIS_URL + "/ppc/updateEditProblem" // 编辑修改某个问题
 
 };
 const RESULT_CODE = {

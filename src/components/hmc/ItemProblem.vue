@@ -235,7 +235,7 @@
           aria-hidden="true"
       >
         <div class="modal-dialog">
-          <div class="modal-content">
+          <div class="modal-content" style="background: #181818">
             <div class="modal-header">
               <h5 class="modal-title">编辑问题</h5>
               <button
@@ -290,48 +290,6 @@
                       v-model="problemObj.ppContent"
                       class="input-height uniform-style item-input-problem"
                   ></textarea>
-                  <span
-                      class="add-or-remove-click"
-                      @click.prevent="addInputProblem"
-                  >
-                    <svg
-                        t="1600088454811"
-                        class="icon"
-                        viewBox="0 0 1024 1024"
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        p-id="1152"
-                        width="32"
-                        height="32"
-                    >
-                      <path
-                          d="M512 70.283c-244.514 0-442.732 197.763-442.732 441.717s198.218 441.717 442.732 441.717 442.732-197.763 442.732-441.717-198.218-441.717-442.732-441.717M735.045 558.604h-176.442v176.442c0 25.738-20.866 46.604-46.604 46.604s-46.604-20.866-46.604-46.604v-176.442h-176.442c-25.738 0-46.604-20.866-46.604-46.604s20.866-46.604 46.604-46.604h176.442v-176.442c0-25.738 20.866-46.604 46.604-46.604s46.604 20.866 46.604 46.604v176.442h176.442c25.738 0 46.604 20.866 46.604 46.604s-20.866 46.604-46.604 46.604z"
-                          fill="#ffffff"
-                          p-id="1153"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span
-                      class="add-or-remove-click"
-                      @click.prevent="removeInputProblem(index)"
-                  >
-                    <svg
-                        t="1600088525141"
-                        class="icon"
-                        viewBox="0 0 1024 1024"
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        p-id="2189"
-                        width="32"
-                        height="32"
-                    >
-                      <path
-                          d="M507.904 52.224q95.232 0 179.2 36.352t145.92 98.304 98.304 145.408 36.352 178.688-36.352 179.2-98.304 145.92-145.92 98.304-179.2 36.352-178.688-36.352-145.408-98.304-98.304-145.92-36.352-179.2 36.352-178.688 98.304-145.408 145.408-98.304 178.688-36.352zM736.256 573.44q30.72 0 55.296-15.872t24.576-47.616q0-30.72-24.576-45.568t-55.296-14.848l-452.608 0q-30.72 0-56.32 14.848t-25.6 45.568q0 31.744 25.6 47.616t56.32 15.872l452.608 0z"
-                          p-id="2190"
-                          fill="#ffffff"
-                      ></path>
-                    </svg>
-                  </span>
                 </label>
               </div>
             </div>
@@ -593,21 +551,21 @@ export default {
     //请求修改问题
     clickEditProblem() {
       const params = new URLSearchParams();
-      params.append("problemId", "");
-      params.append("problemModulePage", "");
-      params.append("problemContent", "");
-      params.append("systemDevicesId", "");
+      params.append("problemId", this.problemObj.id);
+      params.append("problemModulePage", this.problemObj.ppModulePage);
+      params.append("problemContent", this.problemObj.ppContent);
+      params.append("systemDevicesId", this.problemObj.systemDevicesId);
       ConstWeb.axiosRequest(
           ConstWeb.WebApi.UPDATE_EDIT_MODIFY_PROBLEM,
           params,
           data => {
-            FuncCommon.showConsoleError("编辑修改问题：");
-            FuncCommon.showConsoleError(data);
+            FuncCommon.showConsoleInfo(data);
           },
           error => {
             FuncCommon.showConsoleError(error);
           }
       );
+      $("#editProblemDialog").modal("hide");
     }
   }
 };
@@ -697,5 +655,11 @@ select:hover {
 .item-input-problem {
   width: 90%;
   height: 100px;
+}
+.modal-header {
+  border-bottom: 1px solid #616061;
+}
+.modal-footer {
+  border-top: 1px solid #616061;
 }
 </style>
